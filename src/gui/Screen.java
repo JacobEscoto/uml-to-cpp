@@ -1,15 +1,23 @@
 package gui;
 
-import elementos.FiguraDiagrama;
-import elementos.Inicio;
+import elementos.*;
 import java.awt.GraphicsEnvironment;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 public class Screen extends JFrame {
+
+    private Point click;
+    private JLabel elementoSeleccionado = null;
 
     public Screen() {
         initComponents();
@@ -357,7 +365,7 @@ public class Screen extends JFrame {
                 Screen screen = new Screen();
                 screen.setLocationRelativeTo(null);
                 screen.setVisible(true);
-                
+
             }
         });
     }
@@ -369,8 +377,53 @@ public class Screen extends JFrame {
             modelo.addElement(fuente);
         }
     }
-    
-    
+
+    private void initDragAndDrop(JLabel figura, FiguraDiagrama elemento) {
+        figura.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                seleccionarElemento(figura);
+                click = evt.getPoint();
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                seleccionarElemento(figura);
+            }
+        });
+
+        figura.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent evt) {
+                Point movedClick = SwingUtilities.convertPoint(evt.getComponent(), evt.getPoint(), workarea_jp);
+                int posX = movedClick.x - click.x;
+                int posY = movedClick.y - click.y;
+                posX = setLimits(posX, figura.getWidth(), 0, workarea_jp.getWidth());
+                posY = setLimits(posY, figura.getHeight(), 0, workarea_jp.getHeight());
+                figura.setLocation(posX, posY);
+                elemento.setX(posX);
+                elemento.setY(posY);
+                workarea_jp.repaint();
+            }
+        });
+    }
+
+    private int setLimits(int valor, int medidaIcono, int min, int max) {
+        if (valor < min) {
+            return min;
+        } else if (valor + medidaIcono > max) {
+            return max - medidaIcono;
+        } else {
+            return valor;
+        }
+    }
+
+    private void seleccionarElemento(JLabel label) {
+        elementoSeleccionado = label;
+        workarea_jp.setComponentZOrder(elementoSeleccionado, 0);
+        workarea_jp.repaint();
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregarProceso_btn;
