@@ -12,21 +12,33 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Cambiar Color"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="changeElementBackground_jmiActionPerformed"/>
+          </Events>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="changeElementForeground_jmi">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cambiar Color de Texto"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="changeElementForeground_jmiActionPerformed"/>
+          </Events>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="changeElementText_jmi">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cambiar Texto"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="changeElementText_jmiActionPerformed"/>
+          </Events>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="changeElementFont_jmi">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cambiar Fuente"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="changeElementFont_jmiActionPerformed"/>
+          </Events>
         </MenuItem>
         <Component class="javax.swing.JPopupMenu$Separator" name="js_elementEdition">
         </Component>
@@ -35,16 +47,25 @@
             <Property name="text" type="java.lang.String" value="Copiar"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="copyElement_jmiActionPerformed"/>
+          </Events>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="pasteElement_jmi">
           <Properties>
             <Property name="text" type="java.lang.String" value="Pegar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pasteElement_jmiActionPerformed"/>
+          </Events>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="deleteElement_jmi">
           <Properties>
             <Property name="text" type="java.lang.String" value="Eliminar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteElement_jmiActionPerformed"/>
+          </Events>
         </MenuItem>
         <Component class="javax.swing.JPopupMenu$Separator" name="js_elementProperties">
         </Component>
@@ -52,6 +73,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Propiedades"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="elementProperties_jmiActionPerformed"/>
+          </Events>
         </MenuItem>
       </SubComponents>
     </Container>

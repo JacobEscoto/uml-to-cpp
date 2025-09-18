@@ -16,12 +16,15 @@ import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class Screen extends JFrame {
 
     private Point click;
-    private JLabel elementoSeleccionado = null;
+    private JLabel labelSeleccionado = null;
+    private FiguraDiagrama elementoSeleccionado = null;
+    private FiguraDiagrama copiaElemento = null;
     private final ArrayList<FiguraDiagrama> elementos = new ArrayList();
     private final int BACKGROUND_OPTION = 1;
     private final int FOREGROUND_OPTION = 2;
@@ -101,30 +104,70 @@ public class Screen extends JFrame {
         exportOptions_jm = new javax.swing.JMenu();
 
         changeElementBackground_jmi.setText("Cambiar Color");
+        changeElementBackground_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeElementBackground_jmiActionPerformed(evt);
+            }
+        });
         elements_jpm.add(changeElementBackground_jmi);
 
         changeElementForeground_jmi.setText("Cambiar Color de Texto");
+        changeElementForeground_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeElementForeground_jmiActionPerformed(evt);
+            }
+        });
         elements_jpm.add(changeElementForeground_jmi);
 
         changeElementText_jmi.setText("Cambiar Texto");
+        changeElementText_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeElementText_jmiActionPerformed(evt);
+            }
+        });
         elements_jpm.add(changeElementText_jmi);
 
         changeElementFont_jmi.setText("Cambiar Fuente");
+        changeElementFont_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeElementFont_jmiActionPerformed(evt);
+            }
+        });
         elements_jpm.add(changeElementFont_jmi);
         elements_jpm.add(js_elementEdition);
 
         copyElement_jmi.setText("Copiar");
         copyElement_jmi.setToolTipText("");
+        copyElement_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyElement_jmiActionPerformed(evt);
+            }
+        });
         elements_jpm.add(copyElement_jmi);
 
         pasteElement_jmi.setText("Pegar");
+        pasteElement_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pasteElement_jmiActionPerformed(evt);
+            }
+        });
         elements_jpm.add(pasteElement_jmi);
 
         deleteElement_jmi.setText("Eliminar");
+        deleteElement_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteElement_jmiActionPerformed(evt);
+            }
+        });
         elements_jpm.add(deleteElement_jmi);
         elements_jpm.add(js_elementProperties);
 
         elementProperties_jmi.setText("Propiedades");
+        elementProperties_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                elementProperties_jmiActionPerformed(evt);
+            }
+        });
         elements_jpm.add(elementProperties_jmi);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -478,7 +521,7 @@ public class Screen extends JFrame {
 
     /*
     * DIAGRAM ELEMENTS OPTION PANEL
-    */
+     */
     private void terminalFig_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_terminalFig_btnMouseClicked
         boolean isStartExisting = false;
         boolean isEndExisting = false;
@@ -526,16 +569,20 @@ public class Screen extends JFrame {
 
     /*
     * TOOLS FUNCTIONS
-    */
+     */
     private void fontChooser_jcbItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fontChooser_jcbItemStateChanged
-        if (elementoSeleccionado != null) {
-            elementoSeleccionado.setFont(new Font((String) fontChooser_jcb.getSelectedItem(), elementoSeleccionado.getFont().getStyle(), elementoSeleccionado.getFont().getSize()));
+        if (labelSeleccionado != null) {
+            elementoSeleccionado = encontrarElemento(labelSeleccionado);
+            labelSeleccionado.setFont(new Font((String) fontChooser_jcb.getSelectedItem(), labelSeleccionado.getFont().getStyle(), labelSeleccionado.getFont().getSize()));
+            elementoSeleccionado.setFuente(labelSeleccionado.getFont());
         }
     }//GEN-LAST:event_fontChooser_jcbItemStateChanged
 
     private void fontSize_spinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fontSize_spinnerStateChanged
-        if (elementoSeleccionado != null) {
-            elementoSeleccionado.setFont(new Font(elementoSeleccionado.getFont().getName(), elementoSeleccionado.getFont().getStyle(), (int) fontSize_spinner.getValue()));
+        if (labelSeleccionado != null) {
+            elementoSeleccionado = encontrarElemento(labelSeleccionado);
+            labelSeleccionado.setFont(new Font(labelSeleccionado.getFont().getName(), labelSeleccionado.getFont().getStyle(), (int) fontSize_spinner.getValue()));
+            elementoSeleccionado.setFuente(labelSeleccionado.getFont());
         }
     }//GEN-LAST:event_fontSize_spinnerStateChanged
 
@@ -548,16 +595,91 @@ public class Screen extends JFrame {
     }//GEN-LAST:event_italic_toggleBtnMouseClicked
 
     private void foregroundColor_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foregroundColor_btnMouseClicked
-        if (elementoSeleccionado != null) {
+        if (labelSeleccionado != null) {
+            elementoSeleccionado = encontrarElemento(labelSeleccionado);
             setColorToElement(FOREGROUND_OPTION);
         }
     }//GEN-LAST:event_foregroundColor_btnMouseClicked
 
     private void backgroundChooser_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backgroundChooser_btnMouseClicked
-        if (elementoSeleccionado != null) {
+        if (labelSeleccionado != null) {
+            elementoSeleccionado = encontrarElemento(labelSeleccionado);
             setColorToElement(BACKGROUND_OPTION);
         }
     }//GEN-LAST:event_backgroundChooser_btnMouseClicked
+
+    /*
+    * POPUP MENU FUNCTIONS FOR DIAGRAM ELEMENTS
+     */
+    private void changeElementBackground_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeElementBackground_jmiActionPerformed
+        elementoSeleccionado = encontrarElemento(labelSeleccionado);
+        if (elementoSeleccionado != null) {
+            setColorToElement(BACKGROUND_OPTION);
+        }
+    }//GEN-LAST:event_changeElementBackground_jmiActionPerformed
+
+    private void changeElementForeground_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeElementForeground_jmiActionPerformed
+        elementoSeleccionado = encontrarElemento(labelSeleccionado);
+        if (elementoSeleccionado != null) {
+            setColorToElement(FOREGROUND_OPTION);
+        }
+    }//GEN-LAST:event_changeElementForeground_jmiActionPerformed
+
+    private void changeElementText_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeElementText_jmiActionPerformed
+        String textModified = JOptionPane.showInputDialog(this, "Modificar Texto", labelSeleccionado.getText());
+        if (!textModified.trim().equals("")) {
+            elementoSeleccionado = encontrarElemento(labelSeleccionado);
+            if (elementoSeleccionado != null) {
+                labelSeleccionado.setText(textModified);
+                elementoSeleccionado.setTexto(textModified);
+            }
+        }
+    }//GEN-LAST:event_changeElementText_jmiActionPerformed
+
+    private void changeElementFont_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeElementFont_jmiActionPerformed
+        JComboBox newFontChooser_jcb = new JComboBox();
+        DefaultComboBoxModel fontModel = new DefaultComboBoxModel();
+        newFontChooser_jcb.setModel(fontModel);
+        initFonts(newFontChooser_jcb);
+
+        int option = JOptionPane.showConfirmDialog(this, newFontChooser_jcb, "Seleccionar Fuente", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            elementoSeleccionado = encontrarElemento(labelSeleccionado);
+            if (elementoSeleccionado != null) {
+                String fuenteSeleccionada = (String) newFontChooser_jcb.getSelectedItem();
+                labelSeleccionado.setFont(new Font(fuenteSeleccionada, elementoSeleccionado.getFuente().getStyle(), elementoSeleccionado.getFuente().getSize()));
+                elementoSeleccionado.setFuente(new Font(fuenteSeleccionada, elementoSeleccionado.getFuente().getStyle(), elementoSeleccionado.getFuente().getSize()));
+            }
+        }
+    }//GEN-LAST:event_changeElementFont_jmiActionPerformed
+
+    private void copyElement_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyElement_jmiActionPerformed
+        elementoSeleccionado = encontrarElemento(labelSeleccionado);
+        if (elementoSeleccionado != null) {
+            copiaElemento = elementoSeleccionado;
+        }
+    }//GEN-LAST:event_copyElement_jmiActionPerformed
+
+    private void pasteElement_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pasteElement_jmiActionPerformed
+        if (copiaElemento != null) {
+            copiaElemento.setX(elementoSeleccionado.getX() + elementoSeleccionado.getIcono().getIconWidth());
+            copiaElemento.setY(elementoSeleccionado.getY() + elementoSeleccionado.getIcono().getIconHeight());
+            addToWorkArea(copiaElemento);
+        }
+    }//GEN-LAST:event_pasteElement_jmiActionPerformed
+
+    private void deleteElement_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteElement_jmiActionPerformed
+        elementoSeleccionado = encontrarElemento(labelSeleccionado);
+        elementos.remove(elementoSeleccionado);
+        workarea_jp.remove(labelSeleccionado);
+        
+        elementoSeleccionado = null;
+        labelSeleccionado = null;
+    }//GEN-LAST:event_deleteElement_jmiActionPerformed
+
+    private void elementProperties_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elementProperties_jmiActionPerformed
+        // TO BE IMPLEMENTED...
+    }//GEN-LAST:event_elementProperties_jmiActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -575,21 +697,30 @@ public class Screen extends JFrame {
             }
         });
     }
-    
+
     /*
     * FUNCTIONS IN SCREEN INTERACTIONS
-    */
+     */
+    private FiguraDiagrama encontrarElemento(JLabel label) {
+        for (FiguraDiagrama elemento : elementos) {
+            if (elemento.getLabel() == label) {
+                return elemento;
+            }
+        }
+        return null;
+    }
+
     private void initDragAndDrop(JLabel figura, FiguraDiagrama elemento) {
         figura.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent evt) {
-                seleccionarElemento(figura);
+                seleccionarLabel(figura);
                 click = evt.getPoint();
             }
 
             @Override
             public void mouseClicked(MouseEvent evt) {
-                seleccionarElemento(figura);
+                seleccionarLabel(figura);
             }
         });
 
@@ -619,9 +750,9 @@ public class Screen extends JFrame {
         }
     }
 
-    private void seleccionarElemento(JLabel label) {
-        elementoSeleccionado = label;
-        workarea_jp.setComponentZOrder(elementoSeleccionado, 0);
+    private void seleccionarLabel(JLabel label) {
+        labelSeleccionado = label;
+        workarea_jp.setComponentZOrder(labelSeleccionado, 0);
         workarea_jp.repaint();
     }
 
@@ -637,7 +768,7 @@ public class Screen extends JFrame {
 
     /*
     * FONT AND STYLE JLABEL FUNCTIONS
-    */
+     */
     private void initFonts(JComboBox comboBox) {
         String[] fuentes = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
         DefaultComboBoxModel modelo = ((DefaultComboBoxModel) comboBox.getModel());
@@ -646,29 +777,40 @@ public class Screen extends JFrame {
         }
         modelo.setSelectedItem("Arial");
     }
-    
+
     private void stylishFont() {
-        if (elementoSeleccionado != null) {
-            if (bold_toggleBtn.isSelected() && italic_toggleBtn.isSelected()) {
-                elementoSeleccionado.setFont(new Font(elementoSeleccionado.getFont().getName(), Font.BOLD | Font.ITALIC, elementoSeleccionado.getFont().getSize()));
-            } else if (bold_toggleBtn.isSelected() && !italic_toggleBtn.isSelected()) {
-                elementoSeleccionado.setFont(new Font(elementoSeleccionado.getFont().getName(), Font.BOLD, elementoSeleccionado.getFont().getSize()));
-            } else if (!bold_toggleBtn.isSelected() && italic_toggleBtn.isSelected()) {
-                elementoSeleccionado.setFont(new Font(elementoSeleccionado.getFont().getName(), Font.ITALIC, elementoSeleccionado.getFont().getSize()));
-            } else {
-                elementoSeleccionado.setFont(new Font(elementoSeleccionado.getFont().getName(), Font.PLAIN, elementoSeleccionado.getFont().getSize()));
+        if (labelSeleccionado != null) {
+            elementoSeleccionado = encontrarElemento(labelSeleccionado);
+            if (elementoSeleccionado != null) {
+                Font fuenteElemento = elementoSeleccionado.getFuente();
+                if (bold_toggleBtn.isSelected() && italic_toggleBtn.isSelected()) {
+                    labelSeleccionado.setFont(new Font(fuenteElemento.getName(), Font.BOLD | Font.ITALIC, fuenteElemento.getSize()));
+                } else if (bold_toggleBtn.isSelected() && !italic_toggleBtn.isSelected()) {
+                    labelSeleccionado.setFont(new Font(fuenteElemento.getName(), Font.BOLD, fuenteElemento.getSize()));
+                } else if (!bold_toggleBtn.isSelected() && italic_toggleBtn.isSelected()) {
+                    labelSeleccionado.setFont(new Font(fuenteElemento.getName(), Font.ITALIC, fuenteElemento.getSize()));
+                } else {
+                    labelSeleccionado.setFont(new Font(fuenteElemento.getName(), Font.PLAIN, fuenteElemento.getSize()));
+                }
+                fuenteElemento = new Font(fuenteElemento.getName(), labelSeleccionado.getFont().getStyle(), fuenteElemento.getSize());
+                elementoSeleccionado.setFuente(fuenteElemento);
             }
         } else {
             bold_toggleBtn.setSelected(false);
             italic_toggleBtn.setSelected(false);
         }
     }
-    
+
     private void setColorToElement(int option) {
-        if (option == BACKGROUND_OPTION) {
-            elementoSeleccionado.setBackground((Color) JColorChooser.showDialog(this, "Color Picker", Color.WHITE));
-        } else if (option == FOREGROUND_OPTION) {
-            elementoSeleccionado.setForeground((Color) JColorChooser.showDialog(this, "Color Picker", Color.BLACK));
+        if (elementoSeleccionado != null) {
+            Color color = (Color) JColorChooser.showDialog(this, "Color Picker", Color.WHITE);
+            if (option == BACKGROUND_OPTION) {
+                labelSeleccionado.setBackground(color);
+                elementoSeleccionado.setBackgroundColor(color);
+            } else if (option == FOREGROUND_OPTION) {
+                labelSeleccionado.setForeground(color);
+                elementoSeleccionado.setForegroundColor(color);
+            }
         }
     }
 

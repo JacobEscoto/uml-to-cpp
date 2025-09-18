@@ -15,6 +15,7 @@ public abstract class FiguraDiagrama implements Serializable {
     protected Color backgroundColor;
     protected Color foregroundColor;
     protected ImageIcon icono;
+    protected Font fuente;
     protected int x;
     protected int y;
 
@@ -24,6 +25,7 @@ public abstract class FiguraDiagrama implements Serializable {
         this.backgroundColor = backgroundColor;
         this.foregroundColor = foregroundColor;
         this.icono = icono;
+        this.fuente = new Font("Arial", Font.PLAIN, 12);
         this.x = x;
         this.y = y;
     }
@@ -76,6 +78,14 @@ public abstract class FiguraDiagrama implements Serializable {
         this.icono = icono;
     }
 
+    public Font getFuente() {
+        return fuente;
+    }
+
+    public void setFuente(Font fuente) {
+        this.fuente = fuente;
+    }
+
     public int getX() {
         return x;
     }
@@ -92,10 +102,12 @@ public abstract class FiguraDiagrama implements Serializable {
         this.y = y;
     }
 
+    
+
     public void initLabel() {
         this.label = new JLabel(this.texto, this.icono, JLabel.CENTER);
         label.setName(nombre);
-        label.setBounds(50, 50, icono.getIconWidth(), icono.getIconHeight());
+        label.setBounds(x, y, icono.getIconWidth(), icono.getIconHeight());
         label.setBackground(backgroundColor);
         label.setOpaque(true);
         label.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
@@ -104,7 +116,23 @@ public abstract class FiguraDiagrama implements Serializable {
         label.setHorizontalTextPosition(JLabel.CENTER);
         label.setVerticalTextPosition(JLabel.CENTER);
         label.setForeground(foregroundColor);
-        label.setFont(new Font("Arial", Font.PLAIN, 12));
+        label.setFont(this.fuente);
+
+        label.addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equalsIgnoreCase("name")) {
+                nombre = label.getName();
+            } else if (evt.getPropertyName().equalsIgnoreCase("text")) {
+                texto = label.getText();
+            } else if (evt.getPropertyName().equalsIgnoreCase("background")) {
+                backgroundColor = label.getBackground();
+            } else if (evt.getPropertyName().equalsIgnoreCase("foreground")) {
+                foregroundColor = label.getForeground();
+            } else if (evt.getPropertyName().equalsIgnoreCase("icon")) {
+                icono = (ImageIcon) label.getIcon();
+            } else if(evt.getPropertyName().equalsIgnoreCase("font")) {
+                fuente = label.getFont();
+            }
+        });
     }
 
     public abstract String generarCodigo();
