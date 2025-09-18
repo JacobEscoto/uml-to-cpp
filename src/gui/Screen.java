@@ -627,11 +627,13 @@ public class Screen extends JFrame {
 
     private void changeElementText_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeElementText_jmiActionPerformed
         String textModified = JOptionPane.showInputDialog(this, "Modificar Texto", labelSeleccionado.getText());
-        if (!textModified.trim().equals("")) {
-            elementoSeleccionado = encontrarElemento(labelSeleccionado);
-            if (elementoSeleccionado != null) {
-                labelSeleccionado.setText(textModified);
-                elementoSeleccionado.setTexto(textModified);
+        if (textModified != null) {
+            if (textModified.trim().length() != 0) {
+                elementoSeleccionado = encontrarElemento(labelSeleccionado);
+                if (elementoSeleccionado != null) {
+                    labelSeleccionado.setText(textModified);
+                    elementoSeleccionado.setTexto(textModified);
+                }
             }
         }
     }//GEN-LAST:event_changeElementText_jmiActionPerformed
@@ -672,7 +674,7 @@ public class Screen extends JFrame {
         elementoSeleccionado = encontrarElemento(labelSeleccionado);
         elementos.remove(elementoSeleccionado);
         workarea_jp.remove(labelSeleccionado);
-        
+
         elementoSeleccionado = null;
         labelSeleccionado = null;
     }//GEN-LAST:event_deleteElement_jmiActionPerformed
