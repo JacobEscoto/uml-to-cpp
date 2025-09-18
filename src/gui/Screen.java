@@ -1,8 +1,11 @@
 package gui;
 
+import elementos.FiguraDiagrama;
+import elementos.Inicio;
 import java.awt.GraphicsEnvironment;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
@@ -10,19 +13,19 @@ public class Screen extends JFrame {
 
     public Screen() {
         initComponents();
-        
+
         // Iniciar Fonts Disponibles
         DefaultComboBoxModel modeloFuentes = new DefaultComboBoxModel();
         fontChooser_jcb.setModel(modeloFuentes);
         initFonts(fontChooser_jcb);
-        
+
         // Modelo de Listas (Variables y Procesos)
         DefaultListModel modelVariables = new DefaultListModel();
         variables_list.setModel(modelVariables);
-        
+
         DefaultListModel modelProcesos = new DefaultListModel();
         process_list.setModel(modelProcesos);
-        
+
     }
 
     @SuppressWarnings("unchecked")
@@ -135,7 +138,7 @@ public class Screen extends JFrame {
                 .addComponent(decisionFig_btn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(soutFig_btn)
-                .addContainerGap(139, Short.MAX_VALUE))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
 
         getContentPane().add(menuElements_jp, java.awt.BorderLayout.LINE_START);
@@ -211,7 +214,7 @@ public class Screen extends JFrame {
                 .addComponent(processes_scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(agregarProceso_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         extras_tabs.addTab("Procesos", procesos_jp);
@@ -234,7 +237,7 @@ public class Screen extends JFrame {
         controlButtons_jpLayout.setHorizontalGroup(
             controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlButtons_jpLayout.createSequentialGroup()
-                .addContainerGap(578, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(generarCodigo_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(570, 570, 570))
         );
@@ -345,26 +348,29 @@ public class Screen extends JFrame {
     public static void main(String args[]) {
         try {
             javax.swing.UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
-        
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Screen screen = new Screen();
                 screen.setLocationRelativeTo(null);
                 screen.setVisible(true);
+                
             }
         });
     }
-    
+
     private void initFonts(JComboBox comboBox) {
-        String [] fuentes = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-        DefaultComboBoxModel modelo = ((DefaultComboBoxModel)comboBox.getModel());
+        String[] fuentes = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+        DefaultComboBoxModel modelo = ((DefaultComboBoxModel) comboBox.getModel());
         for (String fuente : fuentes) {
             modelo.addElement(fuente);
         }
     }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregarProceso_btn;
