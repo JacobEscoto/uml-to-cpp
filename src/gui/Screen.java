@@ -22,10 +22,13 @@ public class Screen extends JFrame {
 
     private Point click;
     private JLabel elementoSeleccionado = null;
-    private ArrayList<FiguraDiagrama> elementos = new ArrayList();
+    private final ArrayList<FiguraDiagrama> elementos = new ArrayList();
+    private final int BACKGROUND_OPTION = 1;
+    private final int FOREGROUND_OPTION = 2;
 
     public Screen() {
         initComponents();
+        this.setTitle("Nuevo Diagrama - " + this.getTitle());
 
         // Iniciar Fonts Disponibles
         DefaultComboBoxModel modeloFuentes = new DefaultComboBoxModel();
@@ -45,6 +48,17 @@ public class Screen extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        elements_jpm = new javax.swing.JPopupMenu();
+        changeElementBackground_jmi = new javax.swing.JMenuItem();
+        changeElementForeground_jmi = new javax.swing.JMenuItem();
+        changeElementText_jmi = new javax.swing.JMenuItem();
+        changeElementFont_jmi = new javax.swing.JMenuItem();
+        js_elementEdition = new javax.swing.JPopupMenu.Separator();
+        copyElement_jmi = new javax.swing.JMenuItem();
+        pasteElement_jmi = new javax.swing.JMenuItem();
+        deleteElement_jmi = new javax.swing.JMenuItem();
+        js_elementProperties = new javax.swing.JPopupMenu.Separator();
+        elementProperties_jmi = new javax.swing.JMenuItem();
         menuElements_jp = new javax.swing.JPanel();
         optionsTitle = new javax.swing.JLabel();
         terminalFig_btn = new javax.swing.JButton();
@@ -81,7 +95,37 @@ public class Screen extends JFrame {
         workarea_jp = new javax.swing.JPanel();
         frameMenu_jmb = new javax.swing.JMenuBar();
         fileOptions_jm = new javax.swing.JMenu();
+        newFile_jmi = new javax.swing.JMenuItem();
+        openFile_jmi = new javax.swing.JMenuItem();
+        saveFile_jmi = new javax.swing.JMenuItem();
         exportOptions_jm = new javax.swing.JMenu();
+
+        changeElementBackground_jmi.setText("Cambiar Color");
+        elements_jpm.add(changeElementBackground_jmi);
+
+        changeElementForeground_jmi.setText("Cambiar Color de Texto");
+        elements_jpm.add(changeElementForeground_jmi);
+
+        changeElementText_jmi.setText("Cambiar Texto");
+        elements_jpm.add(changeElementText_jmi);
+
+        changeElementFont_jmi.setText("Cambiar Fuente");
+        elements_jpm.add(changeElementFont_jmi);
+        elements_jpm.add(js_elementEdition);
+
+        copyElement_jmi.setText("Copiar");
+        copyElement_jmi.setToolTipText("");
+        elements_jpm.add(copyElement_jmi);
+
+        pasteElement_jmi.setText("Pegar");
+        elements_jpm.add(pasteElement_jmi);
+
+        deleteElement_jmi.setText("Eliminar");
+        elements_jpm.add(deleteElement_jmi);
+        elements_jpm.add(js_elementProperties);
+
+        elementProperties_jmi.setText("Propiedades");
+        elements_jpm.add(elementProperties_jmi);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UML Editor");
@@ -409,6 +453,19 @@ public class Screen extends JFrame {
         getContentPane().add(workarea_jp, java.awt.BorderLayout.CENTER);
 
         fileOptions_jm.setText("Archivo");
+
+        newFile_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        newFile_jmi.setText("Nuevo");
+        fileOptions_jm.add(newFile_jmi);
+
+        openFile_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        openFile_jmi.setText("Abrir");
+        fileOptions_jm.add(openFile_jmi);
+
+        saveFile_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        saveFile_jmi.setText("Guardar");
+        fileOptions_jm.add(saveFile_jmi);
+
         frameMenu_jmb.add(fileOptions_jm);
 
         exportOptions_jm.setText("Exportar");
@@ -420,8 +477,8 @@ public class Screen extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /*
-    ** DIAGRAM ELEMENTS OPTION PANEL
-     */
+    * DIAGRAM ELEMENTS OPTION PANEL
+    */
     private void terminalFig_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_terminalFig_btnMouseClicked
         boolean isStartExisting = false;
         boolean isEndExisting = false;
@@ -468,8 +525,8 @@ public class Screen extends JFrame {
     }//GEN-LAST:event_soutFig_btnMouseClicked
 
     /*
-    ** TOOLS FUNCTIONS
-     */
+    * TOOLS FUNCTIONS
+    */
     private void fontChooser_jcbItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fontChooser_jcbItemStateChanged
         if (elementoSeleccionado != null) {
             elementoSeleccionado.setFont(new Font((String) fontChooser_jcb.getSelectedItem(), elementoSeleccionado.getFont().getStyle(), elementoSeleccionado.getFont().getSize()));
@@ -492,13 +549,13 @@ public class Screen extends JFrame {
 
     private void foregroundColor_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foregroundColor_btnMouseClicked
         if (elementoSeleccionado != null) {
-            elementoSeleccionado.setForeground(colorChooser());
+            setColorToElement(FOREGROUND_OPTION);
         }
     }//GEN-LAST:event_foregroundColor_btnMouseClicked
 
     private void backgroundChooser_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backgroundChooser_btnMouseClicked
         if (elementoSeleccionado != null) {
-            elementoSeleccionado.setBackground(colorChooser());
+            setColorToElement(BACKGROUND_OPTION);
         }
     }//GEN-LAST:event_backgroundChooser_btnMouseClicked
 
@@ -518,16 +575,10 @@ public class Screen extends JFrame {
             }
         });
     }
-
-    private void initFonts(JComboBox comboBox) {
-        String[] fuentes = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-        DefaultComboBoxModel modelo = ((DefaultComboBoxModel) comboBox.getModel());
-        for (String fuente : fuentes) {
-            modelo.addElement(fuente);
-        }
-        modelo.setSelectedItem("Arial");
-    }
-
+    
+    /*
+    * FUNCTIONS IN SCREEN INTERACTIONS
+    */
     private void initDragAndDrop(JLabel figura, FiguraDiagrama elemento) {
         figura.addMouseListener(new MouseAdapter() {
             @Override
@@ -577,12 +628,25 @@ public class Screen extends JFrame {
     private void addToWorkArea(FiguraDiagrama elemento) {
         elemento.initLabel();
         elementos.add(elemento);
+        elemento.getLabel().setComponentPopupMenu(elements_jpm);
         initDragAndDrop(elemento.getLabel(), elemento);
         workarea_jp.add(elemento.getLabel());
         workarea_jp.revalidate();
         workarea_jp.repaint();
     }
 
+    /*
+    * FONT AND STYLE JLABEL FUNCTIONS
+    */
+    private void initFonts(JComboBox comboBox) {
+        String[] fuentes = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+        DefaultComboBoxModel modelo = ((DefaultComboBoxModel) comboBox.getModel());
+        for (String fuente : fuentes) {
+            modelo.addElement(fuente);
+        }
+        modelo.setSelectedItem("Arial");
+    }
+    
     private void stylishFont() {
         if (elementoSeleccionado != null) {
             if (bold_toggleBtn.isSelected() && italic_toggleBtn.isSelected()) {
@@ -599,9 +663,13 @@ public class Screen extends JFrame {
             italic_toggleBtn.setSelected(false);
         }
     }
-
-    private Color colorChooser() {
-        return (Color) JColorChooser.showDialog(this, "Elige el color", Color.DARK_GRAY);
+    
+    private void setColorToElement(int option) {
+        if (option == BACKGROUND_OPTION) {
+            elementoSeleccionado.setBackground((Color) JColorChooser.showDialog(this, "Color Picker", Color.WHITE));
+        } else if (option == FOREGROUND_OPTION) {
+            elementoSeleccionado.setForeground((Color) JColorChooser.showDialog(this, "Color Picker", Color.BLACK));
+        }
     }
 
 
@@ -610,8 +678,16 @@ public class Screen extends JFrame {
     private javax.swing.JButton agregarVariable_btn;
     private javax.swing.JButton backgroundChooser_btn;
     private javax.swing.JToggleButton bold_toggleBtn;
+    private javax.swing.JMenuItem changeElementBackground_jmi;
+    private javax.swing.JMenuItem changeElementFont_jmi;
+    private javax.swing.JMenuItem changeElementForeground_jmi;
+    private javax.swing.JMenuItem changeElementText_jmi;
     private javax.swing.JPanel controlButtons_jp;
+    private javax.swing.JMenuItem copyElement_jmi;
     private javax.swing.JButton decisionFig_btn;
+    private javax.swing.JMenuItem deleteElement_jmi;
+    private javax.swing.JMenuItem elementProperties_jmi;
+    private javax.swing.JPopupMenu elements_jpm;
     private javax.swing.JMenu exportOptions_jm;
     private javax.swing.JTabbedPane extras_tabs;
     private javax.swing.JMenu fileOptions_jm;
@@ -624,13 +700,19 @@ public class Screen extends JFrame {
     private javax.swing.JToggleButton italic_toggleBtn;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JPopupMenu.Separator js_elementEdition;
+    private javax.swing.JPopupMenu.Separator js_elementProperties;
     private javax.swing.JPanel menuElements_jp;
+    private javax.swing.JMenuItem newFile_jmi;
+    private javax.swing.JMenuItem openFile_jmi;
     private javax.swing.JLabel optionsTitle;
+    private javax.swing.JMenuItem pasteElement_jmi;
     private javax.swing.JButton predefinedProcessFig_btn;
     private javax.swing.JPanel procesos_jp;
     private javax.swing.JButton processFig_btn;
     private javax.swing.JList<String> process_list;
     private javax.swing.JScrollPane processes_scroll;
+    private javax.swing.JMenuItem saveFile_jmi;
     private javax.swing.JSeparator separator2_tool;
     private javax.swing.JSeparator separator_tool;
     private javax.swing.JLabel sizeFontLabel;
