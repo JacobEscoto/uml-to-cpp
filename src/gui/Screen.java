@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -18,6 +19,7 @@ public class Screen extends JFrame {
 
     private Point click;
     private JLabel elementoSeleccionado = null;
+    private ArrayList<FiguraDiagrama> elementos = new ArrayList();
 
     public Screen() {
         initComponents();
@@ -379,7 +381,28 @@ public class Screen extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void terminalFig_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_terminalFig_btnMouseClicked
-        // TO BE IMPLEMENTED...
+        boolean isStartExisting = false;
+        boolean isEndExisting = false;
+        
+        for (FiguraDiagrama elemento : elementos) {
+            if (elemento instanceof Inicio) {
+                isStartExisting = true;
+            }
+            if (elemento instanceof Fin) {
+                isEndExisting = true;
+            }
+        }
+        
+        if (!isStartExisting && !isEndExisting) {
+            Inicio inicio = new Inicio(new ImageIcon(getClass().getResource("/recursos/figuras/templates/terminal.png")), 50, 50);
+            addToWorkArea(inicio);
+        } else if (isStartExisting && !isEndExisting) {
+            Fin fin = new Fin(new ImageIcon(getClass().getResource("/recursos/figuras/templates/terminal.png")), 50, 50);
+            addToWorkArea(fin);
+        } else if (!isStartExisting && isEndExisting) {
+            Inicio inicio = new Inicio(new ImageIcon(getClass().getResource("/recursos/figuras/templates/terminal.png")), 50, 50);
+            addToWorkArea(inicio);
+        }
     }//GEN-LAST:event_terminalFig_btnMouseClicked
 
     private void processFig_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_processFig_btnMouseClicked
@@ -473,9 +496,10 @@ public class Screen extends JFrame {
         workarea_jp.setComponentZOrder(elementoSeleccionado, 0);
         workarea_jp.repaint();
     }
-    
+
     private void addToWorkArea(FiguraDiagrama elemento) {
         elemento.initLabel();
+        elementos.add(elemento);
         initDragAndDrop(elemento.getLabel(), elemento);
         workarea_jp.add(elemento.getLabel());
         workarea_jp.revalidate();
