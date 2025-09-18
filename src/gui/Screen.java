@@ -1,6 +1,8 @@
 package gui;
 
 import elementos.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -61,16 +64,16 @@ public class Screen extends JFrame {
         controlButtons_jp = new javax.swing.JPanel();
         generarCodigo_btn = new javax.swing.JButton();
         tools_jp = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        fontLabel = new javax.swing.JLabel();
         fontChooser_jcb = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
+        sizeFontLabel = new javax.swing.JLabel();
         fontSize_spinner = new javax.swing.JSpinner();
-        jLabel4 = new javax.swing.JLabel();
+        space1_toolLabel = new javax.swing.JLabel();
         separator_tool = new javax.swing.JSeparator();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        bold_toggleBtn = new javax.swing.JToggleButton();
         jLabel5 = new javax.swing.JLabel();
-        jToggleButton2 = new javax.swing.JToggleButton();
-        jLabel6 = new javax.swing.JLabel();
+        italic_toggleBtn = new javax.swing.JToggleButton();
+        space2_toolLbl = new javax.swing.JLabel();
         separator2_tool = new javax.swing.JSeparator();
         foregroundColor_btn = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
@@ -292,30 +295,42 @@ public class Screen extends JFrame {
         tools_jp.setPreferredSize(new java.awt.Dimension(1280, 40));
         tools_jp.setLayout(new javax.swing.BoxLayout(tools_jp, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("   Fuente:    ");
-        tools_jp.add(jLabel2);
+        fontLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        fontLabel.setForeground(new java.awt.Color(0, 0, 0));
+        fontLabel.setText("   Fuente:    ");
+        tools_jp.add(fontLabel);
 
+        fontChooser_jcb.setToolTipText("<html><b>Fuente</b><p>Escoge una nueva fuente para tu texto</p></html>");
         fontChooser_jcb.setLightWeightPopupEnabled(false);
         fontChooser_jcb.setMaximumSize(new java.awt.Dimension(130, 22));
         fontChooser_jcb.setMinimumSize(new java.awt.Dimension(130, 22));
         fontChooser_jcb.setPreferredSize(new java.awt.Dimension(130, 22));
+        fontChooser_jcb.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                fontChooser_jcbItemStateChanged(evt);
+            }
+        });
         tools_jp.add(fontChooser_jcb);
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("       Tamaño:   ");
-        tools_jp.add(jLabel3);
+        sizeFontLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        sizeFontLabel.setForeground(new java.awt.Color(0, 0, 0));
+        sizeFontLabel.setText("       Tamaño:   ");
+        tools_jp.add(sizeFontLabel);
 
         fontSize_spinner.setModel(new javax.swing.SpinnerNumberModel(12, 8, 48, 1));
+        fontSize_spinner.setToolTipText("<html><b>Tamaño de Fuente</b><p>Cambia el tamaño del texto</p></html>");
         fontSize_spinner.setMaximumSize(new java.awt.Dimension(90, 22));
         fontSize_spinner.setMinimumSize(new java.awt.Dimension(90, 22));
         fontSize_spinner.setPreferredSize(new java.awt.Dimension(90, 22));
+        fontSize_spinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                fontSize_spinnerStateChanged(evt);
+            }
+        });
         tools_jp.add(fontSize_spinner);
 
-        jLabel4.setText("    ");
-        tools_jp.add(jLabel4);
+        space1_toolLabel.setText("    ");
+        tools_jp.add(space1_toolLabel);
 
         separator_tool.setBackground(new java.awt.Color(0, 0, 0));
         separator_tool.setForeground(new java.awt.Color(0, 0, 0));
@@ -325,21 +340,33 @@ public class Screen extends JFrame {
         separator_tool.setPreferredSize(new java.awt.Dimension(12, 30));
         tools_jp.add(separator_tool);
 
-        jToggleButton1.setBackground(new java.awt.Color(153, 153, 153));
-        jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/iconos/bold.png"))); // NOI18N
-        jToggleButton1.setBorderPainted(false);
-        tools_jp.add(jToggleButton1);
+        bold_toggleBtn.setBackground(new java.awt.Color(153, 153, 153));
+        bold_toggleBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/iconos/bold.png"))); // NOI18N
+        bold_toggleBtn.setToolTipText("<html><b>Negrita</b><p>Haz tu texto en negrita</p></html>");
+        bold_toggleBtn.setBorderPainted(false);
+        bold_toggleBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bold_toggleBtnMouseClicked(evt);
+            }
+        });
+        tools_jp.add(bold_toggleBtn);
 
         jLabel5.setText("  ");
         tools_jp.add(jLabel5);
 
-        jToggleButton2.setBackground(new java.awt.Color(153, 153, 153));
-        jToggleButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/iconos/italic.png"))); // NOI18N
-        jToggleButton2.setBorderPainted(false);
-        tools_jp.add(jToggleButton2);
+        italic_toggleBtn.setBackground(new java.awt.Color(153, 153, 153));
+        italic_toggleBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/iconos/italic.png"))); // NOI18N
+        italic_toggleBtn.setToolTipText("<html><b>Italica</b><p>Haz tu texto en italica</p></html>");
+        italic_toggleBtn.setBorderPainted(false);
+        italic_toggleBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                italic_toggleBtnMouseClicked(evt);
+            }
+        });
+        tools_jp.add(italic_toggleBtn);
 
-        jLabel6.setText("     ");
-        tools_jp.add(jLabel6);
+        space2_toolLbl.setText("     ");
+        tools_jp.add(space2_toolLbl);
 
         separator2_tool.setBackground(new java.awt.Color(0, 0, 0));
         separator2_tool.setForeground(new java.awt.Color(0, 0, 0));
@@ -351,16 +378,28 @@ public class Screen extends JFrame {
 
         foregroundColor_btn.setBackground(new java.awt.Color(0, 0, 0));
         foregroundColor_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/iconos/text_color.png"))); // NOI18N
+        foregroundColor_btn.setToolTipText("<html><b>Color de Texto</b><p>Cambia el color de tu texto</p></html>");
         foregroundColor_btn.setBorder(null);
         foregroundColor_btn.setBorderPainted(false);
+        foregroundColor_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                foregroundColor_btnMouseClicked(evt);
+            }
+        });
         tools_jp.add(foregroundColor_btn);
 
         jLabel7.setText("   ");
         tools_jp.add(jLabel7);
 
         backgroundChooser_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/iconos/bucket_fill.png"))); // NOI18N
+        backgroundChooser_btn.setToolTipText("<html><b>Shading</b><p>Cambia el color del elemento</p></html>");
         backgroundChooser_btn.setBorderPainted(false);
         backgroundChooser_btn.setContentAreaFilled(false);
+        backgroundChooser_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                backgroundChooser_btnMouseClicked(evt);
+            }
+        });
         tools_jp.add(backgroundChooser_btn);
 
         getContentPane().add(tools_jp, java.awt.BorderLayout.PAGE_START);
@@ -380,10 +419,13 @@ public class Screen extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /*
+    ** DIAGRAM ELEMENTS OPTION PANEL
+     */
     private void terminalFig_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_terminalFig_btnMouseClicked
         boolean isStartExisting = false;
         boolean isEndExisting = false;
-        
+
         for (FiguraDiagrama elemento : elementos) {
             if (elemento instanceof Inicio) {
                 isStartExisting = true;
@@ -392,7 +434,7 @@ public class Screen extends JFrame {
                 isEndExisting = true;
             }
         }
-        
+
         if (!isStartExisting && !isEndExisting) {
             Inicio inicio = new Inicio(new ImageIcon(getClass().getResource("/recursos/figuras/templates/terminal.png")), 50, 50);
             addToWorkArea(inicio);
@@ -424,6 +466,41 @@ public class Screen extends JFrame {
         SalidaDatos sout = new SalidaDatos(new ImageIcon(getClass().getResource("/recursos/figuras/templates/in_out.png")), 50, 50);
         addToWorkArea(sout);
     }//GEN-LAST:event_soutFig_btnMouseClicked
+
+    /*
+    ** TOOLS FUNCTIONS
+     */
+    private void fontChooser_jcbItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fontChooser_jcbItemStateChanged
+        if (elementoSeleccionado != null) {
+            elementoSeleccionado.setFont(new Font((String) fontChooser_jcb.getSelectedItem(), elementoSeleccionado.getFont().getStyle(), elementoSeleccionado.getFont().getSize()));
+        }
+    }//GEN-LAST:event_fontChooser_jcbItemStateChanged
+
+    private void fontSize_spinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fontSize_spinnerStateChanged
+        if (elementoSeleccionado != null) {
+            elementoSeleccionado.setFont(new Font(elementoSeleccionado.getFont().getName(), elementoSeleccionado.getFont().getStyle(), (int) fontSize_spinner.getValue()));
+        }
+    }//GEN-LAST:event_fontSize_spinnerStateChanged
+
+    private void bold_toggleBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bold_toggleBtnMouseClicked
+        stylishFont();
+    }//GEN-LAST:event_bold_toggleBtnMouseClicked
+
+    private void italic_toggleBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_italic_toggleBtnMouseClicked
+        stylishFont();
+    }//GEN-LAST:event_italic_toggleBtnMouseClicked
+
+    private void foregroundColor_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foregroundColor_btnMouseClicked
+        if (elementoSeleccionado != null) {
+            elementoSeleccionado.setForeground(colorChooser());
+        }
+    }//GEN-LAST:event_foregroundColor_btnMouseClicked
+
+    private void backgroundChooser_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backgroundChooser_btnMouseClicked
+        if (elementoSeleccionado != null) {
+            elementoSeleccionado.setBackground(colorChooser());
+        }
+    }//GEN-LAST:event_backgroundChooser_btnMouseClicked
 
     public static void main(String args[]) {
         try {
@@ -506,29 +583,47 @@ public class Screen extends JFrame {
         workarea_jp.repaint();
     }
 
+    private void stylishFont() {
+        if (elementoSeleccionado != null) {
+            if (bold_toggleBtn.isSelected() && italic_toggleBtn.isSelected()) {
+                elementoSeleccionado.setFont(new Font(elementoSeleccionado.getFont().getName(), Font.BOLD | Font.ITALIC, elementoSeleccionado.getFont().getSize()));
+            } else if (bold_toggleBtn.isSelected() && !italic_toggleBtn.isSelected()) {
+                elementoSeleccionado.setFont(new Font(elementoSeleccionado.getFont().getName(), Font.BOLD, elementoSeleccionado.getFont().getSize()));
+            } else if (!bold_toggleBtn.isSelected() && italic_toggleBtn.isSelected()) {
+                elementoSeleccionado.setFont(new Font(elementoSeleccionado.getFont().getName(), Font.ITALIC, elementoSeleccionado.getFont().getSize()));
+            } else {
+                elementoSeleccionado.setFont(new Font(elementoSeleccionado.getFont().getName(), Font.PLAIN, elementoSeleccionado.getFont().getSize()));
+            }
+        } else {
+            bold_toggleBtn.setSelected(false);
+            italic_toggleBtn.setSelected(false);
+        }
+    }
+
+    private Color colorChooser() {
+        return (Color) JColorChooser.showDialog(this, "Elige el color", Color.DARK_GRAY);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregarProceso_btn;
     private javax.swing.JButton agregarVariable_btn;
     private javax.swing.JButton backgroundChooser_btn;
+    private javax.swing.JToggleButton bold_toggleBtn;
     private javax.swing.JPanel controlButtons_jp;
     private javax.swing.JButton decisionFig_btn;
     private javax.swing.JMenu exportOptions_jm;
     private javax.swing.JTabbedPane extras_tabs;
     private javax.swing.JMenu fileOptions_jm;
     private javax.swing.JComboBox<String> fontChooser_jcb;
+    private javax.swing.JLabel fontLabel;
     private javax.swing.JSpinner fontSize_spinner;
     private javax.swing.JButton foregroundColor_btn;
     private javax.swing.JMenuBar frameMenu_jmb;
     private javax.swing.JButton generarCodigo_btn;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JToggleButton italic_toggleBtn;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JToggleButton jToggleButton1;
-    private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JPanel menuElements_jp;
     private javax.swing.JLabel optionsTitle;
     private javax.swing.JButton predefinedProcessFig_btn;
@@ -538,7 +633,10 @@ public class Screen extends JFrame {
     private javax.swing.JScrollPane processes_scroll;
     private javax.swing.JSeparator separator2_tool;
     private javax.swing.JSeparator separator_tool;
+    private javax.swing.JLabel sizeFontLabel;
     private javax.swing.JButton soutFig_btn;
+    private javax.swing.JLabel space1_toolLabel;
+    private javax.swing.JLabel space2_toolLbl;
     private javax.swing.JButton terminalFig_btn;
     private javax.swing.JPanel tools_jp;
     private javax.swing.JPanel variables_jp;

@@ -460,7 +460,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="jLabel2">
+        <Component class="javax.swing.JLabel" name="fontLabel">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
@@ -476,6 +476,7 @@
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Fuente&lt;/b&gt;&lt;p&gt;Escoge una nueva fuente para tu texto&lt;/p&gt;&lt;/html&gt;"/>
             <Property name="lightWeightPopupEnabled" type="boolean" value="false"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[130, 22]"/>
@@ -487,11 +488,14 @@
               <Dimension value="[130, 22]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="fontChooser_jcbItemStateChanged"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel3">
+        <Component class="javax.swing.JLabel" name="sizeFontLabel">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
@@ -507,6 +511,7 @@
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
               <SpinnerModel initial="12" maximum="48" minimum="8" numberType="java.lang.Integer" stepSize="1" type="number"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Tama&#xf1;o de Fuente&lt;/b&gt;&lt;p&gt;Cambia el tama&#xf1;o del texto&lt;/p&gt;&lt;/html&gt;"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[90, 22]"/>
             </Property>
@@ -517,8 +522,11 @@
               <Dimension value="[90, 22]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="fontSize_spinnerStateChanged"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel4">
+        <Component class="javax.swing.JLabel" name="space1_toolLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="    "/>
           </Properties>
@@ -543,7 +551,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JToggleButton" name="jToggleButton1">
+        <Component class="javax.swing.JToggleButton" name="bold_toggleBtn">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="99" green="99" red="99" type="rgb"/>
@@ -551,15 +559,19 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/recursos/iconos/bold.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Negrita&lt;/b&gt;&lt;p&gt;Haz tu texto en negrita&lt;/p&gt;&lt;/html&gt;"/>
             <Property name="borderPainted" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bold_toggleBtnMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
             <Property name="text" type="java.lang.String" value="  "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JToggleButton" name="jToggleButton2">
+        <Component class="javax.swing.JToggleButton" name="italic_toggleBtn">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="99" green="99" red="99" type="rgb"/>
@@ -567,10 +579,14 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/recursos/iconos/italic.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Italica&lt;/b&gt;&lt;p&gt;Haz tu texto en italica&lt;/p&gt;&lt;/html&gt;"/>
             <Property name="borderPainted" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="italic_toggleBtnMouseClicked"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel6">
+        <Component class="javax.swing.JLabel" name="space2_toolLbl">
           <Properties>
             <Property name="text" type="java.lang.String" value="     "/>
           </Properties>
@@ -603,11 +619,15 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/recursos/iconos/text_color.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Color de Texto&lt;/b&gt;&lt;p&gt;Cambia el color de tu texto&lt;/p&gt;&lt;/html&gt;"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="null"/>
             </Property>
             <Property name="borderPainted" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="foregroundColor_btnMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
@@ -619,9 +639,13 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/recursos/iconos/bucket_fill.png"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Shading&lt;/b&gt;&lt;p&gt;Cambia el color del elemento&lt;/p&gt;&lt;/html&gt;"/>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="backgroundChooser_btnMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
