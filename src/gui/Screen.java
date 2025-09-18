@@ -97,22 +97,47 @@ public class Screen extends JFrame {
         terminalFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/terminal.png"))); // NOI18N
         terminalFig_btn.setBorderPainted(false);
         terminalFig_btn.setContentAreaFilled(false);
+        terminalFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                terminalFig_btnMouseClicked(evt);
+            }
+        });
 
         processFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/proceso.png"))); // NOI18N
         processFig_btn.setBorderPainted(false);
         processFig_btn.setContentAreaFilled(false);
+        processFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                processFig_btnMouseClicked(evt);
+            }
+        });
 
         predefinedProcessFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/defined_process.png"))); // NOI18N
         predefinedProcessFig_btn.setBorderPainted(false);
         predefinedProcessFig_btn.setContentAreaFilled(false);
+        predefinedProcessFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                predefinedProcessFig_btnMouseClicked(evt);
+            }
+        });
 
         decisionFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/decision_rombo.png"))); // NOI18N
         decisionFig_btn.setBorderPainted(false);
         decisionFig_btn.setContentAreaFilled(false);
+        decisionFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                decisionFig_btnMouseClicked(evt);
+            }
+        });
 
         soutFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/paralelograma.png"))); // NOI18N
         soutFig_btn.setBorderPainted(false);
         soutFig_btn.setContentAreaFilled(false);
+        soutFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                soutFig_btnMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout menuElements_jpLayout = new javax.swing.GroupLayout(menuElements_jp);
         menuElements_jp.setLayout(menuElements_jpLayout);
@@ -353,6 +378,30 @@ public class Screen extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void terminalFig_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_terminalFig_btnMouseClicked
+        // TO BE IMPLEMENTED...
+    }//GEN-LAST:event_terminalFig_btnMouseClicked
+
+    private void processFig_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_processFig_btnMouseClicked
+        Proceso proceso = new Proceso(new ImageIcon(getClass().getResource("/recursos/figuras/templates/process.png")), 50, 50);
+        addToWorkArea(proceso);
+    }//GEN-LAST:event_processFig_btnMouseClicked
+
+    private void predefinedProcessFig_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_predefinedProcessFig_btnMouseClicked
+        ProcesoPredefinido procesoPredefinido = new ProcesoPredefinido(new ImageIcon(getClass().getResource("/recursos/figuras/templates/predefined_process.png")), 50, 50);
+        addToWorkArea(procesoPredefinido);
+    }//GEN-LAST:event_predefinedProcessFig_btnMouseClicked
+
+    private void decisionFig_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_decisionFig_btnMouseClicked
+        Decision decision = new Decision(new ImageIcon(getClass().getResource("/recursos/figuras/templates/decision.png")), 50, 50);
+        addToWorkArea(decision);
+    }//GEN-LAST:event_decisionFig_btnMouseClicked
+
+    private void soutFig_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_soutFig_btnMouseClicked
+        SalidaDatos sout = new SalidaDatos(new ImageIcon(getClass().getResource("/recursos/figuras/templates/in_out.png")), 50, 50);
+        addToWorkArea(sout);
+    }//GEN-LAST:event_soutFig_btnMouseClicked
+
     public static void main(String args[]) {
         try {
             javax.swing.UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
@@ -376,6 +425,7 @@ public class Screen extends JFrame {
         for (String fuente : fuentes) {
             modelo.addElement(fuente);
         }
+        modelo.setSelectedItem("Arial");
     }
 
     private void initDragAndDrop(JLabel figura, FiguraDiagrama elemento) {
@@ -421,6 +471,14 @@ public class Screen extends JFrame {
     private void seleccionarElemento(JLabel label) {
         elementoSeleccionado = label;
         workarea_jp.setComponentZOrder(elementoSeleccionado, 0);
+        workarea_jp.repaint();
+    }
+    
+    private void addToWorkArea(FiguraDiagrama elemento) {
+        elemento.initLabel();
+        initDragAndDrop(elemento.getLabel(), elemento);
+        workarea_jp.add(elemento.getLabel());
+        workarea_jp.revalidate();
         workarea_jp.repaint();
     }
 

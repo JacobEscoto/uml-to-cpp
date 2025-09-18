@@ -138,6 +138,9 @@
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="terminalFig_btnMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="processFig_btn">
           <Properties>
@@ -147,6 +150,9 @@
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="processFig_btnMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="predefinedProcessFig_btn">
           <Properties>
@@ -156,6 +162,9 @@
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="predefinedProcessFig_btnMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="decisionFig_btn">
           <Properties>
@@ -165,6 +174,9 @@
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="decisionFig_btnMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="soutFig_btn">
           <Properties>
@@ -174,6 +186,9 @@
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="contentAreaFilled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="soutFig_btnMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
