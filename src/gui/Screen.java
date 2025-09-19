@@ -11,9 +11,11 @@ import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -36,11 +38,18 @@ public class Screen extends JFrame {
         // Iniciar Fonts Disponibles
         DefaultComboBoxModel modeloFuentes = new DefaultComboBoxModel();
         fontChooser_jcb.setModel(modeloFuentes);
+        fontProperty_jcb.setModel(modeloFuentes);
         initFonts(fontChooser_jcb);
+        initFonts(fontProperty_jcb);
 
         // Modelo de Listas (Variables y Procesos)
         DefaultListModel modelVariables = new DefaultListModel();
         variables_list.setModel(modelVariables);
+
+        // Modelo de Spinner Number para Tamaño de Fuente
+        SpinnerNumberModel modeloFontSize = new SpinnerNumberModel(12, 8, 48, 1);
+        fontSize_spinner.setModel(modeloFontSize);
+        fontSizeProperty_spinner.setModel(modeloFontSize);
 
         DefaultListModel modelProcesos = new DefaultListModel();
         process_list.setModel(modelProcesos);
@@ -62,6 +71,26 @@ public class Screen extends JFrame {
         deleteElement_jmi = new javax.swing.JMenuItem();
         js_elementProperties = new javax.swing.JPopupMenu.Separator();
         elementProperties_jmi = new javax.swing.JMenuItem();
+        properties_dialog = new javax.swing.JDialog();
+        jPanel1 = new javax.swing.JPanel();
+        namePropertyLabel = new javax.swing.JLabel();
+        tf_nameProperty = new javax.swing.JTextField();
+        textPropertyLabel = new javax.swing.JLabel();
+        tf_textProperty = new javax.swing.JTextField();
+        backgroundLabel = new javax.swing.JLabel();
+        foregroundLabel = new javax.swing.JLabel();
+        bgProperty = new javax.swing.JLabel();
+        foregroundProperty = new javax.swing.JLabel();
+        fontPropertyLabel = new javax.swing.JLabel();
+        fontProperty_jcb = new javax.swing.JComboBox<>();
+        fontSizePropertyLabel = new javax.swing.JLabel();
+        fontSizeProperty_spinner = new javax.swing.JSpinner();
+        widthProperty = new javax.swing.JLabel();
+        heigthPropertyLabel = new javax.swing.JLabel();
+        widthLabel_spinner = new javax.swing.JSpinner();
+        heigthLabel_spinner = new javax.swing.JSpinner();
+        cancelPropertyDialog_btn = new javax.swing.JButton();
+        okProperties_btn = new javax.swing.JButton();
         menuElements_jp = new javax.swing.JPanel();
         optionsTitle = new javax.swing.JLabel();
         terminalFig_btn = new javax.swing.JButton();
@@ -169,6 +198,161 @@ public class Screen extends JFrame {
             }
         });
         elements_jpm.add(elementProperties_jmi);
+
+        properties_dialog.setMaximumSize(new java.awt.Dimension(372, 375));
+        properties_dialog.setMinimumSize(new java.awt.Dimension(372, 375));
+        properties_dialog.setModal(true);
+        properties_dialog.setResizable(false);
+
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setMaximumSize(new java.awt.Dimension(372, 362));
+        jPanel1.setMinimumSize(new java.awt.Dimension(372, 362));
+
+        namePropertyLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        namePropertyLabel.setForeground(new java.awt.Color(0, 0, 0));
+        namePropertyLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        namePropertyLabel.setText("Nombre:");
+
+        textPropertyLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        textPropertyLabel.setForeground(new java.awt.Color(0, 0, 0));
+        textPropertyLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        textPropertyLabel.setText("Texto:");
+
+        backgroundLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        backgroundLabel.setForeground(new java.awt.Color(0, 0, 0));
+        backgroundLabel.setText("Background:");
+
+        foregroundLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        foregroundLabel.setForeground(new java.awt.Color(0, 0, 0));
+        foregroundLabel.setText("Foreground:");
+
+        bgProperty.setText("    ");
+
+        foregroundProperty.setText("    ");
+
+        fontPropertyLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        fontPropertyLabel.setForeground(new java.awt.Color(0, 0, 0));
+        fontPropertyLabel.setText("Fuente:");
+
+        fontSizePropertyLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        fontSizePropertyLabel.setForeground(new java.awt.Color(0, 0, 0));
+        fontSizePropertyLabel.setText("Tamaño:");
+
+        widthProperty.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        widthProperty.setForeground(new java.awt.Color(0, 0, 0));
+        widthProperty.setText("Ancho (px):");
+
+        heigthPropertyLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        heigthPropertyLabel.setForeground(new java.awt.Color(0, 0, 0));
+        heigthPropertyLabel.setText("Alto (px):");
+
+        cancelPropertyDialog_btn.setBackground(new java.awt.Color(153, 153, 153));
+        cancelPropertyDialog_btn.setForeground(new java.awt.Color(0, 0, 0));
+        cancelPropertyDialog_btn.setText("Cancelar");
+        cancelPropertyDialog_btn.setBorderPainted(false);
+        cancelPropertyDialog_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancelPropertyDialog_btnMouseClicked(evt);
+            }
+        });
+
+        okProperties_btn.setBackground(new java.awt.Color(102, 102, 102));
+        okProperties_btn.setForeground(new java.awt.Color(0, 0, 0));
+        okProperties_btn.setText("OK");
+        okProperties_btn.setBorderPainted(false);
+        okProperties_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                okProperties_btnMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(heigthPropertyLabel)
+                    .addComponent(widthProperty)
+                    .addComponent(fontSizePropertyLabel)
+                    .addComponent(fontPropertyLabel)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(namePropertyLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(textPropertyLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(cancelPropertyDialog_btn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(okProperties_btn))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(backgroundLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(bgProperty, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(foregroundLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(foregroundProperty, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(tf_textProperty)
+                        .addComponent(tf_nameProperty)
+                        .addComponent(fontProperty_jcb, 0, 232, Short.MAX_VALUE)
+                        .addComponent(fontSizeProperty_spinner)
+                        .addComponent(widthLabel_spinner)
+                        .addComponent(heigthLabel_spinner)))
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(namePropertyLabel)
+                    .addComponent(tf_nameProperty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textPropertyLabel)
+                    .addComponent(tf_textProperty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(backgroundLabel)
+                    .addComponent(foregroundLabel)
+                    .addComponent(bgProperty, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(foregroundProperty, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fontPropertyLabel)
+                    .addComponent(fontProperty_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fontSizePropertyLabel)
+                    .addComponent(fontSizeProperty_spinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(widthProperty)
+                    .addComponent(widthLabel_spinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(heigthPropertyLabel)
+                    .addComponent(heigthLabel_spinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelPropertyDialog_btn)
+                    .addComponent(okProperties_btn))
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout properties_dialogLayout = new javax.swing.GroupLayout(properties_dialog.getContentPane());
+        properties_dialog.getContentPane().setLayout(properties_dialogLayout);
+        properties_dialogLayout.setHorizontalGroup(
+            properties_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        properties_dialogLayout.setVerticalGroup(
+            properties_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UML Editor");
@@ -404,7 +588,6 @@ public class Screen extends JFrame {
         sizeFontLabel.setText("       Tamaño:   ");
         tools_jp.add(sizeFontLabel);
 
-        fontSize_spinner.setModel(new javax.swing.SpinnerNumberModel(12, 8, 48, 1));
         fontSize_spinner.setToolTipText("<html><b>Tamaño de Fuente</b><p>Cambia el tamaño del texto</p></html>");
         fontSize_spinner.setMaximumSize(new java.awt.Dimension(90, 22));
         fontSize_spinner.setMinimumSize(new java.awt.Dimension(90, 22));
@@ -583,6 +766,8 @@ public class Screen extends JFrame {
             elementoSeleccionado = encontrarElemento(labelSeleccionado);
             labelSeleccionado.setFont(new Font(labelSeleccionado.getFont().getName(), labelSeleccionado.getFont().getStyle(), (int) fontSize_spinner.getValue()));
             elementoSeleccionado.setFuente(labelSeleccionado.getFont());
+            System.out.println("label: " + labelSeleccionado.getFont().getSize());
+            System.out.println("Elemento: " + elementoSeleccionado.getFuente().getSize());
         }
     }//GEN-LAST:event_fontSize_spinnerStateChanged
 
@@ -674,14 +859,56 @@ public class Screen extends JFrame {
         elementoSeleccionado = encontrarElemento(labelSeleccionado);
         elementos.remove(elementoSeleccionado);
         workarea_jp.remove(labelSeleccionado);
+        workarea_jp.repaint();
 
         elementoSeleccionado = null;
         labelSeleccionado = null;
     }//GEN-LAST:event_deleteElement_jmiActionPerformed
 
     private void elementProperties_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elementProperties_jmiActionPerformed
-        // TO BE IMPLEMENTED...
+        elementoSeleccionado = encontrarElemento(labelSeleccionado);
+        tf_nameProperty.setText(labelSeleccionado.getName());
+        tf_textProperty.setText(labelSeleccionado.getText());
+        bgProperty.setBackground(labelSeleccionado.getBackground());
+        foregroundProperty.setBackground(labelSeleccionado.getForeground());
+        bgProperty.setOpaque(true);
+        foregroundProperty.setOpaque(true);
+        fontProperty_jcb.setSelectedItem(labelSeleccionado.getFont().getName());
+        fontSize_spinner.setValue(labelSeleccionado.getFont().getSize());
+        showDialog("Elemento " + labelSeleccionado.getName() + " - Propiedades", properties_dialog, elementoSeleccionado);
     }//GEN-LAST:event_elementProperties_jmiActionPerformed
+
+    /*
+    * PROPERTIES DIALOG FUNCTIONS
+     */
+    private boolean verifyText(javax.swing.JTextField textField) {
+        return textField.getText().trim().length() != 0 && !textField.getText().trim().equals(labelSeleccionado.getText());
+    }
+
+    private String obtainText(javax.swing.JTextField textField) {
+        if (verifyText(textField)) {
+            return textField.getText().trim();
+        } else {
+            return null;
+        }
+    }
+    
+    private void cancelPropertyDialog_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelPropertyDialog_btnMouseClicked
+        properties_dialog.dispose();
+    }//GEN-LAST:event_cancelPropertyDialog_btnMouseClicked
+
+    private void okProperties_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okProperties_btnMouseClicked
+        String nuevoNombre = obtainText(tf_nameProperty);
+        String nuevoTexto = obtainText(tf_textProperty);
+        if (nuevoNombre != null && elementoSeleccionado != null) {
+            labelSeleccionado.setName(nuevoNombre);
+            elementoSeleccionado.setNombre(nuevoNombre);
+        }
+        if (nuevoTexto != null && elementoSeleccionado != null) {
+            labelSeleccionado.setText(nuevoTexto);
+            elementoSeleccionado.setTexto(nuevoTexto);
+        }
+    }//GEN-LAST:event_okProperties_btnMouseClicked
 
     public static void main(String args[]) {
         try {
@@ -723,6 +950,7 @@ public class Screen extends JFrame {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 seleccionarLabel(figura);
+                elementoSeleccionado = encontrarElemento(figura);
             }
         });
 
@@ -816,12 +1044,25 @@ public class Screen extends JFrame {
         }
     }
 
+    /*
+    * SHOW INFORMATION FUNCTIONS
+     */
+    private void showDialog(String title, JDialog dialog, FiguraDiagrama elemento) {
+        dialog.setTitle(title);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregarProceso_btn;
     private javax.swing.JButton agregarVariable_btn;
     private javax.swing.JButton backgroundChooser_btn;
+    private javax.swing.JLabel backgroundLabel;
+    private javax.swing.JLabel bgProperty;
     private javax.swing.JToggleButton bold_toggleBtn;
+    private javax.swing.JButton cancelPropertyDialog_btn;
     private javax.swing.JMenuItem changeElementBackground_jmi;
     private javax.swing.JMenuItem changeElementFont_jmi;
     private javax.swing.JMenuItem changeElementForeground_jmi;
@@ -837,17 +1078,28 @@ public class Screen extends JFrame {
     private javax.swing.JMenu fileOptions_jm;
     private javax.swing.JComboBox<String> fontChooser_jcb;
     private javax.swing.JLabel fontLabel;
+    private javax.swing.JLabel fontPropertyLabel;
+    private javax.swing.JComboBox<String> fontProperty_jcb;
+    private javax.swing.JLabel fontSizePropertyLabel;
+    private javax.swing.JSpinner fontSizeProperty_spinner;
     private javax.swing.JSpinner fontSize_spinner;
     private javax.swing.JButton foregroundColor_btn;
+    private javax.swing.JLabel foregroundLabel;
+    private javax.swing.JLabel foregroundProperty;
     private javax.swing.JMenuBar frameMenu_jmb;
     private javax.swing.JButton generarCodigo_btn;
+    private javax.swing.JSpinner heigthLabel_spinner;
+    private javax.swing.JLabel heigthPropertyLabel;
     private javax.swing.JToggleButton italic_toggleBtn;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator js_elementEdition;
     private javax.swing.JPopupMenu.Separator js_elementProperties;
     private javax.swing.JPanel menuElements_jp;
+    private javax.swing.JLabel namePropertyLabel;
     private javax.swing.JMenuItem newFile_jmi;
+    private javax.swing.JButton okProperties_btn;
     private javax.swing.JMenuItem openFile_jmi;
     private javax.swing.JLabel optionsTitle;
     private javax.swing.JMenuItem pasteElement_jmi;
@@ -856,6 +1108,7 @@ public class Screen extends JFrame {
     private javax.swing.JButton processFig_btn;
     private javax.swing.JList<String> process_list;
     private javax.swing.JScrollPane processes_scroll;
+    private javax.swing.JDialog properties_dialog;
     private javax.swing.JMenuItem saveFile_jmi;
     private javax.swing.JSeparator separator2_tool;
     private javax.swing.JSeparator separator_tool;
@@ -864,10 +1117,15 @@ public class Screen extends JFrame {
     private javax.swing.JLabel space1_toolLabel;
     private javax.swing.JLabel space2_toolLbl;
     private javax.swing.JButton terminalFig_btn;
+    private javax.swing.JLabel textPropertyLabel;
+    private javax.swing.JTextField tf_nameProperty;
+    private javax.swing.JTextField tf_textProperty;
     private javax.swing.JPanel tools_jp;
     private javax.swing.JPanel variables_jp;
     private javax.swing.JList<String> variables_list;
     private javax.swing.JScrollPane variables_scroll;
+    private javax.swing.JSpinner widthLabel_spinner;
+    private javax.swing.JLabel widthProperty;
     private javax.swing.JPanel workarea_jp;
     // End of variables declaration//GEN-END:variables
 }
