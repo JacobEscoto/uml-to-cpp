@@ -8,7 +8,16 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.SpinnerNumberModel;
@@ -16,10 +25,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Screen extends JFrame {
 
@@ -27,7 +38,7 @@ public class Screen extends JFrame {
     private JLabel labelSeleccionado = null;
     private FiguraDiagrama elementoSeleccionado = null;
     private FiguraDiagrama copiaElemento = null;
-    private final ArrayList<FiguraDiagrama> elementos = new ArrayList();
+    private ArrayList<FiguraDiagrama> elementos = new ArrayList();
     private final int BACKGROUND_OPTION = 1;
     private final int FOREGROUND_OPTION = 2;
 
@@ -199,7 +210,6 @@ public class Screen extends JFrame {
         });
         elements_jpm.add(elementProperties_jmi);
 
-        properties_dialog.setMaximumSize(new java.awt.Dimension(372, 375));
         properties_dialog.setMinimumSize(new java.awt.Dimension(372, 375));
         properties_dialog.setModal(true);
         properties_dialog.setResizable(false);
@@ -682,14 +692,29 @@ public class Screen extends JFrame {
 
         newFile_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         newFile_jmi.setText("Nuevo");
+        newFile_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newFile_jmiActionPerformed(evt);
+            }
+        });
         fileOptions_jm.add(newFile_jmi);
 
         openFile_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         openFile_jmi.setText("Abrir");
+        openFile_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openFile_jmiActionPerformed(evt);
+            }
+        });
         fileOptions_jm.add(openFile_jmi);
 
         saveFile_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         saveFile_jmi.setText("Guardar");
+        saveFile_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveFile_jmiActionPerformed(evt);
+            }
+        });
         fileOptions_jm.add(saveFile_jmi);
 
         frameMenu_jmb.add(fileOptions_jm);
@@ -766,8 +791,6 @@ public class Screen extends JFrame {
             elementoSeleccionado = encontrarElemento(labelSeleccionado);
             labelSeleccionado.setFont(new Font(labelSeleccionado.getFont().getName(), labelSeleccionado.getFont().getStyle(), (int) fontSize_spinner.getValue()));
             elementoSeleccionado.setFuente(labelSeleccionado.getFont());
-            System.out.println("label: " + labelSeleccionado.getFont().getSize());
-            System.out.println("Elemento: " + elementoSeleccionado.getFuente().getSize());
         }
     }//GEN-LAST:event_fontSize_spinnerStateChanged
 
@@ -875,7 +898,7 @@ public class Screen extends JFrame {
         foregroundProperty.setOpaque(true);
         fontProperty_jcb.setSelectedItem(labelSeleccionado.getFont().getName());
         fontSize_spinner.setValue(labelSeleccionado.getFont().getSize());
-        showDialog("Elemento " + labelSeleccionado.getName() + " - Propiedades", properties_dialog, elementoSeleccionado);
+        showDialog("Elemento " + labelSeleccionado.getName() + " - Propiedades", properties_dialog);
     }//GEN-LAST:event_elementProperties_jmiActionPerformed
 
     /*
@@ -892,7 +915,7 @@ public class Screen extends JFrame {
             return null;
         }
     }
-    
+
     private void cancelPropertyDialog_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelPropertyDialog_btnMouseClicked
         properties_dialog.dispose();
     }//GEN-LAST:event_cancelPropertyDialog_btnMouseClicked
@@ -909,6 +932,45 @@ public class Screen extends JFrame {
             elementoSeleccionado.setTexto(nuevoTexto);
         }
     }//GEN-LAST:event_okProperties_btnMouseClicked
+    
+    /*
+    * MENU OPTIONS (New, Open, Save)
+    */
+    
+    private void newFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFile_jmiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_newFile_jmiActionPerformed
+
+    private void openFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFile_jmiActionPerformed
+        
+    }//GEN-LAST:event_openFile_jmiActionPerformed
+
+    private void saveFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFile_jmiActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar Diagrama");
+        if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            if (!file.getName().endsWith(".umlc")) {
+                file = new File(file.getAbsolutePath() + ".umlc");
+                
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    ObjectOutputStream oos = new ObjectOutputStream(fos);
+                    if (!elementos.isEmpty()) {
+                        oos.writeObject(elementos);
+                        JOptionPane.showMessageDialog(this, "Archivo Guardado", "", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No hay nada que guardar!", "", JOptionPane.WARNING_MESSAGE);
+                    }
+                    oos.close();
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(this, "Error al guardar el archivo", "", JOptionPane.ERROR_MESSAGE);
+                } catch (IOException ex) {
+                    Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_saveFile_jmiActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -1045,9 +1107,9 @@ public class Screen extends JFrame {
     }
 
     /*
-    * SHOW INFORMATION FUNCTIONS
+    * INFORMATION FUNCTIONS
      */
-    private void showDialog(String title, JDialog dialog, FiguraDiagrama elemento) {
+    private void showDialog(String title, JDialog dialog) {
         dialog.setTitle(title);
         dialog.pack();
         dialog.setLocationRelativeTo(this);
