@@ -2,12 +2,14 @@ package gui;
 
 import elementos.*;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,6 +20,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.SpinnerNumberModel;
@@ -29,8 +32,11 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 public class Screen extends JFrame {
 
@@ -41,10 +47,13 @@ public class Screen extends JFrame {
     private ArrayList<FiguraDiagrama> elementos = new ArrayList();
     private final int BACKGROUND_OPTION = 1;
     private final int FOREGROUND_OPTION = 2;
+    private JFileChooser fileChooser = new JFileChooser();
 
     public Screen() {
         initComponents();
         this.setTitle("Nuevo Diagrama - " + this.getTitle());
+        classesGenerator_jp.setVisible(false);
+        diagram_toggleBtn.setSelected(true);
 
         // Iniciar Fonts Disponibles
         DefaultComboBoxModel modeloFuentes = new DefaultComboBoxModel();
@@ -65,6 +74,11 @@ public class Screen extends JFrame {
         fontSize_spinner.setModel(modeloFontSize);
         fontSizeProperty_spinner.setModel(modeloFontSize);
 
+        // Tree Model
+        DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Clases");
+        DefaultTreeModel modelo = new DefaultTreeModel(nodo);
+        jt_classes.setModel(modelo);
+        modelo.reload();
     }
 
     @SuppressWarnings("unchecked")
@@ -122,6 +136,29 @@ public class Screen extends JFrame {
         resultado_jcb = new javax.swing.JComboBox<>();
         guardarOperancion_btn = new javax.swing.JButton();
         cancelarOperacion_btn = new javax.swing.JButton();
+        clases_jpm = new javax.swing.JPopupMenu();
+        addPropiedad_jmi = new javax.swing.JMenuItem();
+        eliminarPropiedad_jmi = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        addMetodo_jmi = new javax.swing.JMenuItem();
+        eliminatMetodo_jmi = new javax.swing.JMenuItem();
+        descripcionMetodo_jmi = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        descripcion_jmi = new javax.swing.JMenuItem();
+        eliminarArbol_jmi = new javax.swing.JMenuItem();
+        methods_dialog = new javax.swing.JDialog();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        editorDiagrama_jp = new javax.swing.JPanel();
         tools_jp = new javax.swing.JPanel();
         fontLabel = new javax.swing.JLabel();
         fontChooser_jcb = new javax.swing.JComboBox<>();
@@ -155,13 +192,35 @@ public class Screen extends JFrame {
         agregarProceso_btn = new javax.swing.JButton();
         controlButtons_jp = new javax.swing.JPanel();
         generarCodigo_btn = new javax.swing.JButton();
+        code_toggleBtn = new javax.swing.JToggleButton();
+        diagram_toggleBtn = new javax.swing.JToggleButton();
+        main_jp = new javax.swing.JPanel();
         workarea_jp = new javax.swing.JPanel();
+        codeDiagrama_jp = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        classesGenerator_jp = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jt_classes = new javax.swing.JTree();
+        jLabel6 = new javax.swing.JLabel();
+        createClase_btn = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        addToWorkArea_btn = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        workareaClasses_jp = new javax.swing.JPanel();
         frameMenu_jmb = new javax.swing.JMenuBar();
         fileOptions_jm = new javax.swing.JMenu();
         newFile_jmi = new javax.swing.JMenuItem();
         openFile_jmi = new javax.swing.JMenuItem();
         saveFile_jmi = new javax.swing.JMenuItem();
         exportOptions_jm = new javax.swing.JMenu();
+        exportPdf_jmi = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        editorDiagrama_jmi = new javax.swing.JMenuItem();
+        generadorClases_jmi = new javax.swing.JMenuItem();
 
         changeElementBackground_jmi.setText("Cambiar Color");
         changeElementBackground_jmi.addActionListener(new java.awt.event.ActionListener() {
@@ -468,7 +527,6 @@ public class Screen extends JFrame {
             .addComponent(createVariable_jp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        operation_dialog.setMaximumSize(new java.awt.Dimension(456, 394));
         operation_dialog.setMinimumSize(new java.awt.Dimension(456, 394));
         operation_dialog.setModal(true);
         operation_dialog.setResizable(false);
@@ -571,11 +629,138 @@ public class Screen extends JFrame {
             .addComponent(operacion_jp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        addPropiedad_jmi.setText("Agregar Propiedad");
+        clases_jpm.add(addPropiedad_jmi);
+
+        eliminarPropiedad_jmi.setText("Eliminar Propiedad");
+        clases_jpm.add(eliminarPropiedad_jmi);
+        clases_jpm.add(jSeparator1);
+
+        addMetodo_jmi.setText("Agregar Metodo");
+        clases_jpm.add(addMetodo_jmi);
+
+        eliminatMetodo_jmi.setText("Eliminar Metodo");
+        clases_jpm.add(eliminatMetodo_jmi);
+
+        descripcionMetodo_jmi.setText("Descripcion del Metodo");
+        clases_jpm.add(descripcionMetodo_jmi);
+        clases_jpm.add(jSeparator2);
+
+        descripcion_jmi.setText("Descripcion");
+        clases_jpm.add(descripcion_jmi);
+
+        eliminarArbol_jmi.setText("Eliminar Arbol");
+        clases_jpm.add(eliminarArbol_jmi);
+
+        methods_dialog.setTitle("Crear Metodo");
+        methods_dialog.setMaximumSize(new java.awt.Dimension(337, 348));
+        methods_dialog.setMinimumSize(new java.awt.Dimension(337, 348));
+        methods_dialog.setResizable(false);
+
+        jPanel6.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel6.setMaximumSize(new java.awt.Dimension(337, 348));
+        jPanel6.setMinimumSize(new java.awt.Dimension(337, 348));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("Nombre:");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "void", "int", "float", "double", "char", "bool" }));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel9.setText("Retorno:");
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setText("Alcance:");
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "public", "private", "protected" }));
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("Parametro:");
+
+        jButton1.setText("Agregar");
+
+        jButton2.setText("Cancelar");
+
+        jButton4.setText("Agregar");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextField1)
+                    .addComponent(jComboBox2, 0, 211, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton4)
+                .addGap(36, 36, 36))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton4))
+                .addGap(19, 19, 19))
+        );
+
+        javax.swing.GroupLayout methods_dialogLayout = new javax.swing.GroupLayout(methods_dialog.getContentPane());
+        methods_dialog.getContentPane().setLayout(methods_dialogLayout);
+        methods_dialogLayout.setHorizontalGroup(
+            methods_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        methods_dialogLayout.setVerticalGroup(
+            methods_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UML Editor");
         setMaximumSize(new java.awt.Dimension(1280, 720));
         setMinimumSize(new java.awt.Dimension(1280, 720));
         setPreferredSize(new java.awt.Dimension(1280, 720));
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        editorDiagrama_jp.setMaximumSize(new java.awt.Dimension(1280, 697));
+        editorDiagrama_jp.setMinimumSize(new java.awt.Dimension(1280, 697));
+        editorDiagrama_jp.setPreferredSize(new java.awt.Dimension(1280, 697));
+        editorDiagrama_jp.setLayout(new java.awt.BorderLayout());
 
         tools_jp.setBackground(new java.awt.Color(153, 153, 153));
         tools_jp.setMaximumSize(new java.awt.Dimension(1280, 40));
@@ -689,13 +874,13 @@ public class Screen extends JFrame {
         });
         tools_jp.add(backgroundChooser_btn);
 
-        getContentPane().add(tools_jp, java.awt.BorderLayout.PAGE_START);
+        editorDiagrama_jp.add(tools_jp, java.awt.BorderLayout.PAGE_START);
 
         menuElements_jp.setBackground(new java.awt.Color(204, 204, 204));
         menuElements_jp.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 2, new java.awt.Color(51, 51, 51)));
-        menuElements_jp.setMaximumSize(new java.awt.Dimension(210, 497));
-        menuElements_jp.setMinimumSize(new java.awt.Dimension(210, 497));
-        menuElements_jp.setPreferredSize(new java.awt.Dimension(210, 497));
+        menuElements_jp.setMaximumSize(new java.awt.Dimension(185, 497));
+        menuElements_jp.setMinimumSize(new java.awt.Dimension(185, 497));
+        menuElements_jp.setPreferredSize(new java.awt.Dimension(185, 497));
 
         optionsTitle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         optionsTitle.setForeground(new java.awt.Color(0, 0, 0));
@@ -754,7 +939,7 @@ public class Screen extends JFrame {
                 .addComponent(optionsTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(menuElements_jpLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addGap(15, 15, 15)
                 .addGroup(menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(predefinedProcessFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(processFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -778,10 +963,10 @@ public class Screen extends JFrame {
                 .addComponent(decisionFig_btn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(soutFig_btn)
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
 
-        getContentPane().add(menuElements_jp, java.awt.BorderLayout.LINE_START);
+        editorDiagrama_jp.add(menuElements_jp, java.awt.BorderLayout.LINE_START);
 
         extras_tabs.setBackground(new java.awt.Color(204, 204, 204));
         extras_tabs.setForeground(new java.awt.Color(0, 0, 0));
@@ -810,12 +995,10 @@ public class Screen extends JFrame {
             variables_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(variables_jpLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(variables_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(variables_scroll, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, variables_jpLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(agregarVariable_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGroup(variables_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(agregarVariable_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(variables_scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 21, Short.MAX_VALUE))
         );
         variables_jpLayout.setVerticalGroup(
             variables_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -824,7 +1007,7 @@ public class Screen extends JFrame {
                 .addComponent(variables_scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(agregarVariable_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         extras_tabs.addTab("Variables", variables_jp);
@@ -850,12 +1033,10 @@ public class Screen extends JFrame {
             procesos_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(procesos_jpLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(procesos_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(processes_scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procesos_jpLayout.createSequentialGroup()
-                        .addGap(0, 85, Short.MAX_VALUE)
-                        .addComponent(agregarProceso_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGroup(procesos_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(agregarProceso_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(processes_scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21))
         );
         procesos_jpLayout.setVerticalGroup(
             procesos_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -864,17 +1045,17 @@ public class Screen extends JFrame {
                 .addComponent(processes_scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(agregarProceso_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         extras_tabs.addTab("Procesos", procesos_jp);
 
-        getContentPane().add(extras_tabs, java.awt.BorderLayout.LINE_END);
+        editorDiagrama_jp.add(extras_tabs, java.awt.BorderLayout.LINE_END);
 
         controlButtons_jp.setBackground(new java.awt.Color(204, 204, 204));
-        controlButtons_jp.setMaximumSize(new java.awt.Dimension(1280, 50));
-        controlButtons_jp.setMinimumSize(new java.awt.Dimension(1280, 50));
-        controlButtons_jp.setPreferredSize(new java.awt.Dimension(1280, 50));
+        controlButtons_jp.setMaximumSize(new java.awt.Dimension(1280, 62));
+        controlButtons_jp.setMinimumSize(new java.awt.Dimension(1280, 62));
+        controlButtons_jp.setPreferredSize(new java.awt.Dimension(1280, 62));
 
         generarCodigo_btn.setBackground(new java.awt.Color(102, 102, 102));
         generarCodigo_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -882,47 +1063,311 @@ public class Screen extends JFrame {
         generarCodigo_btn.setText("Generar Codigo");
         generarCodigo_btn.setBorderPainted(false);
 
+        code_toggleBtn.setBackground(new Color(255, 255, 255, 128));
+        code_toggleBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        code_toggleBtn.setForeground(new java.awt.Color(0, 0, 0));
+        code_toggleBtn.setText("Codigo");
+        code_toggleBtn.setBorderPainted(false);
+        code_toggleBtn.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                code_toggleBtnItemStateChanged(evt);
+            }
+        });
+        code_toggleBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                code_toggleBtnMouseClicked(evt);
+            }
+        });
+
+        diagram_toggleBtn.setBackground(new Color(255, 255, 255, 128));
+        diagram_toggleBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        diagram_toggleBtn.setForeground(new java.awt.Color(0, 0, 0));
+        diagram_toggleBtn.setText("Diagrama");
+        diagram_toggleBtn.setBorderPainted(false);
+        diagram_toggleBtn.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                diagram_toggleBtnItemStateChanged(evt);
+            }
+        });
+        diagram_toggleBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                diagram_toggleBtnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout controlButtons_jpLayout = new javax.swing.GroupLayout(controlButtons_jp);
         controlButtons_jp.setLayout(controlButtons_jpLayout);
         controlButtons_jpLayout.setHorizontalGroup(
             controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlButtons_jpLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(controlButtons_jpLayout.createSequentialGroup()
+                .addGap(185, 185, 185)
                 .addComponent(generarCodigo_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(570, 570, 570))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 607, Short.MAX_VALUE)
+                .addComponent(diagram_toggleBtn)
+                .addGap(0, 0, 0)
+                .addComponent(code_toggleBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(192, 192, 192))
         );
         controlButtons_jpLayout.setVerticalGroup(
             controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(controlButtons_jpLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(generarCodigo_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(generarCodigo_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(diagram_toggleBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(code_toggleBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
+
+        editorDiagrama_jp.add(controlButtons_jp, java.awt.BorderLayout.PAGE_END);
+
+        main_jp.setBackground(new java.awt.Color(255, 255, 255));
+        main_jp.setLayout(new java.awt.CardLayout());
+
+        workarea_jp.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout workarea_jpLayout = new javax.swing.GroupLayout(workarea_jp);
+        workarea_jp.setLayout(workarea_jpLayout);
+        workarea_jpLayout.setHorizontalGroup(
+            workarea_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 905, Short.MAX_VALUE)
+        );
+        workarea_jpLayout.setVerticalGroup(
+            workarea_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 595, Short.MAX_VALUE)
+        );
+
+        main_jp.add(workarea_jp, "card2");
+
+        codeDiagrama_jp.setBackground(new java.awt.Color(255, 255, 255));
+
+        jScrollPane2.setBorder(null);
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setBackground(new java.awt.Color(255, 255, 255));
+        jTextArea1.setColumns(20);
+        jTextArea1.setForeground(new java.awt.Color(0, 0, 0));
+        jTextArea1.setRows(5);
+        jTextArea1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CODIGO", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
+        jScrollPane2.setViewportView(jTextArea1);
+
+        javax.swing.GroupLayout codeDiagrama_jpLayout = new javax.swing.GroupLayout(codeDiagrama_jp);
+        codeDiagrama_jp.setLayout(codeDiagrama_jpLayout);
+        codeDiagrama_jpLayout.setHorizontalGroup(
+            codeDiagrama_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(codeDiagrama_jpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 893, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        codeDiagrama_jpLayout.setVerticalGroup(
+            codeDiagrama_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(codeDiagrama_jpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        getContentPane().add(controlButtons_jp, java.awt.BorderLayout.PAGE_END);
+        main_jp.add(codeDiagrama_jp, "card3");
 
-        workarea_jp.setBackground(new java.awt.Color(255, 255, 255));
-        workarea_jp.setLayout(null);
-        getContentPane().add(workarea_jp, java.awt.BorderLayout.CENTER);
+        editorDiagrama_jp.add(main_jp, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(editorDiagrama_jp, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
+        classesGenerator_jp.setBackground(new java.awt.Color(204, 204, 204));
+        classesGenerator_jp.setMaximumSize(new java.awt.Dimension(1280, 720));
+        classesGenerator_jp.setMinimumSize(new java.awt.Dimension(1280, 720));
+        classesGenerator_jp.setPreferredSize(new java.awt.Dimension(1280, 720));
+        classesGenerator_jp.setLayout(new java.awt.BorderLayout());
+
+        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel2.setMaximumSize(new java.awt.Dimension(350, 520));
+        jPanel2.setMinimumSize(new java.awt.Dimension(350, 520));
+        jPanel2.setPreferredSize(new java.awt.Dimension(350, 520));
+
+        jScrollPane1.setViewportView(jt_classes);
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Clases Generadas --------------------");
+
+        createClase_btn.setText("Nueva Clase");
+
+        jButton3.setText("Herencia");
+
+        addToWorkArea_btn.setText("Agregar a Area de Trabajo");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(createClase_btn)
+                                .addGap(26, 26, 26)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(75, 75, 75)
+                        .addComponent(addToWorkArea_btn)))
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(createClase_btn)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(addToWorkArea_btn))
+        );
+
+        classesGenerator_jp.add(jPanel2, java.awt.BorderLayout.LINE_START);
+
+        jPanel3.setBackground(new java.awt.Color(204, 204, 204));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 575, Short.MAX_VALUE)
+        );
+
+        classesGenerator_jp.add(jPanel3, java.awt.BorderLayout.LINE_END);
+
+        jPanel4.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel4.setMaximumSize(new java.awt.Dimension(1280, 50));
+        jPanel4.setMinimumSize(new java.awt.Dimension(1280, 50));
+        jPanel4.setPreferredSize(new java.awt.Dimension(1280, 50));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1280, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+
+        classesGenerator_jp.add(jPanel4, java.awt.BorderLayout.PAGE_START);
+
+        jPanel5.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel5.setMaximumSize(new java.awt.Dimension(1280, 75));
+        jPanel5.setMinimumSize(new java.awt.Dimension(1280, 75));
+        jPanel5.setPreferredSize(new java.awt.Dimension(1280, 75));
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1280, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 75, Short.MAX_VALUE)
+        );
+
+        classesGenerator_jp.add(jPanel5, java.awt.BorderLayout.PAGE_END);
+
+        workareaClasses_jp.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout workareaClasses_jpLayout = new javax.swing.GroupLayout(workareaClasses_jp);
+        workareaClasses_jp.setLayout(workareaClasses_jpLayout);
+        workareaClasses_jpLayout.setHorizontalGroup(
+            workareaClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 830, Short.MAX_VALUE)
+        );
+        workareaClasses_jpLayout.setVerticalGroup(
+            workareaClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 575, Short.MAX_VALUE)
+        );
+
+        classesGenerator_jp.add(workareaClasses_jp, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(classesGenerator_jp, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 700));
 
         fileOptions_jm.setText("Archivo");
 
         newFile_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         newFile_jmi.setText("Nuevo");
+        newFile_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newFile_jmiActionPerformed(evt);
+            }
+        });
         fileOptions_jm.add(newFile_jmi);
 
         openFile_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         openFile_jmi.setText("Abrir");
+        openFile_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openFile_jmiActionPerformed(evt);
+            }
+        });
         fileOptions_jm.add(openFile_jmi);
 
         saveFile_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         saveFile_jmi.setText("Guardar");
+        saveFile_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveFile_jmiActionPerformed(evt);
+            }
+        });
         fileOptions_jm.add(saveFile_jmi);
 
         frameMenu_jmb.add(fileOptions_jm);
 
         exportOptions_jm.setText("Exportar");
+
+        exportPdf_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, java.awt.event.InputEvent.ALT_DOWN_MASK));
+        exportPdf_jmi.setText("Exportar PDF");
+        exportPdf_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportPdf_jmiActionPerformed(evt);
+            }
+        });
+        exportOptions_jm.add(exportPdf_jmi);
+
         frameMenu_jmb.add(exportOptions_jm);
+
+        jMenu1.setText("Herramientas");
+
+        editorDiagrama_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        editorDiagrama_jmi.setText("Editor de Diagramas");
+        editorDiagrama_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editorDiagrama_jmiActionPerformed(evt);
+            }
+        });
+        jMenu1.add(editorDiagrama_jmi);
+
+        generadorClases_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        generadorClases_jmi.setText("Generador de Clases");
+        generadorClases_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generadorClases_jmiActionPerformed(evt);
+            }
+        });
+        jMenu1.add(generadorClases_jmi);
+
+        frameMenu_jmb.add(jMenu1);
 
         setJMenuBar(frameMenu_jmb);
 
@@ -1201,6 +1646,130 @@ public class Screen extends JFrame {
         showMessage("Proceso creado exitosamente!", "", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_guardarOperancion_btnMouseClicked
 
+    /*
+    * CHANGE TOOL EDITOR FUNCTION
+     */
+    private void editorDiagrama_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editorDiagrama_jmiActionPerformed
+        editorDiagrama_jp.setVisible(true);
+        classesGenerator_jp.setVisible(false);
+        this.setTitle("Nuevo Diagrama - UML Editor");
+    }//GEN-LAST:event_editorDiagrama_jmiActionPerformed
+
+    private void generadorClases_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generadorClases_jmiActionPerformed
+        editorDiagrama_jp.setVisible(false);
+        classesGenerator_jp.setVisible(true);
+        this.setTitle("Generador de Clases - UML Editor");
+    }//GEN-LAST:event_generadorClases_jmiActionPerformed
+
+    /*
+    * FILE MANAGEMENT FUNCTIONS
+     */
+    private void newFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFile_jmiActionPerformed
+        workarea_jp.removeAll();
+        workareaClasses_jp.removeAll();
+        elementos.clear();
+        DefaultListModel modelo = (DefaultListModel) variables_list.getModel();
+        modelo.removeAllElements();
+        modelo = (DefaultListModel) process_list.getModel();
+        modelo.removeAllElements();
+
+        DefaultTreeModel treeModel = (DefaultTreeModel) jt_classes.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) treeModel.getRoot();
+        raiz.removeAllChildren();
+        treeModel.reload();
+    }//GEN-LAST:event_newFile_jmiActionPerformed
+
+    private void openFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFile_jmiActionPerformed
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos UML (*.umlc)", "umlc"));
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try (FileInputStream fis = new FileInputStream(fileChooser.getSelectedFile())) {
+                ObjectInputStream ois = new ObjectInputStream(fis);
+
+            } catch (IOException ex) {
+                Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_openFile_jmiActionPerformed
+
+    private void saveFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFile_jmiActionPerformed
+        if (!elementos.isEmpty()) {
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                if (!file.getAbsolutePath().endsWith(".umlc")) {
+                    file = new File(file.getAbsolutePath() + ".umlc");
+                }
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+                    oos.writeObject(elementos);
+                    oos.close();
+
+                    showMessage("Archivo guardado\n" + file.getAbsolutePath(), "Guardado", JOptionPane.INFORMATION_MESSAGE);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_saveFile_jmiActionPerformed
+
+    /*
+    * TOGGLE VIEWS
+     */
+    private void diagram_toggleBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagram_toggleBtnMouseClicked
+        workarea_jp.setVisible(true);
+        codeDiagrama_jp.setVisible(false);
+        code_toggleBtn.setSelected(false);
+    }//GEN-LAST:event_diagram_toggleBtnMouseClicked
+
+    private void code_toggleBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_code_toggleBtnMouseClicked
+        workarea_jp.setVisible(false);
+        codeDiagrama_jp.setVisible(true);
+        diagram_toggleBtn.setSelected(false);
+    }//GEN-LAST:event_code_toggleBtnMouseClicked
+
+    private void diagram_toggleBtnItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_diagram_toggleBtnItemStateChanged
+        if (diagram_toggleBtn.isSelected()) {
+            diagram_toggleBtn.setBackground(new Color(170, 170, 170, 128));
+        } else {
+            diagram_toggleBtn.setBackground(new Color(255, 255, 255, 128));
+        }
+    }//GEN-LAST:event_diagram_toggleBtnItemStateChanged
+
+    private void code_toggleBtnItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_code_toggleBtnItemStateChanged
+        if (code_toggleBtn.isSelected()) {
+            code_toggleBtn.setBackground(new Color(170, 170, 170, 128));
+        } else {
+            code_toggleBtn.setBackground(new Color(255, 255, 255, 128));
+        }
+    }//GEN-LAST:event_code_toggleBtnItemStateChanged
+
+    /*
+    * EXPORT PDF FUNCTION
+     */
+    private void exportPdf_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportPdf_jmiActionPerformed
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo PDF (*.pdf)", "pdf"));
+        if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                File file = fileChooser.getSelectedFile();
+                if (!file.getAbsolutePath().endsWith(".jpg")) {
+                    file = new File(file.getAbsolutePath() + ".jpg");
+                }
+                BufferedImage bi = new BufferedImage(workarea_jp.getWidth(), workarea_jp.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                workarea_jp.paint(bi.getGraphics());
+                ImageIO.write(bi, "jpg", file);
+               // Error -> Desktop.getDesktop().print(file);
+
+                showMessage("Exportado a PDF", "Exportado", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException ex) {
+                Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+                showMessage("Error al exportar el archivo", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+    }//GEN-LAST:event_exportPdf_jmiActionPerformed
+
     public static void main(String args[]) {
         try {
             javax.swing.UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
@@ -1228,6 +1797,28 @@ public class Screen extends JFrame {
             }
         }
         return null;
+    }
+
+    private void initDragAndDrop(JScrollPane scroll) {
+        scroll.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                click = SwingUtilities.convertPoint(evt.getComponent(), evt.getPoint(), workareaClasses_jp);
+            }
+        });
+
+        scroll.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent evt) {
+                Point movedClick = SwingUtilities.convertPoint(evt.getComponent(), evt.getPoint(), workareaClasses_jp);
+                int posX = movedClick.x - click.x;
+                int posY = movedClick.y - click.y;
+                posX = setLimits(posX, scroll.getWidth(), 0, workareaClasses_jp.getWidth());
+                posY = setLimits(posY, scroll.getHeight(), 0, workareaClasses_jp.getHeight());
+                scroll.setLocation(posX, posY);
+                workareaClasses_jp.repaint();
+            }
+        });
     }
 
     private void initDragAndDrop(JLabel figura, FiguraDiagrama elemento) {
@@ -1349,8 +1940,11 @@ public class Screen extends JFrame {
         JOptionPane.showMessageDialog(this, message, title, messageType);
     }
 
-
+// <editor-fold defaultstate="collapsed" desc="Variables declaration">
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem addMetodo_jmi;
+    private javax.swing.JMenuItem addPropiedad_jmi;
+    private javax.swing.JButton addToWorkArea_btn;
     private javax.swing.JButton agregarProceso_btn;
     private javax.swing.JButton agregarVariable_btn;
     private javax.swing.JButton backgroundChooser_btn;
@@ -1364,15 +1958,29 @@ public class Screen extends JFrame {
     private javax.swing.JMenuItem changeElementFont_jmi;
     private javax.swing.JMenuItem changeElementForeground_jmi;
     private javax.swing.JMenuItem changeElementText_jmi;
+    private javax.swing.JPopupMenu clases_jpm;
+    private javax.swing.JPanel classesGenerator_jp;
+    private javax.swing.JPanel codeDiagrama_jp;
+    private javax.swing.JToggleButton code_toggleBtn;
     private javax.swing.JPanel controlButtons_jp;
     private javax.swing.JMenuItem copyElement_jmi;
+    private javax.swing.JButton createClase_btn;
     private javax.swing.JButton createVariable_btn;
     private javax.swing.JPanel createVariable_jp;
     private javax.swing.JButton decisionFig_btn;
     private javax.swing.JMenuItem deleteElement_jmi;
+    private javax.swing.JMenuItem descripcionMetodo_jmi;
+    private javax.swing.JMenuItem descripcion_jmi;
+    private javax.swing.JToggleButton diagram_toggleBtn;
+    private javax.swing.JMenuItem editorDiagrama_jmi;
+    private javax.swing.JPanel editorDiagrama_jp;
     private javax.swing.JMenuItem elementProperties_jmi;
     private javax.swing.JPopupMenu elements_jpm;
+    private javax.swing.JMenuItem eliminarArbol_jmi;
+    private javax.swing.JMenuItem eliminarPropiedad_jmi;
+    private javax.swing.JMenuItem eliminatMetodo_jmi;
     private javax.swing.JMenu exportOptions_jm;
+    private javax.swing.JMenuItem exportPdf_jmi;
     private javax.swing.JTabbedPane extras_tabs;
     private javax.swing.JMenu fileOptions_jm;
     private javax.swing.JComboBox<String> fontChooser_jcb;
@@ -1386,21 +1994,48 @@ public class Screen extends JFrame {
     private javax.swing.JLabel foregroundLabel;
     private javax.swing.JLabel foregroundProperty;
     private javax.swing.JMenuBar frameMenu_jmb;
+    private javax.swing.JMenuItem generadorClases_jmi;
     private javax.swing.JButton generarCodigo_btn;
     private javax.swing.JButton guardarOperancion_btn;
     private javax.swing.JSpinner heigthLabel_spinner;
     private javax.swing.JLabel heigthPropertyLabel;
     private javax.swing.JToggleButton italic_toggleBtn;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JPopupMenu.Separator js_elementEdition;
     private javax.swing.JPopupMenu.Separator js_elementProperties;
+    private javax.swing.JTree jt_classes;
+    private javax.swing.JPanel main_jp;
     private javax.swing.JPanel menuElements_jp;
+    private javax.swing.JDialog methods_dialog;
     private javax.swing.JLabel namePropertyLabel;
     private javax.swing.JMenuItem newFile_jmi;
     private javax.swing.JButton okProperties_btn;
@@ -1441,6 +2076,8 @@ public class Screen extends JFrame {
     private javax.swing.JScrollPane variables_scroll;
     private javax.swing.JSpinner widthLabel_spinner;
     private javax.swing.JLabel widthProperty;
+    private javax.swing.JPanel workareaClasses_jp;
     private javax.swing.JPanel workarea_jp;
     // End of variables declaration//GEN-END:variables
+// </editor-fold>
 }
