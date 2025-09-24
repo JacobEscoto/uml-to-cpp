@@ -57,13 +57,13 @@ public class Screen extends JFrame {
         DefaultListModel modelVariables = new DefaultListModel();
         variables_list.setModel(modelVariables);
 
+        DefaultListModel modelProcesos = new DefaultListModel();
+        process_list.setModel(modelProcesos);
+
         // Modelo de Spinner Number para Tamaño de Fuente
         SpinnerNumberModel modeloFontSize = new SpinnerNumberModel(12, 8, 48, 1);
         fontSize_spinner.setModel(modeloFontSize);
         fontSizeProperty_spinner.setModel(modeloFontSize);
-
-        DefaultListModel modelProcesos = new DefaultListModel();
-        process_list.setModel(modelProcesos);
 
     }
 
@@ -102,6 +102,41 @@ public class Screen extends JFrame {
         heigthLabel_spinner = new javax.swing.JSpinner();
         cancelPropertyDialog_btn = new javax.swing.JButton();
         okProperties_btn = new javax.swing.JButton();
+        variables_dialog = new javax.swing.JDialog();
+        createVariable_jp = new javax.swing.JPanel();
+        variableLabel = new javax.swing.JLabel();
+        tf_variableName = new javax.swing.JTextField();
+        typeVariableLabel = new javax.swing.JLabel();
+        typeVariable_jcb = new javax.swing.JComboBox<>();
+        createVariable_btn = new javax.swing.JButton();
+        cancelCreationVariable_btn = new javax.swing.JButton();
+        operation_dialog = new javax.swing.JDialog();
+        operacion_jp = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        operador_jcb = new javax.swing.JComboBox<>();
+        var1_jcb = new javax.swing.JComboBox<>();
+        var2_jcb = new javax.swing.JComboBox<>();
+        resultado_jcb = new javax.swing.JComboBox<>();
+        guardarOperancion_btn = new javax.swing.JButton();
+        cancelarOperacion_btn = new javax.swing.JButton();
+        tools_jp = new javax.swing.JPanel();
+        fontLabel = new javax.swing.JLabel();
+        fontChooser_jcb = new javax.swing.JComboBox<>();
+        sizeFontLabel = new javax.swing.JLabel();
+        fontSize_spinner = new javax.swing.JSpinner();
+        space1_toolLabel = new javax.swing.JLabel();
+        separator_tool = new javax.swing.JSeparator();
+        bold_toggleBtn = new javax.swing.JToggleButton();
+        jLabel5 = new javax.swing.JLabel();
+        italic_toggleBtn = new javax.swing.JToggleButton();
+        space2_toolLbl = new javax.swing.JLabel();
+        separator2_tool = new javax.swing.JSeparator();
+        foregroundColor_btn = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        backgroundChooser_btn = new javax.swing.JButton();
         menuElements_jp = new javax.swing.JPanel();
         optionsTitle = new javax.swing.JLabel();
         terminalFig_btn = new javax.swing.JButton();
@@ -120,21 +155,6 @@ public class Screen extends JFrame {
         agregarProceso_btn = new javax.swing.JButton();
         controlButtons_jp = new javax.swing.JPanel();
         generarCodigo_btn = new javax.swing.JButton();
-        tools_jp = new javax.swing.JPanel();
-        fontLabel = new javax.swing.JLabel();
-        fontChooser_jcb = new javax.swing.JComboBox<>();
-        sizeFontLabel = new javax.swing.JLabel();
-        fontSize_spinner = new javax.swing.JSpinner();
-        space1_toolLabel = new javax.swing.JLabel();
-        separator_tool = new javax.swing.JSeparator();
-        bold_toggleBtn = new javax.swing.JToggleButton();
-        jLabel5 = new javax.swing.JLabel();
-        italic_toggleBtn = new javax.swing.JToggleButton();
-        space2_toolLbl = new javax.swing.JLabel();
-        separator2_tool = new javax.swing.JSeparator();
-        foregroundColor_btn = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
-        backgroundChooser_btn = new javax.swing.JButton();
         workarea_jp = new javax.swing.JPanel();
         frameMenu_jmb = new javax.swing.JMenuBar();
         fileOptions_jm = new javax.swing.JMenu();
@@ -364,211 +384,198 @@ public class Screen extends JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        variables_dialog.setTitle("Crear Variable");
+        variables_dialog.setMinimumSize(new java.awt.Dimension(373, 242));
+        variables_dialog.setModal(true);
+        variables_dialog.setResizable(false);
+
+        createVariable_jp.setBackground(new java.awt.Color(204, 204, 204));
+        createVariable_jp.setMaximumSize(new java.awt.Dimension(373, 331));
+        createVariable_jp.setMinimumSize(new java.awt.Dimension(373, 331));
+
+        variableLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        variableLabel.setForeground(new java.awt.Color(0, 0, 0));
+        variableLabel.setText("Variable:");
+
+        typeVariableLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        typeVariableLabel.setForeground(new java.awt.Color(0, 0, 0));
+        typeVariableLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        typeVariableLabel.setText("Tipo:");
+
+        typeVariable_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "int", "double", "float", "bool", "char", "string" }));
+
+        createVariable_btn.setText("Agregar");
+        createVariable_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                createVariable_btnMouseClicked(evt);
+            }
+        });
+
+        cancelCreationVariable_btn.setText("Cancelar");
+        cancelCreationVariable_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancelCreationVariable_btnMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout createVariable_jpLayout = new javax.swing.GroupLayout(createVariable_jp);
+        createVariable_jp.setLayout(createVariable_jpLayout);
+        createVariable_jpLayout.setHorizontalGroup(
+            createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(createVariable_jpLayout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(createVariable_jpLayout.createSequentialGroup()
+                        .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(typeVariableLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(variableLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tf_variableName)
+                            .addComponent(typeVariable_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(createVariable_jpLayout.createSequentialGroup()
+                        .addComponent(cancelCreationVariable_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(createVariable_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(39, Short.MAX_VALUE))
+        );
+        createVariable_jpLayout.setVerticalGroup(
+            createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(createVariable_jpLayout.createSequentialGroup()
+                .addGap(75, 75, 75)
+                .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(variableLabel)
+                    .addComponent(tf_variableName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(typeVariableLabel)
+                    .addComponent(typeVariable_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
+                .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(createVariable_btn)
+                    .addComponent(cancelCreationVariable_btn))
+                .addGap(33, 33, 33))
+        );
+
+        javax.swing.GroupLayout variables_dialogLayout = new javax.swing.GroupLayout(variables_dialog.getContentPane());
+        variables_dialog.getContentPane().setLayout(variables_dialogLayout);
+        variables_dialogLayout.setHorizontalGroup(
+            variables_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(createVariable_jp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        variables_dialogLayout.setVerticalGroup(
+            variables_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(createVariable_jp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        operation_dialog.setMaximumSize(new java.awt.Dimension(456, 394));
+        operation_dialog.setMinimumSize(new java.awt.Dimension(456, 394));
+        operation_dialog.setModal(true);
+        operation_dialog.setResizable(false);
+
+        operacion_jp.setBackground(new java.awt.Color(204, 204, 204));
+        operacion_jp.setMaximumSize(new java.awt.Dimension(456, 394));
+        operacion_jp.setMinimumSize(new java.awt.Dimension(456, 394));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Operador:");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Variable 1:");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Variable 2:");
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Resultado:");
+
+        operador_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "+", "-", "*", "/" }));
+
+        guardarOperancion_btn.setText("Agregar");
+        guardarOperancion_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                guardarOperancion_btnMouseClicked(evt);
+            }
+        });
+
+        cancelarOperacion_btn.setText("Cancelar");
+        cancelarOperacion_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancelarOperacion_btnMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout operacion_jpLayout = new javax.swing.GroupLayout(operacion_jp);
+        operacion_jp.setLayout(operacion_jpLayout);
+        operacion_jpLayout.setHorizontalGroup(
+            operacion_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, operacion_jpLayout.createSequentialGroup()
+                .addContainerGap(83, Short.MAX_VALUE)
+                .addGroup(operacion_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(operacion_jpLayout.createSequentialGroup()
+                        .addComponent(cancelarOperacion_btn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(guardarOperancion_btn))
+                    .addGroup(operacion_jpLayout.createSequentialGroup()
+                        .addGroup(operacion_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(operacion_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(operador_jcb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(var1_jcb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(var2_jcb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(resultado_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(74, 74, 74))
+        );
+        operacion_jpLayout.setVerticalGroup(
+            operacion_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(operacion_jpLayout.createSequentialGroup()
+                .addGap(94, 94, 94)
+                .addGroup(operacion_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(operador_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(operacion_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(var1_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(operacion_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(var2_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(operacion_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(resultado_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
+                .addGroup(operacion_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(guardarOperancion_btn)
+                    .addComponent(cancelarOperacion_btn))
+                .addContainerGap(98, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout operation_dialogLayout = new javax.swing.GroupLayout(operation_dialog.getContentPane());
+        operation_dialog.getContentPane().setLayout(operation_dialogLayout);
+        operation_dialogLayout.setHorizontalGroup(
+            operation_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(operacion_jp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        operation_dialogLayout.setVerticalGroup(
+            operation_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(operacion_jp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UML Editor");
         setMaximumSize(new java.awt.Dimension(1280, 720));
         setMinimumSize(new java.awt.Dimension(1280, 720));
         setPreferredSize(new java.awt.Dimension(1280, 720));
-
-        menuElements_jp.setBackground(new java.awt.Color(204, 204, 204));
-        menuElements_jp.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 2, new java.awt.Color(51, 51, 51)));
-        menuElements_jp.setMaximumSize(new java.awt.Dimension(210, 497));
-        menuElements_jp.setMinimumSize(new java.awt.Dimension(210, 497));
-        menuElements_jp.setPreferredSize(new java.awt.Dimension(210, 497));
-
-        optionsTitle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        optionsTitle.setForeground(new java.awt.Color(0, 0, 0));
-        optionsTitle.setText("  OPCIONES --------------------");
-
-        terminalFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/terminal.png"))); // NOI18N
-        terminalFig_btn.setBorderPainted(false);
-        terminalFig_btn.setContentAreaFilled(false);
-        terminalFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                terminalFig_btnMouseClicked(evt);
-            }
-        });
-
-        processFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/proceso.png"))); // NOI18N
-        processFig_btn.setBorderPainted(false);
-        processFig_btn.setContentAreaFilled(false);
-        processFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                processFig_btnMouseClicked(evt);
-            }
-        });
-
-        predefinedProcessFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/defined_process.png"))); // NOI18N
-        predefinedProcessFig_btn.setBorderPainted(false);
-        predefinedProcessFig_btn.setContentAreaFilled(false);
-        predefinedProcessFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                predefinedProcessFig_btnMouseClicked(evt);
-            }
-        });
-
-        decisionFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/decision_rombo.png"))); // NOI18N
-        decisionFig_btn.setBorderPainted(false);
-        decisionFig_btn.setContentAreaFilled(false);
-        decisionFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                decisionFig_btnMouseClicked(evt);
-            }
-        });
-
-        soutFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/paralelograma.png"))); // NOI18N
-        soutFig_btn.setBorderPainted(false);
-        soutFig_btn.setContentAreaFilled(false);
-        soutFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                soutFig_btnMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout menuElements_jpLayout = new javax.swing.GroupLayout(menuElements_jp);
-        menuElements_jp.setLayout(menuElements_jpLayout);
-        menuElements_jpLayout.setHorizontalGroup(
-            menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuElements_jpLayout.createSequentialGroup()
-                .addComponent(optionsTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(menuElements_jpLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(predefinedProcessFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(processFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(terminalFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(decisionFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(soutFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(25, 25, 25))
-        );
-        menuElements_jpLayout.setVerticalGroup(
-            menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuElements_jpLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(optionsTitle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(terminalFig_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(processFig_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(predefinedProcessFig_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(decisionFig_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(soutFig_btn)
-                .addContainerGap(129, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(menuElements_jp, java.awt.BorderLayout.LINE_START);
-
-        extras_tabs.setBackground(new java.awt.Color(204, 204, 204));
-        extras_tabs.setForeground(new java.awt.Color(0, 0, 0));
-
-        variables_jp.setBackground(new java.awt.Color(204, 204, 204));
-        variables_jp.setMaximumSize(new java.awt.Dimension(190, 566));
-        variables_jp.setMinimumSize(new java.awt.Dimension(190, 566));
-        variables_jp.setPreferredSize(new java.awt.Dimension(190, 566));
-
-        variables_scroll.setViewportView(variables_list);
-
-        agregarVariable_btn.setBackground(new java.awt.Color(102, 102, 102));
-        agregarVariable_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        agregarVariable_btn.setForeground(new java.awt.Color(0, 0, 0));
-        agregarVariable_btn.setText("Agregar");
-        agregarVariable_btn.setBorderPainted(false);
-
-        javax.swing.GroupLayout variables_jpLayout = new javax.swing.GroupLayout(variables_jp);
-        variables_jp.setLayout(variables_jpLayout);
-        variables_jpLayout.setHorizontalGroup(
-            variables_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(variables_jpLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(variables_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(variables_scroll, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, variables_jpLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(agregarVariable_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        variables_jpLayout.setVerticalGroup(
-            variables_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(variables_jpLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(variables_scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(agregarVariable_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
-        );
-
-        extras_tabs.addTab("Variables", variables_jp);
-
-        procesos_jp.setBackground(new java.awt.Color(204, 204, 204));
-
-        processes_scroll.setViewportView(process_list);
-
-        agregarProceso_btn.setBackground(new java.awt.Color(102, 102, 102));
-        agregarProceso_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        agregarProceso_btn.setForeground(new java.awt.Color(0, 0, 0));
-        agregarProceso_btn.setText("Agregar");
-        agregarProceso_btn.setBorderPainted(false);
-
-        javax.swing.GroupLayout procesos_jpLayout = new javax.swing.GroupLayout(procesos_jp);
-        procesos_jp.setLayout(procesos_jpLayout);
-        procesos_jpLayout.setHorizontalGroup(
-            procesos_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(procesos_jpLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(procesos_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(processes_scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procesos_jpLayout.createSequentialGroup()
-                        .addGap(0, 85, Short.MAX_VALUE)
-                        .addComponent(agregarProceso_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        procesos_jpLayout.setVerticalGroup(
-            procesos_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(procesos_jpLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(processes_scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(agregarProceso_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        extras_tabs.addTab("Procesos", procesos_jp);
-
-        getContentPane().add(extras_tabs, java.awt.BorderLayout.LINE_END);
-
-        controlButtons_jp.setBackground(new java.awt.Color(204, 204, 204));
-        controlButtons_jp.setMaximumSize(new java.awt.Dimension(1280, 50));
-        controlButtons_jp.setMinimumSize(new java.awt.Dimension(1280, 50));
-        controlButtons_jp.setPreferredSize(new java.awt.Dimension(1280, 50));
-
-        generarCodigo_btn.setBackground(new java.awt.Color(102, 102, 102));
-        generarCodigo_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        generarCodigo_btn.setForeground(new java.awt.Color(0, 0, 0));
-        generarCodigo_btn.setText("Generar Codigo");
-        generarCodigo_btn.setBorderPainted(false);
-
-        javax.swing.GroupLayout controlButtons_jpLayout = new javax.swing.GroupLayout(controlButtons_jp);
-        controlButtons_jp.setLayout(controlButtons_jpLayout);
-        controlButtons_jpLayout.setHorizontalGroup(
-            controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlButtons_jpLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(generarCodigo_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(570, 570, 570))
-        );
-        controlButtons_jpLayout.setVerticalGroup(
-            controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(controlButtons_jpLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(generarCodigo_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        getContentPane().add(controlButtons_jp, java.awt.BorderLayout.PAGE_END);
 
         tools_jp.setBackground(new java.awt.Color(153, 153, 153));
         tools_jp.setMaximumSize(new java.awt.Dimension(1280, 40));
@@ -684,6 +691,216 @@ public class Screen extends JFrame {
 
         getContentPane().add(tools_jp, java.awt.BorderLayout.PAGE_START);
 
+        menuElements_jp.setBackground(new java.awt.Color(204, 204, 204));
+        menuElements_jp.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 2, new java.awt.Color(51, 51, 51)));
+        menuElements_jp.setMaximumSize(new java.awt.Dimension(210, 497));
+        menuElements_jp.setMinimumSize(new java.awt.Dimension(210, 497));
+        menuElements_jp.setPreferredSize(new java.awt.Dimension(210, 497));
+
+        optionsTitle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        optionsTitle.setForeground(new java.awt.Color(0, 0, 0));
+        optionsTitle.setText("  OPCIONES --------------------");
+
+        terminalFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/terminal.png"))); // NOI18N
+        terminalFig_btn.setBorderPainted(false);
+        terminalFig_btn.setContentAreaFilled(false);
+        terminalFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                terminalFig_btnMouseClicked(evt);
+            }
+        });
+
+        processFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/proceso.png"))); // NOI18N
+        processFig_btn.setBorderPainted(false);
+        processFig_btn.setContentAreaFilled(false);
+        processFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                processFig_btnMouseClicked(evt);
+            }
+        });
+
+        predefinedProcessFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/defined_process.png"))); // NOI18N
+        predefinedProcessFig_btn.setBorderPainted(false);
+        predefinedProcessFig_btn.setContentAreaFilled(false);
+        predefinedProcessFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                predefinedProcessFig_btnMouseClicked(evt);
+            }
+        });
+
+        decisionFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/decision_rombo.png"))); // NOI18N
+        decisionFig_btn.setBorderPainted(false);
+        decisionFig_btn.setContentAreaFilled(false);
+        decisionFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                decisionFig_btnMouseClicked(evt);
+            }
+        });
+
+        soutFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/paralelograma.png"))); // NOI18N
+        soutFig_btn.setBorderPainted(false);
+        soutFig_btn.setContentAreaFilled(false);
+        soutFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                soutFig_btnMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout menuElements_jpLayout = new javax.swing.GroupLayout(menuElements_jp);
+        menuElements_jp.setLayout(menuElements_jpLayout);
+        menuElements_jpLayout.setHorizontalGroup(
+            menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(menuElements_jpLayout.createSequentialGroup()
+                .addComponent(optionsTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(menuElements_jpLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(predefinedProcessFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(processFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(terminalFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(decisionFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(soutFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(25, 25, 25))
+        );
+        menuElements_jpLayout.setVerticalGroup(
+            menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(menuElements_jpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(optionsTitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(terminalFig_btn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(processFig_btn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(predefinedProcessFig_btn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(decisionFig_btn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(soutFig_btn)
+                .addContainerGap(129, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(menuElements_jp, java.awt.BorderLayout.LINE_START);
+
+        extras_tabs.setBackground(new java.awt.Color(204, 204, 204));
+        extras_tabs.setForeground(new java.awt.Color(0, 0, 0));
+
+        variables_jp.setBackground(new java.awt.Color(204, 204, 204));
+        variables_jp.setMaximumSize(new java.awt.Dimension(190, 566));
+        variables_jp.setMinimumSize(new java.awt.Dimension(190, 566));
+        variables_jp.setPreferredSize(new java.awt.Dimension(190, 566));
+
+        variables_scroll.setViewportView(variables_list);
+
+        agregarVariable_btn.setBackground(new java.awt.Color(102, 102, 102));
+        agregarVariable_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        agregarVariable_btn.setForeground(new java.awt.Color(0, 0, 0));
+        agregarVariable_btn.setText("Agregar");
+        agregarVariable_btn.setBorderPainted(false);
+        agregarVariable_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                agregarVariable_btnMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout variables_jpLayout = new javax.swing.GroupLayout(variables_jp);
+        variables_jp.setLayout(variables_jpLayout);
+        variables_jpLayout.setHorizontalGroup(
+            variables_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(variables_jpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(variables_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(variables_scroll, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, variables_jpLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(agregarVariable_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        variables_jpLayout.setVerticalGroup(
+            variables_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(variables_jpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(variables_scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(agregarVariable_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
+        );
+
+        extras_tabs.addTab("Variables", variables_jp);
+
+        procesos_jp.setBackground(new java.awt.Color(204, 204, 204));
+
+        processes_scroll.setViewportView(process_list);
+
+        agregarProceso_btn.setBackground(new java.awt.Color(102, 102, 102));
+        agregarProceso_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        agregarProceso_btn.setForeground(new java.awt.Color(0, 0, 0));
+        agregarProceso_btn.setText("Agregar");
+        agregarProceso_btn.setBorderPainted(false);
+        agregarProceso_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                agregarProceso_btnMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout procesos_jpLayout = new javax.swing.GroupLayout(procesos_jp);
+        procesos_jp.setLayout(procesos_jpLayout);
+        procesos_jpLayout.setHorizontalGroup(
+            procesos_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(procesos_jpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(procesos_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(processes_scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procesos_jpLayout.createSequentialGroup()
+                        .addGap(0, 85, Short.MAX_VALUE)
+                        .addComponent(agregarProceso_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        procesos_jpLayout.setVerticalGroup(
+            procesos_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(procesos_jpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(processes_scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(agregarProceso_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        extras_tabs.addTab("Procesos", procesos_jp);
+
+        getContentPane().add(extras_tabs, java.awt.BorderLayout.LINE_END);
+
+        controlButtons_jp.setBackground(new java.awt.Color(204, 204, 204));
+        controlButtons_jp.setMaximumSize(new java.awt.Dimension(1280, 50));
+        controlButtons_jp.setMinimumSize(new java.awt.Dimension(1280, 50));
+        controlButtons_jp.setPreferredSize(new java.awt.Dimension(1280, 50));
+
+        generarCodigo_btn.setBackground(new java.awt.Color(102, 102, 102));
+        generarCodigo_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        generarCodigo_btn.setForeground(new java.awt.Color(0, 0, 0));
+        generarCodigo_btn.setText("Generar Codigo");
+        generarCodigo_btn.setBorderPainted(false);
+
+        javax.swing.GroupLayout controlButtons_jpLayout = new javax.swing.GroupLayout(controlButtons_jp);
+        controlButtons_jp.setLayout(controlButtons_jpLayout);
+        controlButtons_jpLayout.setHorizontalGroup(
+            controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlButtons_jpLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(generarCodigo_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(570, 570, 570))
+        );
+        controlButtons_jpLayout.setVerticalGroup(
+            controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(controlButtons_jpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(generarCodigo_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        getContentPane().add(controlButtons_jp, java.awt.BorderLayout.PAGE_END);
+
         workarea_jp.setBackground(new java.awt.Color(255, 255, 255));
         workarea_jp.setLayout(null);
         getContentPane().add(workarea_jp, java.awt.BorderLayout.CENTER);
@@ -692,29 +909,14 @@ public class Screen extends JFrame {
 
         newFile_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         newFile_jmi.setText("Nuevo");
-        newFile_jmi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                newFile_jmiActionPerformed(evt);
-            }
-        });
         fileOptions_jm.add(newFile_jmi);
 
         openFile_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         openFile_jmi.setText("Abrir");
-        openFile_jmi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openFile_jmiActionPerformed(evt);
-            }
-        });
         fileOptions_jm.add(openFile_jmi);
 
         saveFile_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         saveFile_jmi.setText("Guardar");
-        saveFile_jmi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveFile_jmiActionPerformed(evt);
-            }
-        });
         fileOptions_jm.add(saveFile_jmi);
 
         frameMenu_jmb.add(fileOptions_jm);
@@ -932,45 +1134,72 @@ public class Screen extends JFrame {
             elementoSeleccionado.setTexto(nuevoTexto);
         }
     }//GEN-LAST:event_okProperties_btnMouseClicked
-    
+
     /*
-    * MENU OPTIONS (New, Open, Save)
-    */
-    
-    private void newFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFile_jmiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_newFile_jmiActionPerformed
+    * CREATE VARIABLE DIALOG
+     */
+    private void agregarVariable_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agregarVariable_btnMouseClicked
+        showDialog("Crear Variable", variables_dialog);
+    }//GEN-LAST:event_agregarVariable_btnMouseClicked
 
-    private void openFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFile_jmiActionPerformed
-        
-    }//GEN-LAST:event_openFile_jmiActionPerformed
+    private void cancelCreationVariable_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelCreationVariable_btnMouseClicked
+        variables_dialog.dispose();
+    }//GEN-LAST:event_cancelCreationVariable_btnMouseClicked
 
-    private void saveFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFile_jmiActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Guardar Diagrama");
-        if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            if (!file.getName().endsWith(".umlc")) {
-                file = new File(file.getAbsolutePath() + ".umlc");
-                
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    ObjectOutputStream oos = new ObjectOutputStream(fos);
-                    if (!elementos.isEmpty()) {
-                        oos.writeObject(elementos);
-                        JOptionPane.showMessageDialog(this, "Archivo Guardado", "", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "No hay nada que guardar!", "", JOptionPane.WARNING_MESSAGE);
-                    }
-                    oos.close();
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(this, "Error al guardar el archivo", "", JOptionPane.ERROR_MESSAGE);
-                } catch (IOException ex) {
-                    Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+    private void createVariable_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createVariable_btnMouseClicked
+        if (tf_variableName.getText().trim().length() != 0) {
+            String nombre = tf_variableName.getText();
+            String tipo = (String) typeVariable_jcb.getSelectedItem();
+            Variable variable = new Variable(tipo, nombre);
+
+            DefaultListModel model = (DefaultListModel) variables_list.getModel();
+            model.addElement(variable);
+            showMessage("Variable agregada", "Exito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            showMessage("Error al agregar variable", "Error!", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_createVariable_btnMouseClicked
+
+    /*
+    * CREATE OPERATION DIALOG
+     */
+
+    private void agregarProceso_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agregarProceso_btnMouseClicked
+        DefaultComboBoxModel modeloVariable1 = (DefaultComboBoxModel) var1_jcb.getModel();
+        DefaultComboBoxModel modeloVariable2 = (DefaultComboBoxModel) var2_jcb.getModel();
+        DefaultComboBoxModel modeloResultado = (DefaultComboBoxModel) resultado_jcb.getModel();
+        DefaultListModel listModel = (DefaultListModel) variables_list.getModel();
+
+        if (listModel.getSize() > 0) {
+            for (int i = 0; i < listModel.getSize(); i++) {
+                if (listModel.getElementAt(i) instanceof Variable) {
+                    modeloVariable1.addElement((Variable) listModel.getElementAt(i));
+                    modeloVariable2.addElement((Variable) listModel.getElementAt(i));
+                    modeloResultado.addElement((Variable) listModel.getElementAt(i));
                 }
             }
+            showDialog("Crear Operacion", operation_dialog);
+        } else {
+            showMessage("No hay variables registradas para crear un proceso", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_saveFile_jmiActionPerformed
+
+    }//GEN-LAST:event_agregarProceso_btnMouseClicked
+
+    private void cancelarOperacion_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelarOperacion_btnMouseClicked
+        operation_dialog.dispose();
+    }//GEN-LAST:event_cancelarOperacion_btnMouseClicked
+
+    private void guardarOperancion_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guardarOperancion_btnMouseClicked
+        String operador = (String) operador_jcb.getSelectedItem();
+        Variable variable1 = (Variable) var1_jcb.getSelectedItem();
+        Variable variable2 = (Variable) var2_jcb.getSelectedItem();
+        Variable resultado = (Variable) resultado_jcb.getSelectedItem();
+
+        DefaultListModel modeloProcesos = (DefaultListModel) process_list.getModel();
+        modeloProcesos.addElement(new Operacion(operador, variable1, variable2, resultado));
+
+        showMessage("Proceso creado exitosamente!", "", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_guardarOperancion_btnMouseClicked
 
     public static void main(String args[]) {
         try {
@@ -1116,6 +1345,10 @@ public class Screen extends JFrame {
         dialog.setVisible(true);
     }
 
+    private void showMessage(String message, String title, int messageType) {
+        JOptionPane.showMessageDialog(this, message, title, messageType);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregarProceso_btn;
@@ -1124,13 +1357,17 @@ public class Screen extends JFrame {
     private javax.swing.JLabel backgroundLabel;
     private javax.swing.JLabel bgProperty;
     private javax.swing.JToggleButton bold_toggleBtn;
+    private javax.swing.JButton cancelCreationVariable_btn;
     private javax.swing.JButton cancelPropertyDialog_btn;
+    private javax.swing.JButton cancelarOperacion_btn;
     private javax.swing.JMenuItem changeElementBackground_jmi;
     private javax.swing.JMenuItem changeElementFont_jmi;
     private javax.swing.JMenuItem changeElementForeground_jmi;
     private javax.swing.JMenuItem changeElementText_jmi;
     private javax.swing.JPanel controlButtons_jp;
     private javax.swing.JMenuItem copyElement_jmi;
+    private javax.swing.JButton createVariable_btn;
+    private javax.swing.JPanel createVariable_jp;
     private javax.swing.JButton decisionFig_btn;
     private javax.swing.JMenuItem deleteElement_jmi;
     private javax.swing.JMenuItem elementProperties_jmi;
@@ -1150,9 +1387,14 @@ public class Screen extends JFrame {
     private javax.swing.JLabel foregroundProperty;
     private javax.swing.JMenuBar frameMenu_jmb;
     private javax.swing.JButton generarCodigo_btn;
+    private javax.swing.JButton guardarOperancion_btn;
     private javax.swing.JSpinner heigthLabel_spinner;
     private javax.swing.JLabel heigthPropertyLabel;
     private javax.swing.JToggleButton italic_toggleBtn;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
@@ -1163,6 +1405,9 @@ public class Screen extends JFrame {
     private javax.swing.JMenuItem newFile_jmi;
     private javax.swing.JButton okProperties_btn;
     private javax.swing.JMenuItem openFile_jmi;
+    private javax.swing.JPanel operacion_jp;
+    private javax.swing.JComboBox<String> operador_jcb;
+    private javax.swing.JDialog operation_dialog;
     private javax.swing.JLabel optionsTitle;
     private javax.swing.JMenuItem pasteElement_jmi;
     private javax.swing.JButton predefinedProcessFig_btn;
@@ -1171,6 +1416,7 @@ public class Screen extends JFrame {
     private javax.swing.JList<String> process_list;
     private javax.swing.JScrollPane processes_scroll;
     private javax.swing.JDialog properties_dialog;
+    private javax.swing.JComboBox<String> resultado_jcb;
     private javax.swing.JMenuItem saveFile_jmi;
     private javax.swing.JSeparator separator2_tool;
     private javax.swing.JSeparator separator_tool;
@@ -1182,7 +1428,14 @@ public class Screen extends JFrame {
     private javax.swing.JLabel textPropertyLabel;
     private javax.swing.JTextField tf_nameProperty;
     private javax.swing.JTextField tf_textProperty;
+    private javax.swing.JTextField tf_variableName;
     private javax.swing.JPanel tools_jp;
+    private javax.swing.JLabel typeVariableLabel;
+    private javax.swing.JComboBox<String> typeVariable_jcb;
+    private javax.swing.JComboBox<String> var1_jcb;
+    private javax.swing.JComboBox<String> var2_jcb;
+    private javax.swing.JLabel variableLabel;
+    private javax.swing.JDialog variables_dialog;
     private javax.swing.JPanel variables_jp;
     private javax.swing.JList<String> variables_list;
     private javax.swing.JScrollPane variables_scroll;
