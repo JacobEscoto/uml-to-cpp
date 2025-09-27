@@ -4,10 +4,17 @@ public class Variable {
 
     private String tipo;
     private String nombre;
+    private String alcance;
 
     public Variable(String tipo, String nombre) {
         this.tipo = tipo;
         this.nombre = nombre;
+    }
+
+    public Variable(String tipo, String nombre, String alcance) {
+        this.tipo = tipo;
+        this.nombre = nombre;
+        this.alcance = alcance;
     }
 
     public String getTipo() {
@@ -24,6 +31,14 @@ public class Variable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getAlcance() {
+        return alcance;
+    }
+
+    public void setAlcance(String alcance) {
+        this.alcance = alcance;
     }
 
     public String generarCodigo() {

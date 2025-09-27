@@ -1,16 +1,21 @@
 package elementos;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Clase {
-    
+public class Clase implements Serializable {
+
     private String nombre;
+    private boolean esHija;
+    private Clase clasePadre;
     private String descripcion;
     private ArrayList<Variable> propiedades;
-    private ArrayList<Metodos> metodos;
-    
+    private ArrayList<Metodo> metodos;
+
     public Clase(String nombre) {
         this.nombre = nombre;
+        this.esHija = false;
+        this.clasePadre = null;
         this.descripcion = "";
         this.propiedades = new ArrayList();
         this.metodos = new ArrayList();
@@ -22,6 +27,23 @@ public class Clase {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+    
+    public boolean esHija() {
+        return esHija;
+    }
+    
+    public Clase getClasePadre() {
+        return clasePadre;
+    }
+    
+    public void setClasePadre(Clase clasePadre) {
+        this.esHija = true;
+        this.clasePadre = clasePadre;
+    }
+    
+    public void setHija(boolean esHija) {
+        this.esHija = esHija;
     }
 
     public String getDescripcion() {
@@ -40,18 +62,33 @@ public class Clase {
         this.propiedades = propiedades;
     }
 
-    public ArrayList<Metodos> getMetodos() {
+    public ArrayList<Metodo> getMetodos() {
         return metodos;
     }
 
-    public void setMetodos(ArrayList<Metodos> metodos) {
+    public void setMetodos(ArrayList<Metodo> metodos) {
         this.metodos = metodos;
     }
-    
+
+    public String generarHeaderFile() {
+        String h = "#ifndef " + nombre.toUpperCase() + "_H\n#define " + nombre.toUpperCase() + "_H\n";
+        
+        h += "\n#include <iostream>\n#include <string>";
+        if (esHija()) {
+            h += "\n\n#include \"" + clasePadre.getNombre() + ".h\"\n";
+            h+= "\nclass " + nombre + " : public " + clasePadre.getNombre() + "\n{\n";
+        } else {
+            h+= "\n\nclass " + nombre + "\n{\n";
+        }
+        
+        
+        
+        return h;
+    }
+
     @Override
     public String toString() {
         return nombre;
     }
 
 }
-

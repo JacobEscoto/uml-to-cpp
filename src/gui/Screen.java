@@ -2,10 +2,10 @@ package gui;
 
 import elementos.*;
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -33,6 +33,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -45,9 +46,12 @@ public class Screen extends JFrame {
     private FiguraDiagrama elementoSeleccionado = null;
     private FiguraDiagrama copiaElemento = null;
     private ArrayList<FiguraDiagrama> elementos = new ArrayList();
+    private ArrayList<Clase> clases = new ArrayList();
     private final int BACKGROUND_OPTION = 1;
     private final int FOREGROUND_OPTION = 2;
+    private int window = 1;
     private JFileChooser fileChooser = new JFileChooser();
+    private JTree arbolSeleccionado = null;
 
     public Screen() {
         initComponents();
@@ -69,6 +73,12 @@ public class Screen extends JFrame {
         DefaultListModel modelProcesos = new DefaultListModel();
         process_list.setModel(modelProcesos);
 
+        // Modelo de Listas (Clases)
+        DefaultListModel modelClasePadre = new DefaultListModel();
+        DefaultListModel modelClaseHija = new DefaultListModel();
+        parentClass_list.setModel(modelClasePadre);
+        childClass_list.setModel(modelClaseHija);
+
         // Modelo de Spinner Number para Tamaño de Fuente
         SpinnerNumberModel modeloFontSize = new SpinnerNumberModel(12, 8, 48, 1);
         fontSize_spinner.setModel(modeloFontSize);
@@ -85,17 +95,6 @@ public class Screen extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        elements_jpm = new javax.swing.JPopupMenu();
-        changeElementBackground_jmi = new javax.swing.JMenuItem();
-        changeElementForeground_jmi = new javax.swing.JMenuItem();
-        changeElementText_jmi = new javax.swing.JMenuItem();
-        changeElementFont_jmi = new javax.swing.JMenuItem();
-        js_elementEdition = new javax.swing.JPopupMenu.Separator();
-        copyElement_jmi = new javax.swing.JMenuItem();
-        pasteElement_jmi = new javax.swing.JMenuItem();
-        deleteElement_jmi = new javax.swing.JMenuItem();
-        js_elementProperties = new javax.swing.JPopupMenu.Separator();
-        elementProperties_jmi = new javax.swing.JMenuItem();
         properties_dialog = new javax.swing.JDialog();
         jPanel1 = new javax.swing.JPanel();
         namePropertyLabel = new javax.swing.JLabel();
@@ -124,6 +123,8 @@ public class Screen extends JFrame {
         typeVariable_jcb = new javax.swing.JComboBox<>();
         createVariable_btn = new javax.swing.JButton();
         cancelCreationVariable_btn = new javax.swing.JButton();
+        alcance_lbl = new javax.swing.JLabel();
+        alcance_jcb = new javax.swing.JComboBox<>();
         operation_dialog = new javax.swing.JDialog();
         operacion_jp = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -136,16 +137,6 @@ public class Screen extends JFrame {
         resultado_jcb = new javax.swing.JComboBox<>();
         guardarOperancion_btn = new javax.swing.JButton();
         cancelarOperacion_btn = new javax.swing.JButton();
-        clases_jpm = new javax.swing.JPopupMenu();
-        addPropiedad_jmi = new javax.swing.JMenuItem();
-        eliminarPropiedad_jmi = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        addMetodo_jmi = new javax.swing.JMenuItem();
-        eliminatMetodo_jmi = new javax.swing.JMenuItem();
-        descripcionMetodo_jmi = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        descripcion_jmi = new javax.swing.JMenuItem();
-        eliminarArbol_jmi = new javax.swing.JMenuItem();
         methods_dialog = new javax.swing.JDialog();
         jPanel6 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
@@ -158,6 +149,38 @@ public class Screen extends JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        herencia_dialog = new javax.swing.JDialog();
+        herencia_jp = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        parentClass_list = new javax.swing.JList<>();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        childClass_list = new javax.swing.JList<>();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        cancelInheritance_btn = new javax.swing.JButton();
+        applyInheritance_btn = new javax.swing.JButton();
+        elements_jpm = new javax.swing.JPopupMenu();
+        changeElementBackground_jmi = new javax.swing.JMenuItem();
+        changeElementForeground_jmi = new javax.swing.JMenuItem();
+        changeElementText_jmi = new javax.swing.JMenuItem();
+        changeElementFont_jmi = new javax.swing.JMenuItem();
+        js_elementEdition = new javax.swing.JPopupMenu.Separator();
+        copyElement_jmi = new javax.swing.JMenuItem();
+        pasteElement_jmi = new javax.swing.JMenuItem();
+        deleteElement_jmi = new javax.swing.JMenuItem();
+        js_elementProperties = new javax.swing.JPopupMenu.Separator();
+        elementProperties_jmi = new javax.swing.JMenuItem();
+        clases_jpm = new javax.swing.JPopupMenu();
+        addPropiedad_jmi = new javax.swing.JMenuItem();
+        eliminarPropiedad_jmi = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        addMetodo_jmi = new javax.swing.JMenuItem();
+        eliminatMetodo_jmi = new javax.swing.JMenuItem();
+        descripcionMetodo_jmi = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        descripcion_jmi = new javax.swing.JMenuItem();
+        eliminarArbol_jmi = new javax.swing.JMenuItem();
         editorDiagrama_jp = new javax.swing.JPanel();
         tools_jp = new javax.swing.JPanel();
         fontLabel = new javax.swing.JLabel();
@@ -200,17 +223,24 @@ public class Screen extends JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         classesGenerator_jp = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jt_classes = new javax.swing.JTree();
+        menuClasses_jp = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
+        scrollClasses = new javax.swing.JScrollPane();
+        jt_classes = new javax.swing.JTree();
         createClase_btn = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        herencia_btn = new javax.swing.JButton();
         addToWorkArea_btn = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        rightSide_jp = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
+        controlClasses_jp = new javax.swing.JPanel();
+        jButton3 = new javax.swing.JButton();
+        diagramClase_toggleBtn = new javax.swing.JToggleButton();
+        codeClase_toggleBtn = new javax.swing.JToggleButton();
+        mainarea_jp = new javax.swing.JPanel();
         workareaClasses_jp = new javax.swing.JPanel();
+        codeClasses_jp = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
         frameMenu_jmb = new javax.swing.JMenuBar();
         fileOptions_jm = new javax.swing.JMenu();
         newFile_jmi = new javax.swing.JMenuItem();
@@ -218,76 +248,9 @@ public class Screen extends JFrame {
         saveFile_jmi = new javax.swing.JMenuItem();
         exportOptions_jm = new javax.swing.JMenu();
         exportPdf_jmi = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        tools_jm = new javax.swing.JMenu();
         editorDiagrama_jmi = new javax.swing.JMenuItem();
         generadorClases_jmi = new javax.swing.JMenuItem();
-
-        changeElementBackground_jmi.setText("Cambiar Color");
-        changeElementBackground_jmi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                changeElementBackground_jmiActionPerformed(evt);
-            }
-        });
-        elements_jpm.add(changeElementBackground_jmi);
-
-        changeElementForeground_jmi.setText("Cambiar Color de Texto");
-        changeElementForeground_jmi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                changeElementForeground_jmiActionPerformed(evt);
-            }
-        });
-        elements_jpm.add(changeElementForeground_jmi);
-
-        changeElementText_jmi.setText("Cambiar Texto");
-        changeElementText_jmi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                changeElementText_jmiActionPerformed(evt);
-            }
-        });
-        elements_jpm.add(changeElementText_jmi);
-
-        changeElementFont_jmi.setText("Cambiar Fuente");
-        changeElementFont_jmi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                changeElementFont_jmiActionPerformed(evt);
-            }
-        });
-        elements_jpm.add(changeElementFont_jmi);
-        elements_jpm.add(js_elementEdition);
-
-        copyElement_jmi.setText("Copiar");
-        copyElement_jmi.setToolTipText("");
-        copyElement_jmi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                copyElement_jmiActionPerformed(evt);
-            }
-        });
-        elements_jpm.add(copyElement_jmi);
-
-        pasteElement_jmi.setText("Pegar");
-        pasteElement_jmi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pasteElement_jmiActionPerformed(evt);
-            }
-        });
-        elements_jpm.add(pasteElement_jmi);
-
-        deleteElement_jmi.setText("Eliminar");
-        deleteElement_jmi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteElement_jmiActionPerformed(evt);
-            }
-        });
-        elements_jpm.add(deleteElement_jmi);
-        elements_jpm.add(js_elementProperties);
-
-        elementProperties_jmi.setText("Propiedades");
-        elementProperties_jmi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                elementProperties_jmiActionPerformed(evt);
-            }
-        });
-        elements_jpm.add(elementProperties_jmi);
 
         properties_dialog.setMinimumSize(new java.awt.Dimension(372, 375));
         properties_dialog.setModal(true);
@@ -477,6 +440,12 @@ public class Screen extends JFrame {
             }
         });
 
+        alcance_lbl.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        alcance_lbl.setForeground(new java.awt.Color(0, 0, 0));
+        alcance_lbl.setText("Alcance:");
+
+        alcance_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "public", "private", "protected" }));
+
         javax.swing.GroupLayout createVariable_jpLayout = new javax.swing.GroupLayout(createVariable_jp);
         createVariable_jp.setLayout(createVariable_jpLayout);
         createVariable_jpLayout.setHorizontalGroup(
@@ -485,17 +454,20 @@ public class Screen extends JFrame {
                 .addGap(29, 29, 29)
                 .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(createVariable_jpLayout.createSequentialGroup()
-                        .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(typeVariableLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(variableLabel))
+                        .addComponent(cancelCreationVariable_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(createVariable_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(createVariable_jpLayout.createSequentialGroup()
+                        .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(alcance_lbl)
+                            .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(typeVariableLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(variableLabel)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(tf_variableName)
-                            .addComponent(typeVariable_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(createVariable_jpLayout.createSequentialGroup()
-                        .addComponent(cancelCreationVariable_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(createVariable_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(typeVariable_jcb, 0, 233, Short.MAX_VALUE)
+                            .addComponent(alcance_jcb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         createVariable_jpLayout.setVerticalGroup(
@@ -509,7 +481,11 @@ public class Screen extends JFrame {
                 .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(typeVariableLabel)
                     .addComponent(typeVariable_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(alcance_lbl)
+                    .addComponent(alcance_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
                 .addGroup(createVariable_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(createVariable_btn)
                     .addComponent(cancelCreationVariable_btn))
@@ -629,31 +605,7 @@ public class Screen extends JFrame {
             .addComponent(operacion_jp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        addPropiedad_jmi.setText("Agregar Propiedad");
-        clases_jpm.add(addPropiedad_jmi);
-
-        eliminarPropiedad_jmi.setText("Eliminar Propiedad");
-        clases_jpm.add(eliminarPropiedad_jmi);
-        clases_jpm.add(jSeparator1);
-
-        addMetodo_jmi.setText("Agregar Metodo");
-        clases_jpm.add(addMetodo_jmi);
-
-        eliminatMetodo_jmi.setText("Eliminar Metodo");
-        clases_jpm.add(eliminatMetodo_jmi);
-
-        descripcionMetodo_jmi.setText("Descripcion del Metodo");
-        clases_jpm.add(descripcionMetodo_jmi);
-        clases_jpm.add(jSeparator2);
-
-        descripcion_jmi.setText("Descripcion");
-        clases_jpm.add(descripcion_jmi);
-
-        eliminarArbol_jmi.setText("Eliminar Arbol");
-        clases_jpm.add(eliminarArbol_jmi);
-
         methods_dialog.setTitle("Crear Metodo");
-        methods_dialog.setMaximumSize(new java.awt.Dimension(337, 348));
         methods_dialog.setMinimumSize(new java.awt.Dimension(337, 348));
         methods_dialog.setResizable(false);
 
@@ -748,6 +700,200 @@ public class Screen extends JFrame {
             methods_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
+
+        herencia_dialog.setMinimumSize(new java.awt.Dimension(593, 502));
+        herencia_dialog.setModal(true);
+        herencia_dialog.setResizable(false);
+
+        herencia_jp.setBackground(new java.awt.Color(204, 204, 204));
+        herencia_jp.setMaximumSize(new java.awt.Dimension(593, 502));
+        herencia_jp.setMinimumSize(new java.awt.Dimension(593, 502));
+
+        jScrollPane3.setViewportView(parentClass_list);
+
+        jScrollPane4.setViewportView(childClass_list);
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setText("Clase Hija");
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setText("Clase Padre");
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(0, 0, 51));
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("?");
+        jLabel14.setToolTipText("<html><b>Nota!</b><p>Las propiedades de la clase padre</p><p>se convertiran a protegidas!</p></html>");
+
+        cancelInheritance_btn.setText("Cancelar");
+
+        applyInheritance_btn.setText("Aplicar Herencia");
+        applyInheritance_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                applyInheritance_btnMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout herencia_jpLayout = new javax.swing.GroupLayout(herencia_jp);
+        herencia_jp.setLayout(herencia_jpLayout);
+        herencia_jpLayout.setHorizontalGroup(
+            herencia_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, herencia_jpLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(herencia_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addGroup(herencia_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(herencia_jpLayout.createSequentialGroup()
+                        .addComponent(cancelInheritance_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(applyInheritance_btn))
+                    .addGroup(herencia_jpLayout.createSequentialGroup()
+                        .addGroup(herencia_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        herencia_jpLayout.setVerticalGroup(
+            herencia_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(herencia_jpLayout.createSequentialGroup()
+                .addGroup(herencia_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(herencia_jpLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel14))
+                    .addGroup(herencia_jpLayout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(herencia_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(herencia_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addGroup(herencia_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(applyInheritance_btn)
+                    .addComponent(cancelInheritance_btn))
+                .addGap(15, 15, 15))
+        );
+
+        javax.swing.GroupLayout herencia_dialogLayout = new javax.swing.GroupLayout(herencia_dialog.getContentPane());
+        herencia_dialog.getContentPane().setLayout(herencia_dialogLayout);
+        herencia_dialogLayout.setHorizontalGroup(
+            herencia_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(herencia_jp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        herencia_dialogLayout.setVerticalGroup(
+            herencia_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(herencia_jp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        changeElementBackground_jmi.setText("Cambiar Color");
+        changeElementBackground_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeElementBackground_jmiActionPerformed(evt);
+            }
+        });
+        elements_jpm.add(changeElementBackground_jmi);
+
+        changeElementForeground_jmi.setText("Cambiar Color de Texto");
+        changeElementForeground_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeElementForeground_jmiActionPerformed(evt);
+            }
+        });
+        elements_jpm.add(changeElementForeground_jmi);
+
+        changeElementText_jmi.setText("Cambiar Texto");
+        changeElementText_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeElementText_jmiActionPerformed(evt);
+            }
+        });
+        elements_jpm.add(changeElementText_jmi);
+
+        changeElementFont_jmi.setText("Cambiar Fuente");
+        changeElementFont_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeElementFont_jmiActionPerformed(evt);
+            }
+        });
+        elements_jpm.add(changeElementFont_jmi);
+        elements_jpm.add(js_elementEdition);
+
+        copyElement_jmi.setText("Copiar");
+        copyElement_jmi.setToolTipText("");
+        copyElement_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyElement_jmiActionPerformed(evt);
+            }
+        });
+        elements_jpm.add(copyElement_jmi);
+
+        pasteElement_jmi.setText("Pegar");
+        pasteElement_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pasteElement_jmiActionPerformed(evt);
+            }
+        });
+        elements_jpm.add(pasteElement_jmi);
+
+        deleteElement_jmi.setText("Eliminar");
+        deleteElement_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteElement_jmiActionPerformed(evt);
+            }
+        });
+        elements_jpm.add(deleteElement_jmi);
+        elements_jpm.add(js_elementProperties);
+
+        elementProperties_jmi.setText("Propiedades");
+        elementProperties_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                elementProperties_jmiActionPerformed(evt);
+            }
+        });
+        elements_jpm.add(elementProperties_jmi);
+
+        addPropiedad_jmi.setText("Agregar Propiedad");
+        addPropiedad_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addPropiedad_jmiActionPerformed(evt);
+            }
+        });
+        clases_jpm.add(addPropiedad_jmi);
+
+        eliminarPropiedad_jmi.setText("Eliminar Propiedad");
+        eliminarPropiedad_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarPropiedad_jmiActionPerformed(evt);
+            }
+        });
+        clases_jpm.add(eliminarPropiedad_jmi);
+        clases_jpm.add(jSeparator1);
+
+        addMetodo_jmi.setText("Agregar Metodo");
+        clases_jpm.add(addMetodo_jmi);
+
+        eliminatMetodo_jmi.setText("Eliminar Metodo");
+        clases_jpm.add(eliminatMetodo_jmi);
+
+        descripcionMetodo_jmi.setText("Descripcion del Metodo");
+        clases_jpm.add(descripcionMetodo_jmi);
+        clases_jpm.add(jSeparator2);
+
+        descripcion_jmi.setText("Descripcion");
+        clases_jpm.add(descripcion_jmi);
+
+        eliminarArbol_jmi.setText("Eliminar Arbol");
+        clases_jpm.add(eliminarArbol_jmi);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UML Editor");
@@ -884,7 +1030,7 @@ public class Screen extends JFrame {
 
         optionsTitle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         optionsTitle.setForeground(new java.awt.Color(0, 0, 0));
-        optionsTitle.setText("  OPCIONES --------------------");
+        optionsTitle.setText("  OPCIONES ---------------");
 
         terminalFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/terminal.png"))); // NOI18N
         terminalFig_btn.setBorderPainted(false);
@@ -936,9 +1082,6 @@ public class Screen extends JFrame {
         menuElements_jpLayout.setHorizontalGroup(
             menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuElements_jpLayout.createSequentialGroup()
-                .addComponent(optionsTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(menuElements_jpLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(predefinedProcessFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -946,7 +1089,10 @@ public class Screen extends JFrame {
                     .addComponent(terminalFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(decisionFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(soutFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(25, 25, 25))
+                .addContainerGap(12, Short.MAX_VALUE))
+            .addGroup(menuElements_jpLayout.createSequentialGroup()
+                .addComponent(optionsTitle)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         menuElements_jpLayout.setVerticalGroup(
             menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1067,6 +1213,7 @@ public class Screen extends JFrame {
         code_toggleBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         code_toggleBtn.setForeground(new java.awt.Color(0, 0, 0));
         code_toggleBtn.setText("Codigo");
+        code_toggleBtn.setBorder(null);
         code_toggleBtn.setBorderPainted(false);
         code_toggleBtn.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1083,6 +1230,7 @@ public class Screen extends JFrame {
         diagram_toggleBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         diagram_toggleBtn.setForeground(new java.awt.Color(0, 0, 0));
         diagram_toggleBtn.setText("Diagrama");
+        diagram_toggleBtn.setBorder(null);
         diagram_toggleBtn.setBorderPainted(false);
         diagram_toggleBtn.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1099,23 +1247,22 @@ public class Screen extends JFrame {
         controlButtons_jp.setLayout(controlButtons_jpLayout);
         controlButtons_jpLayout.setHorizontalGroup(
             controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(controlButtons_jpLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlButtons_jpLayout.createSequentialGroup()
                 .addGap(185, 185, 185)
                 .addComponent(generarCodigo_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 607, Short.MAX_VALUE)
-                .addComponent(diagram_toggleBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 597, Short.MAX_VALUE)
+                .addComponent(diagram_toggleBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(code_toggleBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(192, 192, 192))
+                .addGap(204, 204, 204))
         );
         controlButtons_jpLayout.setVerticalGroup(
             controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(controlButtons_jpLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(generarCodigo_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(diagram_toggleBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(generarCodigo_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                    .addComponent(diagram_toggleBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(code_toggleBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
@@ -1181,74 +1328,103 @@ public class Screen extends JFrame {
         classesGenerator_jp.setPreferredSize(new java.awt.Dimension(1280, 720));
         classesGenerator_jp.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel2.setMaximumSize(new java.awt.Dimension(350, 520));
-        jPanel2.setMinimumSize(new java.awt.Dimension(350, 520));
-        jPanel2.setPreferredSize(new java.awt.Dimension(350, 520));
-
-        jScrollPane1.setViewportView(jt_classes);
+        menuClasses_jp.setBackground(new java.awt.Color(204, 204, 204));
+        menuClasses_jp.setMaximumSize(new java.awt.Dimension(350, 520));
+        menuClasses_jp.setMinimumSize(new java.awt.Dimension(350, 520));
+        menuClasses_jp.setPreferredSize(new java.awt.Dimension(350, 520));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Clases Generadas --------------------");
 
+        scrollClasses.setViewportView(jt_classes);
+
+        createClase_btn.setBackground(new java.awt.Color(153, 153, 153));
+        createClase_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        createClase_btn.setForeground(new java.awt.Color(0, 0, 0));
         createClase_btn.setText("Nueva Clase");
+        createClase_btn.setBorderPainted(false);
+        createClase_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                createClase_btnMouseClicked(evt);
+            }
+        });
 
-        jButton3.setText("Herencia");
+        herencia_btn.setBackground(new java.awt.Color(153, 153, 153));
+        herencia_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        herencia_btn.setForeground(new java.awt.Color(0, 0, 0));
+        herencia_btn.setText("Herencia");
+        herencia_btn.setBorderPainted(false);
+        herencia_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                herencia_btnMouseClicked(evt);
+            }
+        });
 
+        addToWorkArea_btn.setBackground(new java.awt.Color(153, 153, 153));
+        addToWorkArea_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        addToWorkArea_btn.setForeground(new java.awt.Color(0, 0, 0));
         addToWorkArea_btn.setText("Agregar a Area de Trabajo");
+        addToWorkArea_btn.setBorderPainted(false);
+        addToWorkArea_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addToWorkArea_btnMouseClicked(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout menuClasses_jpLayout = new javax.swing.GroupLayout(menuClasses_jp);
+        menuClasses_jp.setLayout(menuClasses_jpLayout);
+        menuClasses_jpLayout.setHorizontalGroup(
+            menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(menuClasses_jpLayout.createSequentialGroup()
+                .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(menuClasses_jpLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(createClase_btn)
-                                .addGap(26, 26, 26)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(scrollClasses, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(75, 75, 75)
-                        .addComponent(addToWorkArea_btn)))
+                    .addGroup(menuClasses_jpLayout.createSequentialGroup()
+                        .addGap(54, 54, 54)
+                        .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(addToWorkArea_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(menuClasses_jpLayout.createSequentialGroup()
+                                .addComponent(createClase_btn)
+                                .addGap(18, 18, 18)
+                                .addComponent(herencia_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        menuClasses_jpLayout.setVerticalGroup(
+            menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(menuClasses_jpLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollClasses, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(createClase_btn)
-                    .addComponent(jButton3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(addToWorkArea_btn))
+                .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(herencia_btn)
+                    .addComponent(createClase_btn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addToWorkArea_btn)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        classesGenerator_jp.add(jPanel2, java.awt.BorderLayout.LINE_START);
+        classesGenerator_jp.add(menuClasses_jp, java.awt.BorderLayout.LINE_START);
 
-        jPanel3.setBackground(new java.awt.Color(204, 204, 204));
+        rightSide_jp.setBackground(new java.awt.Color(204, 204, 204));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout rightSide_jpLayout = new javax.swing.GroupLayout(rightSide_jp);
+        rightSide_jp.setLayout(rightSide_jpLayout);
+        rightSide_jpLayout.setHorizontalGroup(
+            rightSide_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 100, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 575, Short.MAX_VALUE)
+        rightSide_jpLayout.setVerticalGroup(
+            rightSide_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 595, Short.MAX_VALUE)
         );
 
-        classesGenerator_jp.add(jPanel3, java.awt.BorderLayout.LINE_END);
+        classesGenerator_jp.add(rightSide_jp, java.awt.BorderLayout.LINE_END);
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
         jPanel4.setMaximumSize(new java.awt.Dimension(1280, 50));
@@ -1268,38 +1444,116 @@ public class Screen extends JFrame {
 
         classesGenerator_jp.add(jPanel4, java.awt.BorderLayout.PAGE_START);
 
-        jPanel5.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel5.setMaximumSize(new java.awt.Dimension(1280, 75));
-        jPanel5.setMinimumSize(new java.awt.Dimension(1280, 75));
-        jPanel5.setPreferredSize(new java.awt.Dimension(1280, 75));
+        controlClasses_jp.setBackground(new java.awt.Color(204, 204, 204));
+        controlClasses_jp.setMaximumSize(new java.awt.Dimension(1280, 75));
+        controlClasses_jp.setMinimumSize(new java.awt.Dimension(1280, 75));
+        controlClasses_jp.setPreferredSize(new java.awt.Dimension(1280, 75));
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1280, Short.MAX_VALUE)
+        jButton3.setBackground(new java.awt.Color(153, 153, 153));
+        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(0, 0, 0));
+        jButton3.setText("Generar Codigo");
+        jButton3.setBorderPainted(false);
+
+        diagramClase_toggleBtn.setBackground(new Color(255, 255, 255, 128));
+        diagramClase_toggleBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        diagramClase_toggleBtn.setForeground(new java.awt.Color(0, 0, 0));
+        diagramClase_toggleBtn.setText("Diagrama");
+        diagramClase_toggleBtn.setBorder(null);
+        diagramClase_toggleBtn.setBorderPainted(false);
+        diagramClase_toggleBtn.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                diagramClase_toggleBtnItemStateChanged(evt);
+            }
+        });
+        diagramClase_toggleBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                diagramClase_toggleBtnMouseClicked(evt);
+            }
+        });
+
+        codeClase_toggleBtn.setBackground(new Color(255, 255, 255, 128));
+        codeClase_toggleBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        codeClase_toggleBtn.setForeground(new java.awt.Color(0, 0, 0));
+        codeClase_toggleBtn.setText("Codigo");
+        codeClase_toggleBtn.setBorder(null);
+        codeClase_toggleBtn.setBorderPainted(false);
+        codeClase_toggleBtn.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                codeClase_toggleBtnItemStateChanged(evt);
+            }
+        });
+        codeClase_toggleBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                codeClase_toggleBtnMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout controlClasses_jpLayout = new javax.swing.GroupLayout(controlClasses_jp);
+        controlClasses_jp.setLayout(controlClasses_jpLayout);
+        controlClasses_jpLayout.setHorizontalGroup(
+            controlClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(controlClasses_jpLayout.createSequentialGroup()
+                .addGap(350, 350, 350)
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 549, Short.MAX_VALUE)
+                .addComponent(diagramClase_toggleBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(codeClase_toggleBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(102, 102, 102))
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 75, Short.MAX_VALUE)
+        controlClasses_jpLayout.setVerticalGroup(
+            controlClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(controlClasses_jpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(controlClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                    .addComponent(diagramClase_toggleBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(codeClase_toggleBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
-        classesGenerator_jp.add(jPanel5, java.awt.BorderLayout.PAGE_END);
+        classesGenerator_jp.add(controlClasses_jp, java.awt.BorderLayout.PAGE_END);
+
+        mainarea_jp.setBackground(new java.awt.Color(255, 255, 255));
+        mainarea_jp.setLayout(new java.awt.CardLayout());
 
         workareaClasses_jp.setBackground(new java.awt.Color(255, 255, 255));
+        workareaClasses_jp.setLayout(null);
+        mainarea_jp.add(workareaClasses_jp, "card2");
 
-        javax.swing.GroupLayout workareaClasses_jpLayout = new javax.swing.GroupLayout(workareaClasses_jp);
-        workareaClasses_jp.setLayout(workareaClasses_jpLayout);
-        workareaClasses_jpLayout.setHorizontalGroup(
-            workareaClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 830, Short.MAX_VALUE)
+        codeClasses_jp.setBackground(new java.awt.Color(255, 255, 255));
+
+        jScrollPane1.setBorder(null);
+
+        jTextArea2.setEditable(false);
+        jTextArea2.setBackground(new java.awt.Color(255, 255, 255));
+        jTextArea2.setColumns(20);
+        jTextArea2.setForeground(new java.awt.Color(0, 0, 0));
+        jTextArea2.setRows(5);
+        jTextArea2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CODIGO", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
+        jScrollPane1.setViewportView(jTextArea2);
+
+        javax.swing.GroupLayout codeClasses_jpLayout = new javax.swing.GroupLayout(codeClasses_jp);
+        codeClasses_jp.setLayout(codeClasses_jpLayout);
+        codeClasses_jpLayout.setHorizontalGroup(
+            codeClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(codeClasses_jpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 818, Short.MAX_VALUE)
+                .addContainerGap())
         );
-        workareaClasses_jpLayout.setVerticalGroup(
-            workareaClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 575, Short.MAX_VALUE)
+        codeClasses_jpLayout.setVerticalGroup(
+            codeClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(codeClasses_jpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        classesGenerator_jp.add(workareaClasses_jp, java.awt.BorderLayout.CENTER);
+        mainarea_jp.add(codeClasses_jp, "card3");
+
+        classesGenerator_jp.add(mainarea_jp, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(classesGenerator_jp, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 700));
 
@@ -1347,7 +1601,7 @@ public class Screen extends JFrame {
 
         frameMenu_jmb.add(exportOptions_jm);
 
-        jMenu1.setText("Herramientas");
+        tools_jm.setText("Herramientas");
 
         editorDiagrama_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         editorDiagrama_jmi.setText("Editor de Diagramas");
@@ -1356,7 +1610,7 @@ public class Screen extends JFrame {
                 editorDiagrama_jmiActionPerformed(evt);
             }
         });
-        jMenu1.add(editorDiagrama_jmi);
+        tools_jm.add(editorDiagrama_jmi);
 
         generadorClases_jmi.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         generadorClases_jmi.setText("Generador de Clases");
@@ -1365,9 +1619,9 @@ public class Screen extends JFrame {
                 generadorClases_jmiActionPerformed(evt);
             }
         });
-        jMenu1.add(generadorClases_jmi);
+        tools_jm.add(generadorClases_jmi);
 
-        frameMenu_jmb.add(jMenu1);
+        frameMenu_jmb.add(tools_jm);
 
         setJMenuBar(frameMenu_jmb);
 
@@ -1584,6 +1838,8 @@ public class Screen extends JFrame {
     * CREATE VARIABLE DIALOG
      */
     private void agregarVariable_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agregarVariable_btnMouseClicked
+        alcance_lbl.setVisible(false);
+        alcance_jcb.setVisible(false);
         showDialog("Crear Variable", variables_dialog);
     }//GEN-LAST:event_agregarVariable_btnMouseClicked
 
@@ -1595,14 +1851,35 @@ public class Screen extends JFrame {
         if (tf_variableName.getText().trim().length() != 0) {
             String nombre = tf_variableName.getText();
             String tipo = (String) typeVariable_jcb.getSelectedItem();
-            Variable variable = new Variable(tipo, nombre);
-
-            DefaultListModel model = (DefaultListModel) variables_list.getModel();
-            model.addElement(variable);
-            showMessage("Variable agregada", "Exito", JOptionPane.INFORMATION_MESSAGE);
+            String alcance = (String) alcance_jcb.getSelectedItem();
+            if (window == 1) {
+                Variable variable = new Variable(tipo, nombre);
+                DefaultListModel model = (DefaultListModel) variables_list.getModel();
+                model.addElement(variable);
+                showMessage("Variable agregada", "Exito", JOptionPane.INFORMATION_MESSAGE);
+            } else if (window == 2) {
+                Variable propiedad = new Variable(tipo, nombre, alcance);
+                DefaultMutableTreeNode property = new DefaultMutableTreeNode(propiedad);
+                DefaultMutableTreeNode raiz =(DefaultMutableTreeNode) arbolSeleccionado.getModel().getRoot();
+                DefaultMutableTreeNode nodoPropiedad = null;
+                for (int i = 0; i < raiz.getChildCount(); i++) {
+                    if (raiz.getChildAt(i).toString().equalsIgnoreCase("Propiedades")) {
+                        nodoPropiedad = (DefaultMutableTreeNode) raiz.getChildAt(i);
+                    }
+                }
+                if (nodoPropiedad != null) {
+                    DefaultTreeModel modelo = (DefaultTreeModel) arbolSeleccionado.getModel();
+                    nodoPropiedad.add(property);
+                    modelo.reload();
+                    showMessage("Propiedad agregada", "Exito", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
         } else {
             showMessage("Error al agregar variable", "Error!", JOptionPane.WARNING_MESSAGE);
         }
+        tf_variableName.setText("");
+        typeVariable_jcb.setSelectedIndex(0);
+        alcance_jcb.setSelectedIndex(0);
     }//GEN-LAST:event_createVariable_btnMouseClicked
 
     /*
@@ -1650,15 +1927,50 @@ public class Screen extends JFrame {
     * CHANGE TOOL EDITOR FUNCTION
      */
     private void editorDiagrama_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editorDiagrama_jmiActionPerformed
-        editorDiagrama_jp.setVisible(true);
-        classesGenerator_jp.setVisible(false);
-        this.setTitle("Nuevo Diagrama - UML Editor");
+        if (workareaClasses_jp.getComponentCount() > 0) {
+            int option = JOptionPane.showConfirmDialog(this, "Tienes Cambios sin guadar!\nDeseas Continuar?", "Advertencia", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                window = 1;
+                workareaClasses_jp.removeAll();
+                codeClasses_jp.removeAll();
+                DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) jt_classes.getModel().getRoot();
+                raiz.removeAllChildren();
+                ((DefaultTreeModel) jt_classes.getModel()).reload();
+
+                editorDiagrama_jp.setVisible(true);
+                classesGenerator_jp.setVisible(false);
+                this.setTitle("Nuevo Diagrama - UML Editor");
+            }
+        } else {
+            editorDiagrama_jp.setVisible(true);
+            classesGenerator_jp.setVisible(false);
+            this.setTitle("Nuevo Diagrama - UML Editor");
+        }
     }//GEN-LAST:event_editorDiagrama_jmiActionPerformed
 
     private void generadorClases_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generadorClases_jmiActionPerformed
-        editorDiagrama_jp.setVisible(false);
-        classesGenerator_jp.setVisible(true);
-        this.setTitle("Generador de Clases - UML Editor");
+        window = 2;
+        if (workarea_jp.getComponentCount() > 0) {
+            int option = JOptionPane.showConfirmDialog(this, "Tienes Cambios sin guadar!\nDeseas Continuar?", "Advertencia", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                workarea_jp.removeAll();
+                codeDiagrama_jp.removeAll();
+                elementos.clear();
+                DefaultListModel modelo = (DefaultListModel) variables_list.getModel();
+                modelo.removeAllElements();
+                modelo = (DefaultListModel) process_list.getModel();
+                modelo.removeAllElements();
+                diagramClase_toggleBtn.setSelected(true);
+                editorDiagrama_jp.setVisible(false);
+                classesGenerator_jp.setVisible(true);
+                this.setTitle("Generador de Clases - UML Editor");
+            }
+        } else {
+            diagramClase_toggleBtn.setSelected(true);
+            editorDiagrama_jp.setVisible(false);
+            classesGenerator_jp.setVisible(true);
+            this.setTitle("Generador de Clases - UML Editor");
+        }
     }//GEN-LAST:event_generadorClases_jmiActionPerformed
 
     /*
@@ -1666,7 +1978,7 @@ public class Screen extends JFrame {
      */
     private void newFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFile_jmiActionPerformed
         workarea_jp.removeAll();
-        workareaClasses_jp.removeAll();
+        mainarea_jp.removeAll();
         elementos.clear();
         DefaultListModel modelo = (DefaultListModel) variables_list.getModel();
         modelo.removeAllElements();
@@ -1680,12 +1992,24 @@ public class Screen extends JFrame {
     }//GEN-LAST:event_newFile_jmiActionPerformed
 
     private void openFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFile_jmiActionPerformed
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos UML (*.umlc)", "umlc"));
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos de UML (UMLD, UMLC)", "umld", "umlc"));
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try (FileInputStream fis = new FileInputStream(fileChooser.getSelectedFile())) {
                 ObjectInputStream ois = new ObjectInputStream(fis);
 
+                if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".umld")) {
+                    elementos = (ArrayList<FiguraDiagrama>) ois.readObject();
+                    cargarElementos();
+                } else if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".umlc")) {
+                    DefaultTreeModel model = (DefaultTreeModel) ois.readObject();
+                    jt_classes.setModel(model);
+                    editorDiagrama_jp.setVisible(false);
+                    classesGenerator_jp.setVisible(true);
+                }
+
             } catch (IOException ex) {
+                Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -1693,15 +2017,31 @@ public class Screen extends JFrame {
 
     private void saveFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFile_jmiActionPerformed
         if (!elementos.isEmpty()) {
+            if (window == 1) {
+                fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Diagrama UML", "umld"));
+            } else if (window == 2) {
+                fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Clase UML", "umlc"));
+            }
             if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
-                if (!file.getAbsolutePath().endsWith(".umlc")) {
-                    file = new File(file.getAbsolutePath() + ".umlc");
+                if (window == 1) {
+                    if (!file.getAbsolutePath().endsWith(".umld")) {
+                        file = new File(file.getAbsolutePath() + ".umld");
+                    }
+                } else if (window == 2) {
+                    if (!file.getAbsolutePath().endsWith(".umlc")) {
+                        file = new File(file.getAbsolutePath() + ".umlc");
+                    }
                 }
+
                 try (FileOutputStream fos = new FileOutputStream(file)) {
                     ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-                    oos.writeObject(elementos);
+                    if (window == 1) {
+                        oos.writeObject(elementos);
+                    } else if (window == 2) {
+                        DefaultTreeModel modelo = (DefaultTreeModel) jt_classes.getModel();
+                        oos.writeObject(modelo);
+                    }
                     oos.close();
 
                     showMessage("Archivo guardado\n" + file.getAbsolutePath(), "Guardado", JOptionPane.INFORMATION_MESSAGE);
@@ -1711,6 +2051,8 @@ public class Screen extends JFrame {
                     Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+        } else {
+            showMessage("No tienes nada por guardar!", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_saveFile_jmiActionPerformed
 
@@ -1745,6 +2087,34 @@ public class Screen extends JFrame {
         }
     }//GEN-LAST:event_code_toggleBtnItemStateChanged
 
+    private void diagramClase_toggleBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramClase_toggleBtnMouseClicked
+        workareaClasses_jp.setVisible(true);
+        codeClasses_jp.setVisible(false);
+        codeClase_toggleBtn.setSelected(false);
+    }//GEN-LAST:event_diagramClase_toggleBtnMouseClicked
+
+    private void codeClase_toggleBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_codeClase_toggleBtnMouseClicked
+        workareaClasses_jp.setVisible(false);
+        codeClasses_jp.setVisible(true);
+        diagramClase_toggleBtn.setSelected(false);
+    }//GEN-LAST:event_codeClase_toggleBtnMouseClicked
+
+    private void diagramClase_toggleBtnItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_diagramClase_toggleBtnItemStateChanged
+        if (diagramClase_toggleBtn.isSelected()) {
+            diagramClase_toggleBtn.setBackground(new Color(170, 170, 170, 128));
+        } else {
+            diagramClase_toggleBtn.setBackground(new Color(255, 255, 255, 128));
+        }
+    }//GEN-LAST:event_diagramClase_toggleBtnItemStateChanged
+
+    private void codeClase_toggleBtnItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_codeClase_toggleBtnItemStateChanged
+        if (codeClase_toggleBtn.isSelected()) {
+            codeClase_toggleBtn.setBackground(new Color(170, 170, 170, 128));
+        } else {
+            codeClase_toggleBtn.setBackground(new Color(255, 255, 255, 128));
+        }
+    }//GEN-LAST:event_codeClase_toggleBtnItemStateChanged
+
     /*
     * EXPORT PDF FUNCTION
      */
@@ -1759,7 +2129,7 @@ public class Screen extends JFrame {
                 BufferedImage bi = new BufferedImage(workarea_jp.getWidth(), workarea_jp.getHeight(), BufferedImage.TYPE_INT_ARGB);
                 workarea_jp.paint(bi.getGraphics());
                 ImageIO.write(bi, "jpg", file);
-               // Error -> Desktop.getDesktop().print(file);
+                // Error -> Desktop.getDesktop().print(file);
 
                 showMessage("Exportado a PDF", "Exportado", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
@@ -1769,6 +2139,149 @@ public class Screen extends JFrame {
         }
 
     }//GEN-LAST:event_exportPdf_jmiActionPerformed
+
+    /*
+    * Classes Generator Functions
+     */
+    private void createClase_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createClase_btnMouseClicked
+        String nombreClase = JOptionPane.showInputDialog(this, "Escribe el nombre de la clase", "Crear Clase", JOptionPane.PLAIN_MESSAGE);
+        if (nombreClase == null) {
+            return;
+        }
+        if (nombreClase.trim().length() != 0) {
+            DefaultTreeModel modelo = (DefaultTreeModel) jt_classes.getModel();
+            DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
+
+            Clase clase = new Clase(nombreClase);
+            clases.add(clase);
+
+            DefaultMutableTreeNode nuevaClase = new DefaultMutableTreeNode(clase);
+            DefaultMutableTreeNode propiedades = new DefaultMutableTreeNode("Propiedades");
+            DefaultMutableTreeNode methods = new DefaultMutableTreeNode("Metodos");
+
+            nuevaClase.add(propiedades);
+            nuevaClase.add(methods);
+
+            raiz.add(nuevaClase);
+            modelo.reload();
+            showMessage("Clase Creada!", "Exito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            showMessage("Error al crear la clase\nIntenta de nuevo!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_createClase_btnMouseClicked
+
+    private void herencia_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_herencia_btnMouseClicked
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) jt_classes.getModel().getRoot();
+        if (raiz.getChildCount() == 1) {
+            showMessage("Necesitas otra clase para implementar Herencia!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        } else {
+            DefaultListModel modelClasePadre = (DefaultListModel) parentClass_list.getModel();
+            DefaultListModel modelClaseHija = (DefaultListModel) childClass_list.getModel();
+            modelClasePadre.clear();
+            modelClaseHija.clear();
+            for (Clase clase : clases) {
+                modelClasePadre.addElement(clase);
+                modelClaseHija.addElement(clase);
+            }
+
+            showDialog("Aplicar Herencia", herencia_dialog);
+        }
+    }//GEN-LAST:event_herencia_btnMouseClicked
+
+    private void addToWorkArea_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addToWorkArea_btnMouseClicked
+        if (jt_classes.getSelectionPath() == null) {
+            showMessage("No has seleccionado ninguna clase!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        DefaultMutableTreeNode clase = (DefaultMutableTreeNode) jt_classes.getSelectionPath().getLastPathComponent();
+        if (clase.getUserObject() instanceof Clase) {
+            DefaultMutableTreeNode raiz = new DefaultMutableTreeNode(clase.getUserObject());
+            for (int i = 0; i < clase.getChildCount(); i++) {
+                DefaultMutableTreeNode hijo = (DefaultMutableTreeNode) clase.getChildAt(i);
+                DefaultMutableTreeNode copiaHijo = new DefaultMutableTreeNode(hijo.getUserObject());
+                for (int j = 0; j < hijo.getChildCount(); j++) {
+                    DefaultMutableTreeNode nieto = (DefaultMutableTreeNode) hijo.getChildAt(j);
+                    copiaHijo.add(new DefaultMutableTreeNode(nieto.getUserObject()));
+                }
+
+                raiz.add(copiaHijo);
+            }
+
+            DefaultTreeModel modelo = new DefaultTreeModel(raiz);
+            JTree arbolClase = new JTree(modelo);
+            JScrollPane scroll = new JScrollPane(arbolClase);
+            arbolClase.setComponentPopupMenu(clases_jpm);
+            scroll.setBounds(15, 15, 210, 180);
+            workareaClasses_jp.add(scroll);
+            workareaClasses_jp.revalidate();
+            workareaClasses_jp.repaint();
+
+            actionListeners(scroll, arbolClase);
+        }
+    }//GEN-LAST:event_addToWorkArea_btnMouseClicked
+
+    private void actionListeners(JScrollPane scroll, JTree tree) {
+        tree.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                arbolSeleccionado = tree;
+                workareaClasses_jp.setComponentZOrder(scroll, 0);
+                workareaClasses_jp.repaint();
+            }
+        });
+    }
+    private void applyInheritance_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_applyInheritance_btnMouseClicked
+        DefaultListModel modelClasePadre = (DefaultListModel) parentClass_list.getModel();
+        DefaultListModel modelClaseHija = (DefaultListModel) childClass_list.getModel();
+        int indicePadre = parentClass_list.getSelectedIndex();
+        int indiceHijo = childClass_list.getSelectedIndex();
+        if (indicePadre != -1 && indiceHijo != -1) {
+            Object objP = modelClasePadre.getElementAt(indicePadre);
+            Object objH = modelClaseHija.getElementAt(indiceHijo);
+
+            Clase clasePadre = null;
+            Clase claseHija = null;
+            if (objP instanceof Clase && objH instanceof Clase) {
+                clasePadre = (Clase) objP;
+                claseHija = (Clase) objH;
+            }
+
+            if (clasePadre == null && claseHija == null) {
+                return;
+            }
+            if (clasePadre == claseHija) {
+                showMessage("Elegiste la misma clase!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            for (int i = 0; i < clasePadre.getPropiedades().size(); i++) {
+                clasePadre.getPropiedades().get(i).setAlcance("protected");
+            }
+            claseHija.setClasePadre(clasePadre);
+
+        }
+    }//GEN-LAST:event_applyInheritance_btnMouseClicked
+
+    private void addPropiedad_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPropiedad_jmiActionPerformed
+        alcance_lbl.setVisible(true);
+        alcance_jcb.setVisible(true);
+        showDialog("Agregar Propiedad", variables_dialog);
+    }//GEN-LAST:event_addPropiedad_jmiActionPerformed
+
+    private void eliminarPropiedad_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarPropiedad_jmiActionPerformed
+        if (arbolSeleccionado != null) {
+            DefaultTreeModel modelo = (DefaultTreeModel) arbolSeleccionado.getModel();
+            if (arbolSeleccionado.getSelectionPath() == null) {
+                return;
+            }
+            DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) arbolSeleccionado.getSelectionPath().getLastPathComponent();
+            if (nodo.getUserObject() instanceof Variable) {
+                DefaultMutableTreeNode padre = (DefaultMutableTreeNode) nodo.getParent();
+                padre.remove(nodo);
+                showMessage("Propiedad eliminada!", "Eliminada", JOptionPane.INFORMATION_MESSAGE);
+                modelo.reload();
+            }
+        }
+    }//GEN-LAST:event_eliminarPropiedad_jmiActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -1797,28 +2310,6 @@ public class Screen extends JFrame {
             }
         }
         return null;
-    }
-
-    private void initDragAndDrop(JScrollPane scroll) {
-        scroll.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                click = SwingUtilities.convertPoint(evt.getComponent(), evt.getPoint(), workareaClasses_jp);
-            }
-        });
-
-        scroll.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent evt) {
-                Point movedClick = SwingUtilities.convertPoint(evt.getComponent(), evt.getPoint(), workareaClasses_jp);
-                int posX = movedClick.x - click.x;
-                int posY = movedClick.y - click.y;
-                posX = setLimits(posX, scroll.getWidth(), 0, workareaClasses_jp.getWidth());
-                posY = setLimits(posY, scroll.getHeight(), 0, workareaClasses_jp.getHeight());
-                scroll.setLocation(posX, posY);
-                workareaClasses_jp.repaint();
-            }
-        });
     }
 
     private void initDragAndDrop(JLabel figura, FiguraDiagrama elemento) {
@@ -1940,29 +2431,48 @@ public class Screen extends JFrame {
         JOptionPane.showMessageDialog(this, message, title, messageType);
     }
 
-// <editor-fold defaultstate="collapsed" desc="Variables declaration">
+    private void cargarElementos() {
+        for (FiguraDiagrama elemento : elementos) {
+            JLabel label = elemento.getLabel();
+            label.setComponentPopupMenu(elements_jpm);
+            initDragAndDrop(label, encontrarElemento(label));
+            workarea_jp.add(label);
+            workarea_jp.revalidate();
+            workarea_jp.repaint();
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="Variables declaration">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addMetodo_jmi;
     private javax.swing.JMenuItem addPropiedad_jmi;
     private javax.swing.JButton addToWorkArea_btn;
     private javax.swing.JButton agregarProceso_btn;
     private javax.swing.JButton agregarVariable_btn;
+    private javax.swing.JComboBox<String> alcance_jcb;
+    private javax.swing.JLabel alcance_lbl;
+    private javax.swing.JButton applyInheritance_btn;
     private javax.swing.JButton backgroundChooser_btn;
     private javax.swing.JLabel backgroundLabel;
     private javax.swing.JLabel bgProperty;
     private javax.swing.JToggleButton bold_toggleBtn;
     private javax.swing.JButton cancelCreationVariable_btn;
+    private javax.swing.JButton cancelInheritance_btn;
     private javax.swing.JButton cancelPropertyDialog_btn;
     private javax.swing.JButton cancelarOperacion_btn;
     private javax.swing.JMenuItem changeElementBackground_jmi;
     private javax.swing.JMenuItem changeElementFont_jmi;
     private javax.swing.JMenuItem changeElementForeground_jmi;
     private javax.swing.JMenuItem changeElementText_jmi;
+    private javax.swing.JList<String> childClass_list;
     private javax.swing.JPopupMenu clases_jpm;
     private javax.swing.JPanel classesGenerator_jp;
+    private javax.swing.JToggleButton codeClase_toggleBtn;
+    private javax.swing.JPanel codeClasses_jp;
     private javax.swing.JPanel codeDiagrama_jp;
     private javax.swing.JToggleButton code_toggleBtn;
     private javax.swing.JPanel controlButtons_jp;
+    private javax.swing.JPanel controlClasses_jp;
     private javax.swing.JMenuItem copyElement_jmi;
     private javax.swing.JButton createClase_btn;
     private javax.swing.JButton createVariable_btn;
@@ -1971,6 +2481,7 @@ public class Screen extends JFrame {
     private javax.swing.JMenuItem deleteElement_jmi;
     private javax.swing.JMenuItem descripcionMetodo_jmi;
     private javax.swing.JMenuItem descripcion_jmi;
+    private javax.swing.JToggleButton diagramClase_toggleBtn;
     private javax.swing.JToggleButton diagram_toggleBtn;
     private javax.swing.JMenuItem editorDiagrama_jmi;
     private javax.swing.JPanel editorDiagrama_jp;
@@ -1999,6 +2510,9 @@ public class Screen extends JFrame {
     private javax.swing.JButton guardarOperancion_btn;
     private javax.swing.JSpinner heigthLabel_spinner;
     private javax.swing.JLabel heigthPropertyLabel;
+    private javax.swing.JButton herencia_btn;
+    private javax.swing.JDialog herencia_dialog;
+    private javax.swing.JPanel herencia_jp;
     private javax.swing.JToggleButton italic_toggleBtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -2009,6 +2523,9 @@ public class Screen extends JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -2017,23 +2534,24 @@ public class Screen extends JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JPopupMenu.Separator js_elementEdition;
     private javax.swing.JPopupMenu.Separator js_elementProperties;
     private javax.swing.JTree jt_classes;
     private javax.swing.JPanel main_jp;
+    private javax.swing.JPanel mainarea_jp;
+    private javax.swing.JPanel menuClasses_jp;
     private javax.swing.JPanel menuElements_jp;
     private javax.swing.JDialog methods_dialog;
     private javax.swing.JLabel namePropertyLabel;
@@ -2044,6 +2562,7 @@ public class Screen extends JFrame {
     private javax.swing.JComboBox<String> operador_jcb;
     private javax.swing.JDialog operation_dialog;
     private javax.swing.JLabel optionsTitle;
+    private javax.swing.JList<String> parentClass_list;
     private javax.swing.JMenuItem pasteElement_jmi;
     private javax.swing.JButton predefinedProcessFig_btn;
     private javax.swing.JPanel procesos_jp;
@@ -2052,7 +2571,9 @@ public class Screen extends JFrame {
     private javax.swing.JScrollPane processes_scroll;
     private javax.swing.JDialog properties_dialog;
     private javax.swing.JComboBox<String> resultado_jcb;
+    private javax.swing.JPanel rightSide_jp;
     private javax.swing.JMenuItem saveFile_jmi;
+    private javax.swing.JScrollPane scrollClasses;
     private javax.swing.JSeparator separator2_tool;
     private javax.swing.JSeparator separator_tool;
     private javax.swing.JLabel sizeFontLabel;
@@ -2064,6 +2585,7 @@ public class Screen extends JFrame {
     private javax.swing.JTextField tf_nameProperty;
     private javax.swing.JTextField tf_textProperty;
     private javax.swing.JTextField tf_variableName;
+    private javax.swing.JMenu tools_jm;
     private javax.swing.JPanel tools_jp;
     private javax.swing.JLabel typeVariableLabel;
     private javax.swing.JComboBox<String> typeVariable_jcb;
