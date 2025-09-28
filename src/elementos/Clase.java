@@ -41,10 +41,6 @@ public class Clase implements Serializable {
         this.esHija = true;
         this.clasePadre = clasePadre;
     }
-    
-    public void setHija(boolean esHija) {
-        this.esHija = esHija;
-    }
 
     public String getDescripcion() {
         return descripcion;

@@ -14,7 +14,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -36,17 +35,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-
 
 public class Screen extends JFrame {
 
@@ -59,8 +57,9 @@ public class Screen extends JFrame {
     private final int BACKGROUND_OPTION = 1;
     private final int FOREGROUND_OPTION = 2;
     private int window = 1;
-    private JFileChooser fileChooser = new JFileChooser();
     private JTree arbolSeleccionado = null;
+
+    private ArrayList<Variable> parametros = new ArrayList();
 
     public Screen() {
         initComponents();
@@ -68,36 +67,33 @@ public class Screen extends JFrame {
         classesGenerator_jp.setVisible(false);
         diagram_toggleBtn.setSelected(true);
 
-        // Iniciar Fonts Disponibles
         DefaultComboBoxModel modeloFuentes = new DefaultComboBoxModel();
         fontChooser_jcb.setModel(modeloFuentes);
         fontProperty_jcb.setModel(modeloFuentes);
         initFonts(fontChooser_jcb);
         initFonts(fontProperty_jcb);
 
-        // Modelo de Listas (Variables y Procesos)
         DefaultListModel modelVariables = new DefaultListModel();
         variables_list.setModel(modelVariables);
 
         DefaultListModel modelProcesos = new DefaultListModel();
         process_list.setModel(modelProcesos);
 
-        // Modelo de Listas (Clases)
         DefaultListModel modelClasePadre = new DefaultListModel();
         DefaultListModel modelClaseHija = new DefaultListModel();
         parentClass_list.setModel(modelClasePadre);
         childClass_list.setModel(modelClaseHija);
 
-        // Modelo de Spinner Number para Tamaño de Fuente
         SpinnerNumberModel modeloFontSize = new SpinnerNumberModel(12, 8, 48, 1);
         fontSize_spinner.setModel(modeloFontSize);
         fontSizeProperty_spinner.setModel(modeloFontSize);
 
-        // Tree Model
         DefaultMutableTreeNode nodo = new DefaultMutableTreeNode("Clases");
         DefaultTreeModel modelo = new DefaultTreeModel(nodo);
         jt_classes.setModel(modelo);
         modelo.reload();
+
+        deleteHerencia_btn.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -149,11 +145,11 @@ public class Screen extends JFrame {
         methods_dialog = new javax.swing.JDialog();
         jPanel6 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        tf_nombreMetodo = new javax.swing.JTextField();
+        retornoMetodo_jcb = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        alcanceMetodo_jcb = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
         addParametro_btn = new javax.swing.JButton();
         cancelMethod_btn = new javax.swing.JButton();
@@ -188,6 +184,13 @@ public class Screen extends JFrame {
         descripcionMetodo_jmi = new javax.swing.JMenuItem();
         descripcion_jmi = new javax.swing.JMenuItem();
         eliminarArbol_jmi = new javax.swing.JMenuItem();
+        parameters_dialog = new javax.swing.JDialog();
+        jPanel2 = new javax.swing.JPanel();
+        parameterType_jcb = new javax.swing.JComboBox<>();
+        typeParametroLbl = new javax.swing.JLabel();
+        nameParametroLbl = new javax.swing.JLabel();
+        tf_parameterName = new javax.swing.JTextField();
+        confirmParametro_btn = new javax.swing.JButton();
         editorDiagrama_jp = new javax.swing.JPanel();
         tools_jp = new javax.swing.JPanel();
         fontLabel = new javax.swing.JLabel();
@@ -224,17 +227,19 @@ public class Screen extends JFrame {
         generarCodigo_btn = new javax.swing.JButton();
         code_toggleBtn = new javax.swing.JToggleButton();
         diagram_toggleBtn = new javax.swing.JToggleButton();
+        paste_btn = new javax.swing.JButton();
         main_jp = new javax.swing.JPanel();
         workarea_jp = new javax.swing.JPanel();
         codeDiagrama_jp = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        ta_codeDiagrama = new javax.swing.JTextArea();
         classesGenerator_jp = new javax.swing.JPanel();
         menuClasses_jp = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         scrollClasses = new javax.swing.JScrollPane();
         jt_classes = new javax.swing.JTree();
         createClase_btn = new javax.swing.JButton();
+        deleteHerencia_btn = new javax.swing.JButton();
         herencia_btn = new javax.swing.JButton();
         addToWorkArea_btn = new javax.swing.JButton();
         rightSide_jp = new javax.swing.JPanel();
@@ -247,7 +252,7 @@ public class Screen extends JFrame {
         workareaClasses_jp = new javax.swing.JPanel();
         codeClasses_jp = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        ta_codeClass = new javax.swing.JTextArea();
         frameMenu_jmb = new javax.swing.JMenuBar();
         fileOptions_jm = new javax.swing.JMenu();
         newFile_jmi = new javax.swing.JMenuItem();
@@ -624,7 +629,7 @@ public class Screen extends JFrame {
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Nombre:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "void", "int", "float", "double", "char", "bool" }));
+        retornoMetodo_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "void", "int", "float", "double", "char", "bool" }));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
@@ -634,17 +639,32 @@ public class Screen extends JFrame {
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Alcance:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "public", "private", "protected" }));
+        alcanceMetodo_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "public", "private", "protected" }));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Parametro:");
 
         addParametro_btn.setText("Agregar");
+        addParametro_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addParametro_btnMouseClicked(evt);
+            }
+        });
 
         cancelMethod_btn.setText("Cancelar");
+        cancelMethod_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancelMethod_btnMouseClicked(evt);
+            }
+        });
 
         agregarMetodo_btn.setText("Agregar");
+        agregarMetodo_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                agregarMetodo_btnMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -665,9 +685,9 @@ public class Screen extends JFrame {
                             .addComponent(jLabel9))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField1)
-                            .addComponent(jComboBox2, 0, 211, Short.MAX_VALUE)
+                            .addComponent(retornoMetodo_jcb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tf_nombreMetodo)
+                            .addComponent(alcanceMetodo_jcb, 0, 211, Short.MAX_VALUE)
                             .addComponent(addParametro_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
@@ -677,15 +697,15 @@ public class Screen extends JFrame {
                 .addGap(50, 50, 50)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tf_nombreMetodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(retornoMetodo_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(alcanceMetodo_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
@@ -924,6 +944,77 @@ public class Screen extends JFrame {
             }
         });
         clases_jpm.add(eliminarArbol_jmi);
+
+        parameters_dialog.setTitle("Agregar Parametro");
+        parameters_dialog.setMaximumSize(new java.awt.Dimension(400, 242));
+        parameters_dialog.setMinimumSize(new java.awt.Dimension(400, 242));
+        parameters_dialog.setModal(true);
+        parameters_dialog.setResizable(false);
+
+        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel2.setMaximumSize(new java.awt.Dimension(400, 242));
+        jPanel2.setMinimumSize(new java.awt.Dimension(400, 242));
+
+        parameterType_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "int", "float", "double", "char", "string", "bool" }));
+
+        typeParametroLbl.setForeground(new java.awt.Color(0, 0, 0));
+        typeParametroLbl.setText("Tipo de Parametro:");
+
+        nameParametroLbl.setForeground(new java.awt.Color(0, 0, 0));
+        nameParametroLbl.setText("Nombre de Parametro:");
+
+        confirmParametro_btn.setText("Agregar Parametro");
+        confirmParametro_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                confirmParametro_btnMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(nameParametroLbl)
+                    .addComponent(typeParametroLbl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(tf_parameterName)
+                    .addComponent(parameterType_jcb, 0, 184, Short.MAX_VALUE))
+                .addGap(49, 49, 49))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(108, 108, 108)
+                .addComponent(confirmParametro_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(108, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(69, 69, 69)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nameParametroLbl)
+                    .addComponent(tf_parameterName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(parameterType_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(typeParametroLbl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addComponent(confirmParametro_btn)
+                .addGap(38, 38, 38))
+        );
+
+        javax.swing.GroupLayout parameters_dialogLayout = new javax.swing.GroupLayout(parameters_dialog.getContentPane());
+        parameters_dialog.getContentPane().setLayout(parameters_dialogLayout);
+        parameters_dialogLayout.setHorizontalGroup(
+            parameters_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        parameters_dialogLayout.setVerticalGroup(
+            parameters_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UML Editor");
@@ -1273,6 +1364,17 @@ public class Screen extends JFrame {
             }
         });
 
+        paste_btn.setBackground(new java.awt.Color(102, 102, 102));
+        paste_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        paste_btn.setForeground(new java.awt.Color(0, 0, 0));
+        paste_btn.setText("Pegar");
+        paste_btn.setBorderPainted(false);
+        paste_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                paste_btnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout controlButtons_jpLayout = new javax.swing.GroupLayout(controlButtons_jp);
         controlButtons_jp.setLayout(controlButtons_jpLayout);
         controlButtons_jpLayout.setHorizontalGroup(
@@ -1280,7 +1382,9 @@ public class Screen extends JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlButtons_jpLayout.createSequentialGroup()
                 .addGap(185, 185, 185)
                 .addComponent(generarCodigo_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 597, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(paste_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 453, Short.MAX_VALUE)
                 .addComponent(diagram_toggleBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(code_toggleBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1291,7 +1395,9 @@ public class Screen extends JFrame {
             .addGroup(controlButtons_jpLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(generarCodigo_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                    .addGroup(controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(generarCodigo_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                        .addComponent(paste_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
                     .addComponent(diagram_toggleBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(code_toggleBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(25, Short.MAX_VALUE))
@@ -1321,13 +1427,13 @@ public class Screen extends JFrame {
 
         jScrollPane2.setBorder(null);
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextArea1.setColumns(20);
-        jTextArea1.setForeground(new java.awt.Color(0, 0, 0));
-        jTextArea1.setRows(5);
-        jTextArea1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CODIGO", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
-        jScrollPane2.setViewportView(jTextArea1);
+        ta_codeDiagrama.setEditable(false);
+        ta_codeDiagrama.setBackground(new java.awt.Color(255, 255, 255));
+        ta_codeDiagrama.setColumns(20);
+        ta_codeDiagrama.setForeground(new java.awt.Color(0, 0, 0));
+        ta_codeDiagrama.setRows(5);
+        ta_codeDiagrama.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CODIGO", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
+        jScrollPane2.setViewportView(ta_codeDiagrama);
 
         javax.swing.GroupLayout codeDiagrama_jpLayout = new javax.swing.GroupLayout(codeDiagrama_jp);
         codeDiagrama_jp.setLayout(codeDiagrama_jpLayout);
@@ -1367,6 +1473,11 @@ public class Screen extends JFrame {
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Clases Generadas --------------------");
 
+        jt_classes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jt_classesMouseClicked(evt);
+            }
+        });
         scrollClasses.setViewportView(jt_classes);
 
         createClase_btn.setBackground(new java.awt.Color(153, 153, 153));
@@ -1377,6 +1488,17 @@ public class Screen extends JFrame {
         createClase_btn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 createClase_btnMouseClicked(evt);
+            }
+        });
+
+        deleteHerencia_btn.setBackground(new java.awt.Color(153, 153, 153));
+        deleteHerencia_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        deleteHerencia_btn.setForeground(new java.awt.Color(0, 0, 0));
+        deleteHerencia_btn.setText("Eliminar Herencia");
+        deleteHerencia_btn.setBorderPainted(false);
+        deleteHerencia_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteHerencia_btnMouseClicked(evt);
             }
         });
 
@@ -1407,21 +1529,27 @@ public class Screen extends JFrame {
         menuClasses_jpLayout.setHorizontalGroup(
             menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuClasses_jpLayout.createSequentialGroup()
-                .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(scrollClasses)
                     .addGroup(menuClasses_jpLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scrollClasses, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)))
+                .addGap(19, 19, 19))
+            .addGroup(menuClasses_jpLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(menuClasses_jpLayout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(addToWorkArea_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(menuClasses_jpLayout.createSequentialGroup()
-                                .addComponent(createClase_btn)
-                                .addGap(18, 18, 18)
-                                .addComponent(herencia_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(23, Short.MAX_VALUE))
+                        .addComponent(createClase_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15))
+                    .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(addToWorkArea_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(menuClasses_jpLayout.createSequentialGroup()
+                            .addComponent(herencia_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(deleteHerencia_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         menuClasses_jpLayout.setVerticalGroup(
             menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1429,14 +1557,16 @@ public class Screen extends JFrame {
                 .addContainerGap()
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollClasses, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addComponent(scrollClasses, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(createClase_btn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(herencia_btn)
-                    .addComponent(createClase_btn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(deleteHerencia_btn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(addToWorkArea_btn)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         classesGenerator_jp.add(menuClasses_jp, java.awt.BorderLayout.LINE_START);
@@ -1524,7 +1654,7 @@ public class Screen extends JFrame {
         controlClasses_jpLayout.setHorizontalGroup(
             controlClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(controlClasses_jpLayout.createSequentialGroup()
-                .addGap(350, 350, 350)
+                .addContainerGap(350, Short.MAX_VALUE)
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 549, Short.MAX_VALUE)
                 .addComponent(diagramClase_toggleBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1556,13 +1686,13 @@ public class Screen extends JFrame {
 
         jScrollPane1.setBorder(null);
 
-        jTextArea2.setEditable(false);
-        jTextArea2.setBackground(new java.awt.Color(255, 255, 255));
-        jTextArea2.setColumns(20);
-        jTextArea2.setForeground(new java.awt.Color(0, 0, 0));
-        jTextArea2.setRows(5);
-        jTextArea2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CODIGO", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
-        jScrollPane1.setViewportView(jTextArea2);
+        ta_codeClass.setEditable(false);
+        ta_codeClass.setBackground(new java.awt.Color(255, 255, 255));
+        ta_codeClass.setColumns(20);
+        ta_codeClass.setForeground(new java.awt.Color(0, 0, 0));
+        ta_codeClass.setRows(5);
+        ta_codeClass.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CODIGO", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
+        jScrollPane1.setViewportView(ta_codeClass);
 
         javax.swing.GroupLayout codeClasses_jpLayout = new javax.swing.GroupLayout(codeClasses_jp);
         codeClasses_jp.setLayout(codeClasses_jpLayout);
@@ -1907,12 +2037,18 @@ public class Screen extends JFrame {
                     modelo.reload();
 
                     DefaultTreeModel modelArbolGeneral = (DefaultTreeModel) jt_classes.getModel();
+
                     DefaultMutableTreeNode raizGeneral = (DefaultMutableTreeNode) modelArbolGeneral.getRoot();
                     DefaultMutableTreeNode nodo = null;
                     for (int i = 0; i < raizGeneral.getChildCount(); i++) {
-                        if (raizGeneral.getChildAt(i).toString().equalsIgnoreCase(arbolSeleccionado.getModel().getRoot().toString())) {
-                            nodo = (DefaultMutableTreeNode) raizGeneral.getChildAt(i);
-                            break;
+                        DefaultMutableTreeNode temp = (DefaultMutableTreeNode) raizGeneral.getChildAt(i);
+                        if (temp.getUserObject() instanceof Clase && raiz.getUserObject() instanceof Clase) {
+                            Clase claseGeneral = (Clase) temp.getUserObject();
+                            Clase claseSeleccionada = (Clase) raiz.getUserObject();
+                            if (claseGeneral.getNombre().equalsIgnoreCase(claseSeleccionada.getNombre())) {
+                                nodo = (DefaultMutableTreeNode) raizGeneral.getChildAt(i);
+                                break;
+                            }
                         }
                     }
                     if (nodo != null) {
@@ -1985,13 +2121,14 @@ public class Screen extends JFrame {
     * CHANGE TOOL EDITOR FUNCTION
      */
     private void editorDiagrama_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editorDiagrama_jmiActionPerformed
-        if (workareaClasses_jp.getComponentCount() > 0) {
+
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) jt_classes.getModel().getRoot();
+        if (raiz.getChildCount() > 0 || workareaClasses_jp.getComponentCount() > 0) {
             int option = JOptionPane.showConfirmDialog(this, "Tienes Cambios sin guadar!\nDeseas Continuar?", "Advertencia", JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
                 window = 1;
                 workareaClasses_jp.removeAll();
                 codeClasses_jp.removeAll();
-                DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) jt_classes.getModel().getRoot();
                 raiz.removeAllChildren();
                 ((DefaultTreeModel) jt_classes.getModel()).reload();
 
@@ -2036,13 +2173,17 @@ public class Screen extends JFrame {
      */
     private void newFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFile_jmiActionPerformed
         workarea_jp.removeAll();
-        mainarea_jp.removeAll();
+        actualizarVista(workarea_jp);
+        ta_codeDiagrama.setText("");
         elementos.clear();
         DefaultListModel modelo = (DefaultListModel) variables_list.getModel();
         modelo.removeAllElements();
         modelo = (DefaultListModel) process_list.getModel();
         modelo.removeAllElements();
 
+        workareaClasses_jp.removeAll();
+        actualizarVista(workareaClasses_jp);
+        ta_codeClass.setText("");
         DefaultTreeModel treeModel = (DefaultTreeModel) jt_classes.getModel();
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) treeModel.getRoot();
         raiz.removeAllChildren();
@@ -2050,15 +2191,18 @@ public class Screen extends JFrame {
     }//GEN-LAST:event_newFile_jmiActionPerformed
 
     private void openFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFile_jmiActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos de UML (UMLD, UMLC)", "umld", "umlc"));
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try (FileInputStream fis = new FileInputStream(fileChooser.getSelectedFile())) {
                 ObjectInputStream ois = new ObjectInputStream(fis);
 
                 if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".umld")) {
+                    this.setTitle(fileChooser.getSelectedFile().getName() + " - UML Editor");
                     elementos = (ArrayList<FiguraDiagrama>) ois.readObject();
                     cargarElementos();
                 } else if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".umlc")) {
+                    this.setTitle(fileChooser.getSelectedFile().getName() + " - UML Editor");
                     DefaultTreeModel model = (DefaultTreeModel) ois.readObject();
                     jt_classes.setModel(model);
                     editorDiagrama_jp.setVisible(false);
@@ -2074,17 +2218,30 @@ public class Screen extends JFrame {
     }//GEN-LAST:event_openFile_jmiActionPerformed
 
     private void saveFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFile_jmiActionPerformed
-        if (!elementos.isEmpty() && window == 1) {
-            fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Diagrama UML", "umld"));
-        } else {
-            showMessage("No tienes nada por guardar!", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (window == 2) {
-            fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Clase UML", "umlc"));
-        } else {
-            showMessage("No tienes nada por guardar!", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
+        JFileChooser fileChooser = new JFileChooser();
+        switch (window) {
+            case 1 -> {
+                if (!elementos.isEmpty()) {
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Diagrama UML", "umld"));
+                } else {
+                    showMessage("No tienes nada por guardar!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+            case 2 -> {
+                DefaultTreeModel modelo = (DefaultTreeModel) jt_classes.getModel();
+                if (hayClases((DefaultMutableTreeNode) modelo.getRoot())) {
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Clase UML", "umlc"));
+
+                } else {
+                    showMessage("No has creado ninguna clase para guardar!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+            default -> {
+                showMessage("No tienes nada por guardar!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
         }
 
         if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -2105,10 +2262,6 @@ public class Screen extends JFrame {
                     oos.writeObject(elementos);
                 } else if (window == 2) {
                     DefaultTreeModel modelo = (DefaultTreeModel) jt_classes.getModel();
-                    if (!hayClases((DefaultMutableTreeNode) modelo.getRoot())) {
-                        showMessage("No has creado ninguna clase para guardar!", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                        return;
-                    }
                     oos.writeObject(modelo);
                 }
                 oos.close();
@@ -2189,6 +2342,7 @@ public class Screen extends JFrame {
     * EXPORT PDF FUNCTION
      */
     private void exportPdf_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportPdf_jmiActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo PDF (*.pdf)", "pdf"));
         if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             int ancho = 0;
@@ -2218,20 +2372,18 @@ public class Screen extends JFrame {
                 panel.paint(bi.getGraphics());
                 File fileImg = new File("imagen.jpg");
                 ImageIO.write(bi, "jpg", fileImg);
-                
+
                 PDPageContentStream contentStream = new PDPageContentStream(doc, pagina);
                 PDImageXObject img = LosslessFactory.createFromImage(doc, bi);
                 contentStream.drawImage(img, 0, 0, panel.getWidth(), panel.getHeight());
-                
+
                 contentStream.close();
                 doc.save(file);
                 doc.close();
                 showMessage("PDF Exportado", "Exportado", JOptionPane.INFORMATION_MESSAGE);
-                
-                
-                
-            } catch (Exception ex) {
-                
+
+            } catch (IOException ex) {
+                showMessage("Error al exportar el PDF", "Error", JOptionPane.ERROR_MESSAGE);
             }
             PDDocument doc = new PDDocument();
             PDPage page = new PDPage();
@@ -2294,28 +2446,30 @@ public class Screen extends JFrame {
             return;
         }
         DefaultMutableTreeNode clase = (DefaultMutableTreeNode) jt_classes.getSelectionPath().getLastPathComponent();
+        if (clase.isRoot()) {
+            showMessage("No puedes agregar la raiz del arbol al area de trabajo", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         if (clase.getUserObject() instanceof Clase) {
             DefaultMutableTreeNode raiz = new DefaultMutableTreeNode(clase.getUserObject());
             for (int i = 0; i < clase.getChildCount(); i++) {
-                DefaultMutableTreeNode hijo = (DefaultMutableTreeNode) clase.getChildAt(i);
-                DefaultMutableTreeNode copiaHijo = new DefaultMutableTreeNode(hijo.getUserObject());
-                for (int j = 0; j < hijo.getChildCount(); j++) {
-                    DefaultMutableTreeNode nieto = (DefaultMutableTreeNode) hijo.getChildAt(j);
-                    copiaHijo.add(new DefaultMutableTreeNode(nieto.getUserObject()));
+                DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) clase.getChildAt(i);
+                DefaultMutableTreeNode copiaNodo = new DefaultMutableTreeNode(nodo.getUserObject());
+                for (int j = 0; j < nodo.getChildCount(); j++) {
+                    DefaultMutableTreeNode subnodo = (DefaultMutableTreeNode) nodo.getChildAt(j);
+                    copiaNodo.add(new DefaultMutableTreeNode(subnodo.getUserObject()));
                 }
 
-                raiz.add(copiaHijo);
+                raiz.add(copiaNodo);
             }
 
             DefaultTreeModel modelo = new DefaultTreeModel(raiz);
             JTree arbolClase = new JTree(modelo);
             JScrollPane scroll = new JScrollPane(arbolClase);
-            scroll.setBounds(15, 15, 210, 180);
-            workareaClasses_jp.add(scroll);
-            workareaClasses_jp.revalidate();
-            workareaClasses_jp.repaint();
-
+            scroll.setBounds(15, 15, 180, 225);
             actionListeners(scroll, arbolClase);
+            workareaClasses_jp.add(scroll);
+            actualizarVista(workareaClasses_jp);
         }
     }//GEN-LAST:event_addToWorkArea_btnMouseClicked
 
@@ -2421,17 +2575,7 @@ public class Screen extends JFrame {
     }//GEN-LAST:event_addPropiedad_jmiActionPerformed
 
     private void eliminarPropiedad_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarPropiedad_jmiActionPerformed
-        if (arbolSeleccionado != null && arbolSeleccionado.getSelectionPath() != null) {
-            DefaultTreeModel modeloArb = (DefaultTreeModel) arbolSeleccionado.getModel();
-            DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) arbolSeleccionado.getSelectionPath().getLastPathComponent();
-            if (nodo.getUserObject() instanceof Variable) {
-                Variable variable = (Variable) nodo.getUserObject();
-                modeloArb.removeNodeFromParent(nodo);
-            }
-        } else {
-            return;
-        }
-
+        // 
     }//GEN-LAST:event_eliminarPropiedad_jmiActionPerformed
 
     private void addMetodo_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMetodo_jmiActionPerformed
@@ -2439,23 +2583,24 @@ public class Screen extends JFrame {
     }//GEN-LAST:event_addMetodo_jmiActionPerformed
 
     private void eliminarMetodo_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarMetodo_jmiActionPerformed
-        if (arbolSeleccionado != null) {
-            DefaultTreeModel modelo = (DefaultTreeModel) arbolSeleccionado.getModel();
-            if (arbolSeleccionado.getSelectionPath() == null) {
-                return;
-            }
-            DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) arbolSeleccionado.getSelectionPath().getLastPathComponent();
-            if (nodo.getUserObject() instanceof Metodo) {
-                DefaultMutableTreeNode padre = (DefaultMutableTreeNode) nodo.getParent();
-                padre.remove(nodo);
-                showMessage("Metodo eliminado!", "Eliminado", JOptionPane.INFORMATION_MESSAGE);
-                modelo.reload();
-            }
-        }
+        // ...
     }//GEN-LAST:event_eliminarMetodo_jmiActionPerformed
 
     private void descripcionMetodo_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descripcionMetodo_jmiActionPerformed
+        if (arbolSeleccionado == null) {
+            return;
+        }
+        if (arbolSeleccionado.getSelectionPath() != null) {
+            DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) arbolSeleccionado.getSelectionPath().getLastPathComponent();
+            if (nodo.getUserObject() instanceof Metodo) {
+                Metodo metodo = (Metodo) nodo.getUserObject();
+                String descripcion = JOptionPane.showInputDialog(this, "Escribe la descripcion", metodo.getDescripcion());
+            }
+        } else {
+            return;
+        }
 
+        showMessage("Se agrego una descripcion al metodo", "Descripcion Cambiada", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_descripcionMetodo_jmiActionPerformed
 
     private void descripcion_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descripcion_jmiActionPerformed
@@ -2463,38 +2608,98 @@ public class Screen extends JFrame {
     }//GEN-LAST:event_descripcion_jmiActionPerformed
 
     private void eliminarArbol_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarArbol_jmiActionPerformed
-        if (arbolSeleccionado != null) {
-            int option = JOptionPane.showConfirmDialog(this, "Estas seguro de eliminar el arbol?\nSe eliminara del arbol general", "", JOptionPane.OK_CANCEL_OPTION);
-            if (option == JOptionPane.OK_OPTION) {
-                workareaClasses_jp.remove((JScrollPane) arbolSeleccionado.getParent().getParent());
-                workareaClasses_jp.remove(arbolSeleccionado);
 
-                workareaClasses_jp.revalidate();
-                workareaClasses_jp.repaint();
+    }//GEN-LAST:event_eliminarArbol_jmiActionPerformed
+
+    private void paste_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paste_btnMouseClicked
+        if (copiaElemento != null) {
+            copiaElemento.setX(elementoSeleccionado.getX() + elementoSeleccionado.getIcono().getIconWidth());
+            copiaElemento.setY(elementoSeleccionado.getY() + elementoSeleccionado.getIcono().getIconHeight());
+            addToWorkArea(copiaElemento);
+        }
+    }//GEN-LAST:event_paste_btnMouseClicked
+
+    private void jt_classesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jt_classesMouseClicked
+        if (jt_classes.getSelectionPath() == null) {
+            return;
+        }
+        DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) jt_classes.getSelectionPath().getLastPathComponent();
+        if (nodo.getUserObject() instanceof Clase) {
+            Clase clase = (Clase) nodo.getUserObject();
+            if (clase.getClasePadre() != null) {
+                deleteHerencia_btn.setVisible(true);
+            } else {
+                deleteHerencia_btn.setVisible(false);
             }
         }
-    }//GEN-LAST:event_eliminarArbol_jmiActionPerformed
+    }//GEN-LAST:event_jt_classesMouseClicked
+
+    private void deleteHerencia_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteHerencia_btnMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_deleteHerencia_btnMouseClicked
+
+    private void addParametro_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addParametro_btnMouseClicked
+        showDialog(parameters_dialog.getTitle(), parameters_dialog);
+    }//GEN-LAST:event_addParametro_btnMouseClicked
+
+    private void confirmParametro_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmParametro_btnMouseClicked
+        if (tf_parameterName.getText().trim().length() == 0) {
+            showMessage("Nombre del Parametro Vacio!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String nombre = tf_parameterName.getText().replace(" ", "");
+        String tipo = (String) parameterType_jcb.getSelectedItem();
+
+        parametros.add(new Variable(tipo, nombre));
+        showMessage("Parametro agregado!", "Agregado", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_confirmParametro_btnMouseClicked
+
+    private void agregarMetodo_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agregarMetodo_btnMouseClicked
+        if (tf_nombreMetodo.getText().trim().length() == 0) {
+            showMessage("No escribiste un nombrePara el Metodo", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String nombre = tf_nombreMetodo.getText().replace(" ", "");
+        String retorno = (String) retornoMetodo_jcb.getSelectedItem();
+        String alcance = (String) alcanceMetodo_jcb.getSelectedItem();
+
+        Metodo metodo = new Metodo(nombre, retorno, alcance);
+
+        if (!parametros.isEmpty()) {
+            metodo.setParametros(parametros);
+            parametros.clear();
+        }
+        agregarEnArbol((DefaultTreeModel) arbolSeleccionado.getModel(), metodo);
+        
+
+
+    }//GEN-LAST:event_agregarMetodo_btnMouseClicked
+
+    private void cancelMethod_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelMethod_btnMouseClicked
+        methods_dialog.dispose();
+    }//GEN-LAST:event_cancelMethod_btnMouseClicked
 
     public static void main(String args[]) {
         try {
             javax.swing.UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (UnsupportedLookAndFeelException ex) {
         }
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                Screen screen = new Screen();
-                screen.setLocationRelativeTo(null);
-                screen.setVisible(true);
-
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            Screen screen = new Screen();
+            screen.setLocationRelativeTo(null);
+            screen.setVisible(true);
         });
     }
 
     /*
     * FUNCTIONS IN SCREEN INTERACTIONS
      */
+    private void actualizarVista(JPanel panel) {
+        panel.revalidate();
+        panel.repaint();
+    }
+
     private FiguraDiagrama encontrarElemento(JLabel label) {
         for (FiguraDiagrama elemento : elementos) {
             if (elemento.getLabel() == label) {
@@ -2522,7 +2727,7 @@ public class Screen extends JFrame {
         figura.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent evt) {
-                Point movedClick = SwingUtilities.convertPoint(evt.getComponent(), evt.getPoint(), workarea_jp);
+                Point movedClick = SwingUtilities.convertPoint(evt.getComponent(), evt.getX(), evt.getY(), workarea_jp);
                 int posX = movedClick.x - click.x;
                 int posY = movedClick.y - click.y;
                 posX = setLimits(posX, figura.getWidth(), 0, workarea_jp.getWidth());
@@ -2530,7 +2735,7 @@ public class Screen extends JFrame {
                 figura.setLocation(posX, posY);
                 elemento.setX(posX);
                 elemento.setY(posY);
-                workarea_jp.repaint();
+                actualizarVista(workarea_jp);
             }
         });
     }
@@ -2548,7 +2753,7 @@ public class Screen extends JFrame {
     private void seleccionarLabel(JLabel label) {
         labelSeleccionado = label;
         workarea_jp.setComponentZOrder(labelSeleccionado, 0);
-        workarea_jp.repaint();
+        actualizarVista(workarea_jp);
     }
 
     private void addToWorkArea(FiguraDiagrama elemento) {
@@ -2557,8 +2762,7 @@ public class Screen extends JFrame {
         elemento.getLabel().setComponentPopupMenu(elements_jpm);
         initDragAndDrop(elemento.getLabel(), elemento);
         workarea_jp.add(elemento.getLabel());
-        workarea_jp.revalidate();
-        workarea_jp.repaint();
+        actualizarVista(workarea_jp);
     }
 
     /*
@@ -2629,9 +2833,53 @@ public class Screen extends JFrame {
             label.setComponentPopupMenu(elements_jpm);
             initDragAndDrop(label, encontrarElemento(label));
             workarea_jp.add(label);
-            workarea_jp.revalidate();
-            workarea_jp.repaint();
+            actualizarVista(workarea_jp);
         }
+    }
+
+    private void agregarEnArbol(DefaultTreeModel modelo, Metodo metodo) {
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
+        DefaultMutableTreeNode nodoMetodo = new DefaultMutableTreeNode(metodo);
+        DefaultMutableTreeNode padreNodo = null;
+        ArrayList<DefaultMutableTreeNode> nodos = new ArrayList();
+        for (int i = 0; i < raiz.getChildCount(); i++) {
+            if (raiz.getChildAt(i).toString().equals("Metodos")) {
+                padreNodo = (DefaultMutableTreeNode) raiz.getChildAt(i);
+                if (padreNodo.getChildCount() > 0) {
+                    for (int j = 0; j < padreNodo.getChildCount(); j++) {
+                        DefaultMutableTreeNode temp = (DefaultMutableTreeNode) padreNodo.getChildAt(j);
+                        if (temp.getUserObject() instanceof Metodo) {
+                            nodos.add(temp);
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (padreNodo != null && nodos.isEmpty()) {
+            padreNodo.add(nodoMetodo);
+            showMessage("El Metodo fue agregado", "Agregado", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            boolean esExistente = false;
+            for (DefaultMutableTreeNode nodo : nodos) {
+                if (nodo == nodoMetodo) {
+                    esExistente = true;
+                    break;
+                }
+            }
+            if (!esExistente) {
+                padreNodo.add(nodoMetodo);
+                showMessage("El Metodo fue agregado", "Agregado", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                showMessage("El Metodo ya existe", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+
+        modelo.reload();
+    }
+    
+    private void agregarEnArbol(DefaultTreeModel modelo, Variable propiedad) {
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="Variables declaration">
@@ -2643,6 +2891,7 @@ public class Screen extends JFrame {
     private javax.swing.JButton agregarMetodo_btn;
     private javax.swing.JButton agregarProceso_btn;
     private javax.swing.JButton agregarVariable_btn;
+    private javax.swing.JComboBox<String> alcanceMetodo_jcb;
     private javax.swing.JComboBox<String> alcance_jcb;
     private javax.swing.JLabel alcance_lbl;
     private javax.swing.JButton applyInheritance_btn;
@@ -2666,6 +2915,7 @@ public class Screen extends JFrame {
     private javax.swing.JPanel codeClasses_jp;
     private javax.swing.JPanel codeDiagrama_jp;
     private javax.swing.JToggleButton code_toggleBtn;
+    private javax.swing.JButton confirmParametro_btn;
     private javax.swing.JPanel controlButtons_jp;
     private javax.swing.JPanel controlClasses_jp;
     private javax.swing.JMenuItem copyElement_jmi;
@@ -2674,6 +2924,7 @@ public class Screen extends JFrame {
     private javax.swing.JPanel createVariable_jp;
     private javax.swing.JButton decisionFig_btn;
     private javax.swing.JMenuItem deleteElement_jmi;
+    private javax.swing.JButton deleteHerencia_btn;
     private javax.swing.JMenuItem descripcionMetodo_jmi;
     private javax.swing.JMenuItem descripcion_jmi;
     private javax.swing.JToggleButton diagramClase_toggleBtn;
@@ -2710,8 +2961,6 @@ public class Screen extends JFrame {
     private javax.swing.JPanel herencia_jp;
     private javax.swing.JToggleButton italic_toggleBtn;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2727,15 +2976,13 @@ public class Screen extends JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JPopupMenu.Separator js_elementEdition;
     private javax.swing.JPopupMenu.Separator js_elementProperties;
     private javax.swing.JTree jt_classes;
@@ -2744,6 +2991,7 @@ public class Screen extends JFrame {
     private javax.swing.JPanel menuClasses_jp;
     private javax.swing.JPanel menuElements_jp;
     private javax.swing.JDialog methods_dialog;
+    private javax.swing.JLabel nameParametroLbl;
     private javax.swing.JLabel namePropertyLabel;
     private javax.swing.JMenuItem newFile_jmi;
     private javax.swing.JButton okProperties_btn;
@@ -2752,8 +3000,11 @@ public class Screen extends JFrame {
     private javax.swing.JComboBox<String> operador_jcb;
     private javax.swing.JDialog operation_dialog;
     private javax.swing.JLabel optionsTitle;
+    private javax.swing.JComboBox<String> parameterType_jcb;
+    private javax.swing.JDialog parameters_dialog;
     private javax.swing.JList<String> parentClass_list;
     private javax.swing.JMenuItem pasteElement_jmi;
+    private javax.swing.JButton paste_btn;
     private javax.swing.JButton predefinedProcessFig_btn;
     private javax.swing.JPanel procesos_jp;
     private javax.swing.JButton processFig_btn;
@@ -2761,6 +3012,7 @@ public class Screen extends JFrame {
     private javax.swing.JScrollPane processes_scroll;
     private javax.swing.JDialog properties_dialog;
     private javax.swing.JComboBox<String> resultado_jcb;
+    private javax.swing.JComboBox<String> retornoMetodo_jcb;
     private javax.swing.JPanel rightSide_jp;
     private javax.swing.JMenuItem saveFile_jmi;
     private javax.swing.JScrollPane scrollClasses;
@@ -2770,13 +3022,18 @@ public class Screen extends JFrame {
     private javax.swing.JButton soutFig_btn;
     private javax.swing.JLabel space1_toolLabel;
     private javax.swing.JLabel space2_toolLbl;
+    private javax.swing.JTextArea ta_codeClass;
+    private javax.swing.JTextArea ta_codeDiagrama;
     private javax.swing.JButton terminalFig_btn;
     private javax.swing.JLabel textPropertyLabel;
     private javax.swing.JTextField tf_nameProperty;
+    private javax.swing.JTextField tf_nombreMetodo;
+    private javax.swing.JTextField tf_parameterName;
     private javax.swing.JTextField tf_textProperty;
     private javax.swing.JTextField tf_variableName;
     private javax.swing.JMenu tools_jm;
     private javax.swing.JPanel tools_jp;
+    private javax.swing.JLabel typeParametroLbl;
     private javax.swing.JLabel typeVariableLabel;
     private javax.swing.JComboBox<String> typeVariable_jcb;
     private javax.swing.JComboBox<String> var1_jcb;

@@ -1,6 +1,8 @@
 package elementos;
 
-public class Variable {
+import java.io.Serializable;
+
+public class Variable implements Serializable{
 
     private String tipo;
     private String nombre;

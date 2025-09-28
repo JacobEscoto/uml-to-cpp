@@ -6,22 +6,17 @@ import java.util.ArrayList;
 public class Metodo implements Serializable {
 
     private String nombre;
+    private String descripcion;
     private String tipoRetorno;
     private String alcance;
     private ArrayList<Variable> parametros;
 
     public Metodo(String nombre, String tipoRetorno, String alcance) {
         this.nombre = nombre;
+        this.descripcion = "";
         this.tipoRetorno = tipoRetorno;
         this.alcance = alcance;
         this.parametros = new ArrayList();
-    }
-
-    public Metodo(String nombre, String tipoRetorno, String alcance, ArrayList<Variable> parametros) {
-        this.nombre = nombre;
-        this.tipoRetorno = tipoRetorno;
-        this.alcance = alcance;
-        this.parametros = parametros;
     }
 
     public String getNombre() {
@@ -30,6 +25,14 @@ public class Metodo implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+    
+    public String getDescripcion() {
+        return descripcion;
+    }
+    
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getTipoRetorno() {
