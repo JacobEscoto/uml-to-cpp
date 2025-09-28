@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
-import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -15,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -32,12 +32,21 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import org.apache.commons.io.IOUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+
 
 public class Screen extends JFrame {
 
@@ -146,9 +155,9 @@ public class Screen extends JFrame {
         jLabel10 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        addParametro_btn = new javax.swing.JButton();
+        cancelMethod_btn = new javax.swing.JButton();
+        agregarMetodo_btn = new javax.swing.JButton();
         herencia_dialog = new javax.swing.JDialog();
         herencia_jp = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -174,11 +183,9 @@ public class Screen extends JFrame {
         clases_jpm = new javax.swing.JPopupMenu();
         addPropiedad_jmi = new javax.swing.JMenuItem();
         eliminarPropiedad_jmi = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         addMetodo_jmi = new javax.swing.JMenuItem();
-        eliminatMetodo_jmi = new javax.swing.JMenuItem();
+        eliminarMetodo_jmi = new javax.swing.JMenuItem();
         descripcionMetodo_jmi = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
         descripcion_jmi = new javax.swing.JMenuItem();
         eliminarArbol_jmi = new javax.swing.JMenuItem();
         editorDiagrama_jp = new javax.swing.JPanel();
@@ -633,11 +640,11 @@ public class Screen extends JFrame {
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Parametro:");
 
-        jButton1.setText("Agregar");
+        addParametro_btn.setText("Agregar");
 
-        jButton2.setText("Cancelar");
+        cancelMethod_btn.setText("Cancelar");
 
-        jButton4.setText("Agregar");
+        agregarMetodo_btn.setText("Agregar");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -646,23 +653,23 @@ public class Screen extends JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1)
-                    .addComponent(jComboBox2, 0, 211, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(cancelMethod_btn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(agregarMetodo_btn))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextField1)
+                            .addComponent(jComboBox2, 0, 211, Short.MAX_VALUE)
+                            .addComponent(addParametro_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(21, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
-                .addGap(36, 36, 36))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -682,12 +689,12 @@ public class Screen extends JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
-                    .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
+                    .addComponent(addParametro_btn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton4))
-                .addGap(19, 19, 19))
+                    .addComponent(cancelMethod_btn)
+                    .addComponent(agregarMetodo_btn))
+                .addGap(17, 17, 17))
         );
 
         javax.swing.GroupLayout methods_dialogLayout = new javax.swing.GroupLayout(methods_dialog.getContentPane());
@@ -877,22 +884,45 @@ public class Screen extends JFrame {
             }
         });
         clases_jpm.add(eliminarPropiedad_jmi);
-        clases_jpm.add(jSeparator1);
 
         addMetodo_jmi.setText("Agregar Metodo");
+        addMetodo_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMetodo_jmiActionPerformed(evt);
+            }
+        });
         clases_jpm.add(addMetodo_jmi);
 
-        eliminatMetodo_jmi.setText("Eliminar Metodo");
-        clases_jpm.add(eliminatMetodo_jmi);
+        eliminarMetodo_jmi.setText("Eliminar Metodo");
+        eliminarMetodo_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarMetodo_jmiActionPerformed(evt);
+            }
+        });
+        clases_jpm.add(eliminarMetodo_jmi);
 
         descripcionMetodo_jmi.setText("Descripcion del Metodo");
+        descripcionMetodo_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                descripcionMetodo_jmiActionPerformed(evt);
+            }
+        });
         clases_jpm.add(descripcionMetodo_jmi);
-        clases_jpm.add(jSeparator2);
 
         descripcion_jmi.setText("Descripcion");
+        descripcion_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                descripcion_jmiActionPerformed(evt);
+            }
+        });
         clases_jpm.add(descripcion_jmi);
 
         eliminarArbol_jmi.setText("Eliminar Arbol");
+        eliminarArbol_jmi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarArbol_jmiActionPerformed(evt);
+            }
+        });
         clases_jpm.add(eliminarArbol_jmi);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1860,17 +1890,45 @@ public class Screen extends JFrame {
             } else if (window == 2) {
                 Variable propiedad = new Variable(tipo, nombre, alcance);
                 DefaultMutableTreeNode property = new DefaultMutableTreeNode(propiedad);
-                DefaultMutableTreeNode raiz =(DefaultMutableTreeNode) arbolSeleccionado.getModel().getRoot();
+                if (arbolSeleccionado == null) {
+                    return;
+                }
+                DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) arbolSeleccionado.getModel().getRoot();
                 DefaultMutableTreeNode nodoPropiedad = null;
                 for (int i = 0; i < raiz.getChildCount(); i++) {
                     if (raiz.getChildAt(i).toString().equalsIgnoreCase("Propiedades")) {
                         nodoPropiedad = (DefaultMutableTreeNode) raiz.getChildAt(i);
+                        break;
                     }
                 }
                 if (nodoPropiedad != null) {
                     DefaultTreeModel modelo = (DefaultTreeModel) arbolSeleccionado.getModel();
                     nodoPropiedad.add(property);
                     modelo.reload();
+
+                    DefaultTreeModel modelArbolGeneral = (DefaultTreeModel) jt_classes.getModel();
+                    DefaultMutableTreeNode raizGeneral = (DefaultMutableTreeNode) modelArbolGeneral.getRoot();
+                    DefaultMutableTreeNode nodo = null;
+                    for (int i = 0; i < raizGeneral.getChildCount(); i++) {
+                        if (raizGeneral.getChildAt(i).toString().equalsIgnoreCase(arbolSeleccionado.getModel().getRoot().toString())) {
+                            nodo = (DefaultMutableTreeNode) raizGeneral.getChildAt(i);
+                            break;
+                        }
+                    }
+                    if (nodo != null) {
+                        DefaultMutableTreeNode prop = null;
+                        for (int i = 0; i < nodo.getChildCount(); i++) {
+                            if (nodo.getChildAt(i).toString().equalsIgnoreCase("Propiedades")) {
+                                prop = (DefaultMutableTreeNode) nodo.getChildAt(i);
+                                break;
+                            }
+                        }
+                        if (prop != null) {
+                            DefaultMutableTreeNode copiaPropiedad = new DefaultMutableTreeNode(property);
+                            prop.add(copiaPropiedad);
+                            modelArbolGeneral.reload();
+                        }
+                    }
                     showMessage("Propiedad agregada", "Exito", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
@@ -2016,45 +2074,57 @@ public class Screen extends JFrame {
     }//GEN-LAST:event_openFile_jmiActionPerformed
 
     private void saveFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFile_jmiActionPerformed
-        if (!elementos.isEmpty()) {
-            if (window == 1) {
-                fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Diagrama UML", "umld"));
-            } else if (window == 2) {
-                fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Clase UML", "umlc"));
-            }
-            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
-                if (window == 1) {
-                    if (!file.getAbsolutePath().endsWith(".umld")) {
-                        file = new File(file.getAbsolutePath() + ".umld");
-                    }
-                } else if (window == 2) {
-                    if (!file.getAbsolutePath().endsWith(".umlc")) {
-                        file = new File(file.getAbsolutePath() + ".umlc");
-                    }
-                }
-
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    ObjectOutputStream oos = new ObjectOutputStream(fos);
-                    if (window == 1) {
-                        oos.writeObject(elementos);
-                    } else if (window == 2) {
-                        DefaultTreeModel modelo = (DefaultTreeModel) jt_classes.getModel();
-                        oos.writeObject(modelo);
-                    }
-                    oos.close();
-
-                    showMessage("Archivo guardado\n" + file.getAbsolutePath(), "Guardado", JOptionPane.INFORMATION_MESSAGE);
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+        if (!elementos.isEmpty() && window == 1) {
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Diagrama UML", "umld"));
         } else {
             showMessage("No tienes nada por guardar!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (window == 2) {
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Clase UML", "umlc"));
+        } else {
+            showMessage("No tienes nada por guardar!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            if (window == 1) {
+                if (!file.getAbsolutePath().endsWith(".umld")) {
+                    file = new File(file.getAbsolutePath() + ".umld");
+                }
+            } else if (window == 2) {
+                if (!file.getAbsolutePath().endsWith(".umlc")) {
+                    file = new File(file.getAbsolutePath() + ".umlc");
+                }
+            }
+
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                if (window == 1) {
+                    oos.writeObject(elementos);
+                } else if (window == 2) {
+                    DefaultTreeModel modelo = (DefaultTreeModel) jt_classes.getModel();
+                    if (!hayClases((DefaultMutableTreeNode) modelo.getRoot())) {
+                        showMessage("No has creado ninguna clase para guardar!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    oos.writeObject(modelo);
+                }
+                oos.close();
+
+                showMessage("Archivo guardado\n" + file.getAbsolutePath(), "Guardado", JOptionPane.INFORMATION_MESSAGE);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_saveFile_jmiActionPerformed
+
+    private boolean hayClases(DefaultMutableTreeNode raiz) {
+        return raiz.getChildCount() > 0;
+    }
 
     /*
     * TOGGLE VIEWS
@@ -2121,21 +2191,51 @@ public class Screen extends JFrame {
     private void exportPdf_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportPdf_jmiActionPerformed
         fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo PDF (*.pdf)", "pdf"));
         if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-            try {
-                File file = fileChooser.getSelectedFile();
-                if (!file.getAbsolutePath().endsWith(".jpg")) {
-                    file = new File(file.getAbsolutePath() + ".jpg");
-                }
-                BufferedImage bi = new BufferedImage(workarea_jp.getWidth(), workarea_jp.getHeight(), BufferedImage.TYPE_INT_ARGB);
-                workarea_jp.paint(bi.getGraphics());
-                ImageIO.write(bi, "jpg", file);
-                // Error -> Desktop.getDesktop().print(file);
-
-                showMessage("Exportado a PDF", "Exportado", JOptionPane.INFORMATION_MESSAGE);
-            } catch (IOException ex) {
-                Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
-                showMessage("Error al exportar el archivo", "ERROR", JOptionPane.ERROR_MESSAGE);
+            int ancho = 0;
+            int alto = 0;
+            JPanel panel = null;
+            File file = fileChooser.getSelectedFile();
+            if (!file.getAbsolutePath().endsWith(".pdf")) {
+                file = new File(file.getAbsolutePath() + ".pdf");
             }
+            if (window == 1) {
+                ancho = workarea_jp.getWidth();
+                alto = workarea_jp.getHeight();
+                panel = workarea_jp;
+            } else if (window == 2) {
+                ancho = workareaClasses_jp.getWidth();
+                alto = workareaClasses_jp.getHeight();
+                panel = workareaClasses_jp;
+            }
+            if (panel == null) {
+                return;
+            }
+            try {
+                PDDocument doc = new PDDocument();
+                PDPage pagina = new PDPage(new PDRectangle(panel.getWidth(), panel.getHeight()));
+                doc.addPage(pagina);
+                BufferedImage bi = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_RGB);
+                panel.paint(bi.getGraphics());
+                File fileImg = new File("imagen.jpg");
+                ImageIO.write(bi, "jpg", fileImg);
+                
+                PDPageContentStream contentStream = new PDPageContentStream(doc, pagina);
+                PDImageXObject img = LosslessFactory.createFromImage(doc, bi);
+                contentStream.drawImage(img, 0, 0, panel.getWidth(), panel.getHeight());
+                
+                contentStream.close();
+                doc.save(file);
+                doc.close();
+                showMessage("PDF Exportado", "Exportado", JOptionPane.INFORMATION_MESSAGE);
+                
+                
+                
+            } catch (Exception ex) {
+                
+            }
+            PDDocument doc = new PDDocument();
+            PDPage page = new PDPage();
+            doc.addPage(page);
         }
 
     }//GEN-LAST:event_exportPdf_jmiActionPerformed
@@ -2210,7 +2310,6 @@ public class Screen extends JFrame {
             DefaultTreeModel modelo = new DefaultTreeModel(raiz);
             JTree arbolClase = new JTree(modelo);
             JScrollPane scroll = new JScrollPane(arbolClase);
-            arbolClase.setComponentPopupMenu(clases_jpm);
             scroll.setBounds(15, 15, 210, 180);
             workareaClasses_jp.add(scroll);
             workareaClasses_jp.revalidate();
@@ -2221,15 +2320,69 @@ public class Screen extends JFrame {
     }//GEN-LAST:event_addToWorkArea_btnMouseClicked
 
     private void actionListeners(JScrollPane scroll, JTree tree) {
+
         tree.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 arbolSeleccionado = tree;
                 workareaClasses_jp.setComponentZOrder(scroll, 0);
                 workareaClasses_jp.repaint();
+                if (tree.getSelectionPath() == null) {
+                    return;
+                }
+                if (evt.isMetaDown()) {
+
+                    DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent();
+
+                    if (nodo.getParent() == null) {
+                        addPropiedad_jmi.setVisible(false);
+                        eliminarPropiedad_jmi.setVisible(false);
+                        addMetodo_jmi.setVisible(false);
+                        eliminarMetodo_jmi.setVisible(false);
+                        descripcionMetodo_jmi.setVisible(false);
+                        descripcion_jmi.setVisible(true);
+                        eliminarArbol_jmi.setVisible(true);
+                    } else if (nodo.toString().equalsIgnoreCase("Propiedades")) {
+                        addPropiedad_jmi.setVisible(true);
+                        eliminarPropiedad_jmi.setVisible(false);
+                        addMetodo_jmi.setVisible(false);
+                        eliminarMetodo_jmi.setVisible(false);
+                        descripcionMetodo_jmi.setVisible(false);
+                        descripcion_jmi.setVisible(false);
+                        eliminarArbol_jmi.setVisible(false);
+                    } else if (nodo.getUserObject() instanceof Variable) {
+                        addPropiedad_jmi.setVisible(false);
+                        eliminarPropiedad_jmi.setVisible(true);
+                        addMetodo_jmi.setVisible(false);
+                        eliminarMetodo_jmi.setVisible(false);
+                        descripcionMetodo_jmi.setVisible(false);
+                        descripcion_jmi.setVisible(false);
+                        eliminarArbol_jmi.setVisible(false);
+                    } else if (nodo.toString().equalsIgnoreCase("Metodos")) {
+                        addPropiedad_jmi.setVisible(false);
+                        eliminarPropiedad_jmi.setVisible(false);
+                        addMetodo_jmi.setVisible(true);
+                        eliminarMetodo_jmi.setVisible(false);
+                        descripcionMetodo_jmi.setVisible(false);
+                        descripcion_jmi.setVisible(false);
+                        eliminarArbol_jmi.setVisible(false);
+                    } else if (nodo.getUserObject() instanceof Metodo) {
+                        addPropiedad_jmi.setVisible(false);
+                        eliminarPropiedad_jmi.setVisible(false);
+                        addMetodo_jmi.setVisible(false);
+                        eliminarMetodo_jmi.setVisible(true);
+                        descripcionMetodo_jmi.setVisible(true);
+                        descripcion_jmi.setVisible(false);
+                        eliminarArbol_jmi.setVisible(false);
+                    }
+                    clases_jpm.show(tree, evt.getX(), evt.getY());
+                } else {
+                    return;
+                }
             }
         });
     }
+
     private void applyInheritance_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_applyInheritance_btnMouseClicked
         DefaultListModel modelClasePadre = (DefaultListModel) parentClass_list.getModel();
         DefaultListModel modelClaseHija = (DefaultListModel) childClass_list.getModel();
@@ -2268,20 +2421,59 @@ public class Screen extends JFrame {
     }//GEN-LAST:event_addPropiedad_jmiActionPerformed
 
     private void eliminarPropiedad_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarPropiedad_jmiActionPerformed
+        if (arbolSeleccionado != null && arbolSeleccionado.getSelectionPath() != null) {
+            DefaultTreeModel modeloArb = (DefaultTreeModel) arbolSeleccionado.getModel();
+            DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) arbolSeleccionado.getSelectionPath().getLastPathComponent();
+            if (nodo.getUserObject() instanceof Variable) {
+                Variable variable = (Variable) nodo.getUserObject();
+                modeloArb.removeNodeFromParent(nodo);
+            }
+        } else {
+            return;
+        }
+
+    }//GEN-LAST:event_eliminarPropiedad_jmiActionPerformed
+
+    private void addMetodo_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMetodo_jmiActionPerformed
+        showDialog("Crear Metodo", methods_dialog);
+    }//GEN-LAST:event_addMetodo_jmiActionPerformed
+
+    private void eliminarMetodo_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarMetodo_jmiActionPerformed
         if (arbolSeleccionado != null) {
             DefaultTreeModel modelo = (DefaultTreeModel) arbolSeleccionado.getModel();
             if (arbolSeleccionado.getSelectionPath() == null) {
                 return;
             }
             DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) arbolSeleccionado.getSelectionPath().getLastPathComponent();
-            if (nodo.getUserObject() instanceof Variable) {
+            if (nodo.getUserObject() instanceof Metodo) {
                 DefaultMutableTreeNode padre = (DefaultMutableTreeNode) nodo.getParent();
                 padre.remove(nodo);
-                showMessage("Propiedad eliminada!", "Eliminada", JOptionPane.INFORMATION_MESSAGE);
+                showMessage("Metodo eliminado!", "Eliminado", JOptionPane.INFORMATION_MESSAGE);
                 modelo.reload();
             }
         }
-    }//GEN-LAST:event_eliminarPropiedad_jmiActionPerformed
+    }//GEN-LAST:event_eliminarMetodo_jmiActionPerformed
+
+    private void descripcionMetodo_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descripcionMetodo_jmiActionPerformed
+
+    }//GEN-LAST:event_descripcionMetodo_jmiActionPerformed
+
+    private void descripcion_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descripcion_jmiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_descripcion_jmiActionPerformed
+
+    private void eliminarArbol_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarArbol_jmiActionPerformed
+        if (arbolSeleccionado != null) {
+            int option = JOptionPane.showConfirmDialog(this, "Estas seguro de eliminar el arbol?\nSe eliminara del arbol general", "", JOptionPane.OK_CANCEL_OPTION);
+            if (option == JOptionPane.OK_OPTION) {
+                workareaClasses_jp.remove((JScrollPane) arbolSeleccionado.getParent().getParent());
+                workareaClasses_jp.remove(arbolSeleccionado);
+
+                workareaClasses_jp.revalidate();
+                workareaClasses_jp.repaint();
+            }
+        }
+    }//GEN-LAST:event_eliminarArbol_jmiActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -2445,8 +2637,10 @@ public class Screen extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Variables declaration">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addMetodo_jmi;
+    private javax.swing.JButton addParametro_btn;
     private javax.swing.JMenuItem addPropiedad_jmi;
     private javax.swing.JButton addToWorkArea_btn;
+    private javax.swing.JButton agregarMetodo_btn;
     private javax.swing.JButton agregarProceso_btn;
     private javax.swing.JButton agregarVariable_btn;
     private javax.swing.JComboBox<String> alcance_jcb;
@@ -2458,6 +2652,7 @@ public class Screen extends JFrame {
     private javax.swing.JToggleButton bold_toggleBtn;
     private javax.swing.JButton cancelCreationVariable_btn;
     private javax.swing.JButton cancelInheritance_btn;
+    private javax.swing.JButton cancelMethod_btn;
     private javax.swing.JButton cancelPropertyDialog_btn;
     private javax.swing.JButton cancelarOperacion_btn;
     private javax.swing.JMenuItem changeElementBackground_jmi;
@@ -2488,8 +2683,8 @@ public class Screen extends JFrame {
     private javax.swing.JMenuItem elementProperties_jmi;
     private javax.swing.JPopupMenu elements_jpm;
     private javax.swing.JMenuItem eliminarArbol_jmi;
+    private javax.swing.JMenuItem eliminarMetodo_jmi;
     private javax.swing.JMenuItem eliminarPropiedad_jmi;
-    private javax.swing.JMenuItem eliminatMetodo_jmi;
     private javax.swing.JMenu exportOptions_jm;
     private javax.swing.JMenuItem exportPdf_jmi;
     private javax.swing.JTabbedPane extras_tabs;
@@ -2514,10 +2709,7 @@ public class Screen extends JFrame {
     private javax.swing.JDialog herencia_dialog;
     private javax.swing.JPanel herencia_jp;
     private javax.swing.JToggleButton italic_toggleBtn;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
@@ -2541,8 +2733,6 @@ public class Screen extends JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField1;
