@@ -45,6 +45,10 @@ public class Operacion {
     public void setResultado(Variable resultado) {
         this.resultado = resultado;
     }
+    
+    public String generarCodigo() {
+        return "\n  " + resultado.getNombre() + " = " + variable1.getNombre() + " " + operador + " " + variable2.getNombre() + ";";
+    }
 
     @Override
     public String toString() {

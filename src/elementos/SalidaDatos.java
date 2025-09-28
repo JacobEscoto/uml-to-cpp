@@ -11,7 +11,7 @@ public class SalidaDatos extends FiguraDiagrama {
     
     @Override
     public String generarCodigo() {
-        return "cout << \"" + texto + "\" << endl;";
+        return "\n  cout << \"" + texto + "\" << endl;";
     }
 }
 

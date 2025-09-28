@@ -13,7 +13,7 @@ public class Inicio extends FiguraDiagrama {
     @Override
     public String generarCodigo() {
         return """
-               // ========== INICIO DEL CODIGO ==========
+               // ============= INICIO DEL CODIGO =============
                #include <iostream>
                using namespace std;
                

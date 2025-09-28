@@ -44,7 +44,7 @@ public class Variable implements Serializable{
     }
 
     public String generarCodigo() {
-        return tipo + " " + nombre + ";";
+        return "\n  " + tipo + " " + nombre + ";";
     }
 
     @Override

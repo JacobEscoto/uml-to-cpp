@@ -2096,6 +2096,9 @@
                 <Property name="text" type="java.lang.String" value="Generar Codigo"/>
                 <Property name="borderPainted" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="generarCodigo_btnMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JToggleButton" name="code_toggleBtn">
               <Properties>
@@ -2369,7 +2372,7 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="addToWorkArea_btn" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="23" max="32767" attributes="0"/>
+                      <EmptySpace pref="3" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

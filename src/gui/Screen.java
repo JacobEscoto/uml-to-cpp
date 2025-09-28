@@ -2,6 +2,7 @@ package gui;
 
 import elementos.*;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
@@ -1329,6 +1330,11 @@ public class Screen extends JFrame {
         generarCodigo_btn.setForeground(new java.awt.Color(0, 0, 0));
         generarCodigo_btn.setText("Generar Codigo");
         generarCodigo_btn.setBorderPainted(false);
+        generarCodigo_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                generarCodigo_btnMouseClicked(evt);
+            }
+        });
 
         code_toggleBtn.setBackground(new Color(255, 255, 255, 128));
         code_toggleBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -1566,7 +1572,7 @@ public class Screen extends JFrame {
                     .addComponent(deleteHerencia_btn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(addToWorkArea_btn)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(3, Short.MAX_VALUE))
         );
 
         classesGenerator_jp.add(menuClasses_jp, java.awt.BorderLayout.LINE_START);
@@ -2670,7 +2676,6 @@ public class Screen extends JFrame {
             parametros.clear();
         }
         agregarEnArbol((DefaultTreeModel) arbolSeleccionado.getModel(), metodo);
-        
 
 
     }//GEN-LAST:event_agregarMetodo_btnMouseClicked
@@ -2678,6 +2683,48 @@ public class Screen extends JFrame {
     private void cancelMethod_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelMethod_btnMouseClicked
         methods_dialog.dispose();
     }//GEN-LAST:event_cancelMethod_btnMouseClicked
+
+    private void generarCodigo_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_generarCodigo_btnMouseClicked
+        ta_codeDiagrama.setText("");
+        Inicio inicio = null;
+        Fin fin = null;
+        for (FiguraDiagrama figura : elementos) {
+            if (figura instanceof Inicio) {
+                inicio = (Inicio) figura;
+            }else if (figura instanceof Fin) {
+                fin = (Fin) figura;
+            }
+        }
+        
+        if (inicio == null || fin == null) {
+            showMessage("Te falta un Inicio o Fin en tu Diagrama\nRecuerda agregarlo!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        ta_codeDiagrama.append(inicio.generarCodigo());
+        DefaultListModel listVariables = (DefaultListModel) variables_list.getModel();
+        DefaultListModel listProcesos = (DefaultListModel) process_list.getModel();
+        
+        for (int i = 0; i < listVariables.size(); i++) {
+            if (listVariables.getElementAt(i) instanceof Variable) {
+                Variable var = (Variable) listVariables.getElementAt(i);
+                ta_codeDiagrama.append(var.generarCodigo());
+            }
+        }
+        for (int i = 0; i < listProcesos.size(); i++) {
+            if (listProcesos.getElementAt(i) instanceof Operacion) {
+                Operacion operacion = (Operacion) listProcesos.getElementAt(i);
+                ta_codeDiagrama.append(operacion.generarCodigo());
+            }
+        }
+        
+        for (FiguraDiagrama figura : elementos) {
+            if (!(figura instanceof Inicio) && !(figura instanceof Fin)) {
+                ta_codeDiagrama.append(figura.generarCodigo());
+            }
+        }
+        ta_codeDiagrama.append(fin.generarCodigo());
+        showMessage("Codigo Generado Exitosamente", "Generado", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_generarCodigo_btnMouseClicked
 
     public static void main(String args[]) {
         try {
@@ -2855,7 +2902,7 @@ public class Screen extends JFrame {
                 }
             }
         }
-        
+
         if (padreNodo != null && nodos.isEmpty()) {
             padreNodo.add(nodoMetodo);
             showMessage("El Metodo fue agregado", "Agregado", JOptionPane.INFORMATION_MESSAGE);
@@ -2877,9 +2924,9 @@ public class Screen extends JFrame {
 
         modelo.reload();
     }
-    
+
     private void agregarEnArbol(DefaultTreeModel modelo, Variable propiedad) {
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="Variables declaration">

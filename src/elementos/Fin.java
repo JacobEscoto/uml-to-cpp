@@ -12,7 +12,8 @@ public class Fin extends FiguraDiagrama {
     @Override
     public String generarCodigo() {
         return """
-                   return 0;
+                   
+                return 0;
                }
                // ============= FIN DEL CODIGO =============""";
     }

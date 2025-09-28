@@ -11,7 +11,7 @@ public class ProcesoPredefinido extends FiguraDiagrama {
     
     @Override
     public String generarCodigo() {
-        return texto + ";";
+        return "\n  " + texto + ";";
     }
 
 }
