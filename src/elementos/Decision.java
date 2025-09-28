@@ -12,7 +12,7 @@ public class Decision extends FiguraDiagrama {
     @Override
     public String generarCodigo() {
         return "\n  if (" + texto + ") {\n" +
-                "\n }"; 
+                "\n  } else {\n\n   }\n"; 
     }
 
 }
