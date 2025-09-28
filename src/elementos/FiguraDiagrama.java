@@ -1,7 +1,6 @@
 package elementos;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Font;
 import java.io.Serializable;
 import javax.swing.ImageIcon;
@@ -110,7 +109,6 @@ public abstract class FiguraDiagrama implements Serializable {
         label.setBounds(x, y, icono.getIconWidth(), icono.getIconHeight());
         label.setBackground(backgroundColor);
         label.setOpaque(true);
-        label.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
         label.setBorder(null);
 
         label.setHorizontalTextPosition(JLabel.CENTER);

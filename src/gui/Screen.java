@@ -2411,6 +2411,17 @@ public class Screen extends JFrame {
         if (nombreClase == null) {
             return;
         }
+        boolean existe = false;
+        for (Clase clase : clases) {
+            if (clase.getNombre().equals(nombreClase)) {
+                existe = true;
+                break;
+            }
+        }
+        if (existe) {
+            showMessage("Clase ya existe con ese nombre\nIntenta otro nombre!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         if (nombreClase.trim().length() != 0) {
             DefaultTreeModel modelo = (DefaultTreeModel) jt_classes.getModel();
             DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
@@ -2555,6 +2566,25 @@ public class Screen extends JFrame {
                     return;
                 }
             }
+            
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                click = evt.getPoint();
+                workareaClasses_jp.setComponentZOrder(scroll, 0);
+            }
+        });
+        tree.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent evt) {
+                Point movedClick = SwingUtilities.convertPoint(tree.getParent().getParent(), evt.getPoint(), workareaClasses_jp);
+                int posX = movedClick.x - click.x;
+                int posY = movedClick.y - click.y;
+                posX = setLimits(posX, scroll.getWidth(), 0, workareaClasses_jp.getWidth());
+                posY = setLimits(posY, scroll.getHeight(), 0, workareaClasses_jp.getHeight());
+                scroll.setLocation(posX, posY);
+                scroll.getParent().setLocation(posX, posY);
+                actualizarVista(workareaClasses_jp);
+            }
         });
     }
 
@@ -2627,7 +2657,7 @@ public class Screen extends JFrame {
         if (propiedad != null) {
             DefaultTreeModel modeloGeneral = (DefaultTreeModel) jt_classes.getModel();
             DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloGeneral.getRoot();
-            
+
             DefaultMutableTreeNode nodoClase = null;
             for (int i = 0; i < raiz.getChildCount(); i++) {
                 DefaultMutableTreeNode temp = (DefaultMutableTreeNode) raiz.getChildAt(i);
@@ -2655,7 +2685,7 @@ public class Screen extends JFrame {
                     DefaultMutableTreeNode temp = (DefaultMutableTreeNode) nodoPadre.getChildAt(i);
                     if (temp.getUserObject() instanceof Variable) {
                         Variable propiedadEncontrada = (Variable) temp.getUserObject();
-                        if (propiedad.getNombre().equals(propiedadEncontrada.getNombre())){
+                        if (propiedad.getNombre().equals(propiedadEncontrada.getNombre())) {
                             nodoEliminar = (DefaultMutableTreeNode) nodoPadre.getChildAt(i);
                             break;
                         }
@@ -2681,12 +2711,13 @@ public class Screen extends JFrame {
         DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) arbolSeleccionado.getSelectionPath().getLastPathComponent();
         if (nodo.getUserObject() instanceof Metodo) {
             metodo = (Metodo) nodo.getUserObject();
+            claseSeleccionada.getMetodos().remove(metodo);
             eliminarMetodoEnArbol((DefaultTreeModel) arbolSeleccionado.getModel(), metodo);
         }
         if (metodo != null) {
             DefaultTreeModel modeloGeneral = (DefaultTreeModel) jt_classes.getModel();
             DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloGeneral.getRoot();
-            
+
             DefaultMutableTreeNode nodoClase = null;
             for (int i = 0; i < raiz.getChildCount(); i++) {
                 DefaultMutableTreeNode temp = (DefaultMutableTreeNode) raiz.getChildAt(i);
@@ -2714,7 +2745,7 @@ public class Screen extends JFrame {
                     DefaultMutableTreeNode temp = (DefaultMutableTreeNode) nodoPadre.getChildAt(i);
                     if (temp.getUserObject() instanceof Metodo) {
                         Metodo metodoEncontrado = (Metodo) temp.getUserObject();
-                        if (metodoEncontrado.getNombre().equals(metodo.getNombre()) && metodoEncontrado.getParametros() == metodo.getParametros() && metodoEncontrado.getTipoRetorno().equalsIgnoreCase(metodo.getTipoRetorno())){
+                        if (metodoEncontrado.getNombre().equals(metodo.getNombre()) && metodoEncontrado.getParametros() == metodo.getParametros() && metodoEncontrado.getTipoRetorno().equalsIgnoreCase(metodo.getTipoRetorno())) {
                             nodoEliminar = (DefaultMutableTreeNode) nodoPadre.getChildAt(i);
                             break;
                         }
@@ -2735,21 +2766,41 @@ public class Screen extends JFrame {
             DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) arbolSeleccionado.getSelectionPath().getLastPathComponent();
             if (nodo.getUserObject() instanceof Metodo) {
                 Metodo metodo = (Metodo) nodo.getUserObject();
-                String descripcion = JOptionPane.showInputDialog(this, "Escribe la descripcion", metodo.getDescripcion());
+                String descripcion = JOptionPane.showInputDialog(this, "Escribe una descripcion del metodo");
+                for (Clase clase : clases) {
+                    if (claseSeleccionada.equals(clase)) {
+                        for (Metodo metodoEnClase : claseSeleccionada.getMetodos()) {
+                            if (metodoEnClase.equals(metodo)) {
+                                metodoEnClase.setDescripcion(descripcion);
+                                showMessage("La descripcion del metodo " + metodoEnClase.getNombre()+ " fue cambiada!", "Exito", JOptionPane.INFORMATION_MESSAGE);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
             }
-        } else {
-            return;
         }
-
-        showMessage("Se agrego una descripcion al metodo", "Descripcion Cambiada", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_descripcionMetodo_jmiActionPerformed
 
     private void descripcion_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descripcion_jmiActionPerformed
-        // TODO add your handling code here:
+        if (arbolSeleccionado != null && arbolSeleccionado.getSelectionPath() != null) {
+           String descripcion = JOptionPane.showInputDialog(this, "Escribe una descripcion de la clase");
+           if (descripcion.trim().length() != 0 && descripcion != null) {
+               claseSeleccionada.setDescripcion(descripcion);
+               showMessage("Descripcion de la Clase " + claseSeleccionada.getNombre() + " fue cambiada!", "Exito", JOptionPane.INFORMATION_MESSAGE);
+           }
+           
+        }
     }//GEN-LAST:event_descripcion_jmiActionPerformed
 
     private void eliminarArbol_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarArbol_jmiActionPerformed
-
+        if (arbolSeleccionado != null && arbolSeleccionado.getSelectionPath() != null) {
+            workareaClasses_jp.remove(arbolSeleccionado.getParent().getParent());
+            workareaClasses_jp.remove(arbolSeleccionado);
+            arbolSeleccionado = null;
+            actualizarVista(workareaClasses_jp);
+        }
     }//GEN-LAST:event_eliminarArbol_jmiActionPerformed
 
     private void paste_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paste_btnMouseClicked
@@ -2825,7 +2876,7 @@ public class Screen extends JFrame {
         if (claseSeleccionada == null) {
             return;
         }
-        
+
         claseSeleccionada.getMetodos().add(metodo);
         agregarMetodoEnArbol((DefaultTreeModel) arbolSeleccionado.getModel(), metodo);
 
@@ -3172,7 +3223,7 @@ public class Screen extends JFrame {
 
         modelo.reload();
     }
-    
+
     private void eliminarMetodoEnArbol(DefaultTreeModel modelo, Metodo metodo) {
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
         DefaultMutableTreeNode padreNodo = null;
@@ -3202,7 +3253,7 @@ public class Screen extends JFrame {
             showMessage("Metodo eliminado!", "Eliminado", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
+
     private void eliminarPropiedadEnArbol(DefaultTreeModel modelo, Variable propiedad) {
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
         DefaultMutableTreeNode padreNodo = null;
