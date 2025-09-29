@@ -1,6 +1,6 @@
 # Editor y Creador de Diagramas | Generador de Clases
 ---
-### - Funcionalidades del Programa
+### Funcionalidades del Programa
 - [x] Drag and Drop
 - [x] Agregar Elementos de Diagrama
 - [x] Crear Variable
@@ -15,9 +15,8 @@
 - [x] Abrir Archivo
 - [x] Exportar a PDF
 
-
-### - Librerías Utilizadas
 ---
-FlatLaf 3.1.1 (Look and Feel)
 
-Apache PDFBox 3.0.5
+### Librerías Utilizadas
+1. FlatLaf 3.1.1 (Look and Feel)
+2. Apache PDFBox 3.0.5

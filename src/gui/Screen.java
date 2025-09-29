@@ -2388,9 +2388,21 @@ public class Screen extends JFrame {
                 } else if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".umlc")) {
                     this.setTitle(fileChooser.getSelectedFile().getName() + " - UML Editor");
                     DefaultTreeModel model = (DefaultTreeModel) ois.readObject();
+                    DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) model.getRoot();
                     jt_classes.setModel(model);
                     editorDiagrama_jp.setVisible(false);
                     classesGenerator_jp.setVisible(true);
+                    
+                    clases.clear();
+                    for (int i = 0; i < raiz.getChildCount(); i++) {
+                        DefaultMutableTreeNode temp = (DefaultMutableTreeNode) raiz.getChildAt(i);
+                        if(temp.getUserObject() instanceof Clase) {
+                            Clase clase = (Clase) temp.getUserObject();
+                            clases.add(clase);
+                        }
+                    }
+                    model.reload();
+                    
                 }
 
             } catch (IOException | ClassNotFoundException ex) {
@@ -2552,8 +2564,6 @@ public class Screen extends JFrame {
                 doc.addPage(pagina);
                 BufferedImage bi = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_RGB);
                 panel.paint(bi.getGraphics());
-                File fileImg = new File("imagen.jpg");
-                ImageIO.write(bi, "jpg", fileImg);
 
                 PDPageContentStream contentStream = new PDPageContentStream(doc, pagina);
                 PDImageXObject img = LosslessFactory.createFromImage(doc, bi);
