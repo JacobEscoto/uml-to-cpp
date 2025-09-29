@@ -20,7 +20,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
@@ -1956,9 +1955,6 @@ public class Screen extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /*
-    * DIAGRAM ELEMENTS OPTION PANEL
-     */
     private void terminalFig_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_terminalFig_btnMouseClicked
         boolean isStartExisting = false;
         boolean isEndExisting = false;
@@ -1998,9 +1994,9 @@ public class Screen extends JFrame {
         SalidaDatos sout = new SalidaDatos(new ImageIcon(getClass().getResource("/recursos/figuras/templates/in_out.png")), 50, 50);
         addToWorkArea(sout);
     }//GEN-LAST:event_soutFig_btnMouseClicked
-    
+
     private void bucleFor_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bucleFor_btnMouseClicked
-        BucleFor bucleFor = new BucleFor(new ImageIcon(getClass().getResource("/recursos/figuras/templates/bucle_for.png")), "",50, 50);
+        BucleFor bucleFor = new BucleFor(new ImageIcon(getClass().getResource("/recursos/figuras/templates/bucle_for.png")), "", 50, 50);
         addToWorkArea(bucleFor);
     }//GEN-LAST:event_bucleFor_btnMouseClicked
 
@@ -2013,9 +2009,6 @@ public class Screen extends JFrame {
         showDialog("Agregar Conector", conector_dialog);
     }//GEN-LAST:event_addConector_btnMouseClicked
 
-    /*
-    * TOOLS FUNCTIONS
-     */
     private void fontChooser_jcbItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fontChooser_jcbItemStateChanged
         if (labelSeleccionado != null) {
             elementoSeleccionado = encontrarElemento(labelSeleccionado);
@@ -2054,9 +2047,6 @@ public class Screen extends JFrame {
         }
     }//GEN-LAST:event_backgroundChooser_btnMouseClicked
 
-    /*
-    * POPUP MENU FUNCTIONS FOR DIAGRAM ELEMENTS
-     */
     private void changeElementBackground_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeElementBackground_jmiActionPerformed
         elementoSeleccionado = encontrarElemento(labelSeleccionado);
         if (elementoSeleccionado != null) {
@@ -2156,9 +2146,6 @@ public class Screen extends JFrame {
         showDialog("Elemento " + labelSeleccionado.getName() + " - Propiedades", properties_dialog);
     }//GEN-LAST:event_elementProperties_jmiActionPerformed
 
-    /*
-    * PROPERTIES DIALOG FUNCTIONS
-     */
     private boolean verifyText(javax.swing.JTextField textField) {
         return textField.getText().trim().length() != 0 && !textField.getText().trim().equals(labelSeleccionado.getText());
     }
@@ -2186,13 +2173,10 @@ public class Screen extends JFrame {
             labelSeleccionado.setText(nuevoTexto);
             elementoSeleccionado.setTexto(nuevoTexto);
         }
-        
+
         properties_dialog.dispose();
     }//GEN-LAST:event_okProperties_btnMouseClicked
 
-    /*
-    * CREATE VARIABLE DIALOG
-     */
     private void agregarVariable_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agregarVariable_btnMouseClicked
         alcance_lbl.setVisible(false);
         alcance_jcb.setVisible(false);
@@ -2260,10 +2244,6 @@ public class Screen extends JFrame {
         alcance_jcb.setSelectedIndex(0);
     }//GEN-LAST:event_createVariable_btnMouseClicked
 
-    /*
-    * CREATE OPERATION DIALOG
-     */
-
     private void agregarProceso_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agregarProceso_btnMouseClicked
         DefaultComboBoxModel modeloVariable1 = (DefaultComboBoxModel) var1_jcb.getModel();
         DefaultComboBoxModel modeloVariable2 = (DefaultComboBoxModel) var2_jcb.getModel();
@@ -2301,9 +2281,6 @@ public class Screen extends JFrame {
         showMessage("Proceso creado exitosamente!", "", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_guardarOperancion_btnMouseClicked
 
-    /*
-    * CHANGE TOOL EDITOR FUNCTION
-     */
     private void editorDiagrama_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editorDiagrama_jmiActionPerformed
 
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) jt_classes.getModel().getRoot();
@@ -2352,9 +2329,6 @@ public class Screen extends JFrame {
         }
     }//GEN-LAST:event_generadorClases_jmiActionPerformed
 
-    /*
-    * FILE MANAGEMENT FUNCTIONS
-     */
     private void newFile_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFile_jmiActionPerformed
         workarea_jp.removeAll();
         actualizarVista(workarea_jp);
@@ -2392,17 +2366,17 @@ public class Screen extends JFrame {
                     jt_classes.setModel(model);
                     editorDiagrama_jp.setVisible(false);
                     classesGenerator_jp.setVisible(true);
-                    
+
                     clases.clear();
                     for (int i = 0; i < raiz.getChildCount(); i++) {
                         DefaultMutableTreeNode temp = (DefaultMutableTreeNode) raiz.getChildAt(i);
-                        if(temp.getUserObject() instanceof Clase) {
+                        if (temp.getUserObject() instanceof Clase) {
                             Clase clase = (Clase) temp.getUserObject();
                             clases.add(clase);
                         }
                     }
                     model.reload();
-                    
+
                 }
 
             } catch (IOException | ClassNotFoundException ex) {
@@ -2473,9 +2447,6 @@ public class Screen extends JFrame {
         return raiz.getChildCount() > 0;
     }
 
-    /*
-    * TOGGLE VIEWS
-     */
     private void diagram_toggleBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagram_toggleBtnMouseClicked
         workarea_jp.setVisible(true);
         codeDiagrama_jp.setVisible(false);
@@ -2532,9 +2503,6 @@ public class Screen extends JFrame {
         }
     }//GEN-LAST:event_codeClase_toggleBtnItemStateChanged
 
-    /*
-    * EXPORT PDF FUNCTION
-     */
     private void exportPdf_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportPdf_jmiActionPerformed
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo PDF (*.pdf)", "pdf"));
@@ -2584,9 +2552,6 @@ public class Screen extends JFrame {
 
     }//GEN-LAST:event_exportPdf_jmiActionPerformed
 
-    /*
-    * Classes Generator Functions
-     */
     private void createClase_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createClase_btnMouseClicked
         String nombreClase = JOptionPane.showInputDialog(this, "Escribe el nombre de la clase", "Crear Clase", JOptionPane.PLAIN_MESSAGE);
         if (nombreClase == null) {
@@ -3078,7 +3043,7 @@ public class Screen extends JFrame {
         if (nodo.getUserObject() instanceof Clase) {
             Clase clase = (Clase) nodo.getUserObject();
             claseSeleccionada = encontrarClase(nodo);
-            
+
             if (claseSeleccionada == clase) {
                 clases.remove(claseSeleccionada);
                 claseSeleccionada = null;
@@ -3116,8 +3081,6 @@ public class Screen extends JFrame {
         conector_dialog.dispose();
     }//GEN-LAST:event_confirmConector_btnMouseClicked
 
-    
-
     public static void main(String args[]) {
         try {
             javax.swing.UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
@@ -3131,9 +3094,6 @@ public class Screen extends JFrame {
         });
     }
 
-    /*
-    * FUNCTIONS IN SCREEN INTERACTIONS
-     */
     private void actualizarVista(JPanel panel) {
         panel.revalidate();
         panel.repaint();
@@ -3330,9 +3290,6 @@ public class Screen extends JFrame {
         actualizarVista(workarea_jp);
     }
 
-    /*
-    * FONT AND STYLE JLABEL FUNCTIONS
-     */
     private void initFonts(JComboBox comboBox) {
         String[] fuentes = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
         DefaultComboBoxModel modelo = ((DefaultComboBoxModel) comboBox.getModel());
@@ -3378,9 +3335,6 @@ public class Screen extends JFrame {
         }
     }
 
-    /*
-    * INFORMATION FUNCTIONS
-     */
     private void showDialog(String title, JDialog dialog) {
         dialog.setTitle(title);
         dialog.pack();
