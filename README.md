@@ -1,18 +1,23 @@
-# >>> Editor y Creador de Diagramas | Generador de Clases <<<
+# Editor y Creador de Diagramas | Generador de Clases
 ---
-### Funcionalidades
-- Drag and Drop
-- Crear Diagramas de Flujo
-- Crear Variables
-- Crear Procesos
-- Guardar Archivo
-- Abrir Archivo
-- Exportar a PDF
-- Crear Clases
-- Crear Propiedades
-- Crear Metodos
-- Implementar Herencia entre Clases
+### - Funcionalidades del Programa
+- [x] Drag and Drop
+- [x] Agregar Elementos de Diagrama
+- [x] Crear Variable
+- [x] Crear Proceso
+- [x] Crear Clase
+- [x] Implementar Herencia
+- [x] Crear Propiedades
+- [x] Crear Metodos
+- [x] Cambiar Propiedades | Estilo del Elemento
+- [x] Generar Codigo en C++
+- [x] Guardar Archivo
+- [x] Abrir Archivo
+- [x] Exportar a PDF
+
+
+### - Librerías Utilizadas
 ---
-### Librerías Utilizadas
-- FlatLaf 3.1.1 (Look and Feel)
-- Apache PDFBox 3.0.5
+FlatLaf 3.1.1 (Look and Feel)
+
+Apache PDFBox 3.0.5

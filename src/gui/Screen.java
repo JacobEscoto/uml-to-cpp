@@ -35,9 +35,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTree;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -72,6 +70,7 @@ public class Screen extends JFrame {
     public Screen() {
         initComponents();
         this.setTitle("Nuevo Diagrama - " + this.getTitle());
+        this.setIconImage((new ImageIcon(getClass().getResource("/recursos/icon.png"))).getImage());
         classesGenerator_jp.setVisible(false);
         diagram_toggleBtn.setSelected(true);
 
@@ -1063,7 +1062,6 @@ public class Screen extends JFrame {
         });
         clases_jpm.add(eliminarArbol_jmi);
 
-        conector_dialog.setMaximumSize(new java.awt.Dimension(248, 100));
         conector_dialog.setMinimumSize(new java.awt.Dimension(248, 100));
         conector_dialog.setModal(true);
         conector_dialog.setResizable(false);
@@ -1720,7 +1718,7 @@ public class Screen extends JFrame {
             .addGroup(menuClasses_jpLayout.createSequentialGroup()
                 .addComponent(clasesGeneradasLbl)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollClasses, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                .addComponent(scrollClasses, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(createClase_btn)
@@ -2007,7 +2005,7 @@ public class Screen extends JFrame {
     }//GEN-LAST:event_bucleFor_btnMouseClicked
 
     private void bucleWhile_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bucleWhile_btnMouseClicked
-        BucleWhile bucleWhile = new BucleWhile(new ImageIcon(getClass().getResource("/recursos/figuras/templates/bucle_while.png")), "true",50, 50);
+        BucleWhile bucleWhile = new BucleWhile(new ImageIcon(getClass().getResource("/recursos/figuras/templates/bucle_while.png")), "true", 50, 50);
         addToWorkArea(bucleWhile);
     }//GEN-LAST:event_bucleWhile_btnMouseClicked
 
