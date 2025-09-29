@@ -1,17 +1,17 @@
-# UML to Code 💻
----
-####Editor y creador de Diagramas / Generador de Clases
+# >>> Editor y Creador de Diagramas | Generador de Clases <<<
 ---
 ### Funcionalidades
-
+- Drag and Drop
 - Crear Diagramas de Flujo
-- Crear Clases
 - Crear Variables
 - Crear Procesos
-- Crear Metodos
 - Guardar Archivo
 - Abrir Archivo
 - Exportar a PDF
+- Crear Clases
+- Crear Propiedades
+- Crear Metodos
+- Implementar Herencia entre Clases
 ---
 ### Librerías Utilizadas
 - FlatLaf 3.1.1 (Look and Feel)

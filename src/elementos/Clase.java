@@ -77,11 +77,11 @@ public class Clase implements Serializable {
     }
 
     public String generarCodigo() {
-        String codigo = "#include <iostream>\n#include <string>\n#using namespace std;\n";
+        String codigo = "// ============== INICIO DE CLASE " + nombre.toUpperCase() + " ==============\n\n#include <iostream>\n#include <string>\n";
         if (clasePadre == null) {
-            codigo += "\nclass " + nombre + "\n{\n";
+            codigo += "using namespace std;\n\nclass " + nombre + "\n{\n";
         } else if (incluyeHerencia && clasePadre != null) {
-            codigo += "#include \"" + clasePadre.getNombre() + ".cpp\"\n\n";
+            codigo += "#include \"" + clasePadre.getNombre() + ".cpp\"\nusing namespace std;\n";
             codigo += "class " + nombre + " : public " + clasePadre.getNombre() + "\n{";
         }
         boolean contienePublic = false;
@@ -103,33 +103,31 @@ public class Clase implements Serializable {
                     protecteds += "   " + propiedad.generarCodigo() + "\n";
                 }
             }
-
-            if (!metodos.isEmpty()) {
-                for (Metodo metodo : metodos) {
-                    if (metodo.getAlcance().equalsIgnoreCase("public")) {
-                        contienePublic = true;
-                        publicos += "   " + metodo.generarCodigo() + "\n";
-                    } else if (metodo.getAlcance().equalsIgnoreCase("private")) {
-                        contienePrivate = true;
-                        privados += "   " + metodo.generarCodigo() + "\n";
-                    } else if (metodo.getAlcance().equalsIgnoreCase("protected")) {
-                        contieneProtected = true;
-                        protecteds += "   " + metodo.generarCodigo() + "\n";
-                    }
+        }
+        if (!metodos.isEmpty()) {
+            for (Metodo metodo : metodos) {
+                if (metodo.getAlcance().equalsIgnoreCase("public")) {
+                    contienePublic = true;
+                    publicos += "   " + metodo.generarCodigo() + "\n";
+                } else if (metodo.getAlcance().equalsIgnoreCase("private")) {
+                    contienePrivate = true;
+                    privados += "   " + metodo.generarCodigo() + "\n";
+                } else if (metodo.getAlcance().equalsIgnoreCase("protected")) {
+                    contieneProtected = true;
+                    protecteds += "   " + metodo.generarCodigo() + "\n";
                 }
             }
-            if (contienePublic) {
-                codigo += publicos;
-            }
-            if (contienePrivate) {
-                codigo += privados;
-            }
-            if (contieneProtected) {
-                codigo += protecteds;
-            }
-            codigo += "};\n";
-
         }
+        if (contienePublic) {
+            codigo += publicos;
+        }
+        if (contienePrivate) {
+            codigo += privados;
+        }
+        if (contieneProtected) {
+            codigo += protecteds;
+        }
+        codigo += "};\n// ============== FIN DE LA CLASE " + nombre.toUpperCase() + " ==============\n\n";
 
         return codigo;
     }

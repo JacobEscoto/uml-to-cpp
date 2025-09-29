@@ -74,7 +74,7 @@
                               <Component id="fontProperty_jcb" pref="232" max="32767" attributes="0"/>
                               <Component id="fontSizeProperty_spinner" max="32767" attributes="0"/>
                               <Component id="widthLabel_spinner" max="32767" attributes="0"/>
-                              <Component id="heigthLabel_spinner" max="32767" attributes="0"/>
+                              <Component id="heightLabel_spinner" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace pref="25" max="32767" attributes="0"/>
@@ -119,7 +119,7 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="heigthPropertyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="heigthLabel_spinner" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="heightLabel_spinner" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -249,8 +249,24 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JSpinner" name="widthLabel_spinner">
+              <Properties>
+                <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                  <SpinnerModel initial="1" minimum="1" numberType="java.lang.Integer" stepSize="2" type="number"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="widthLabel_spinnerStateChanged"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JSpinner" name="heigthLabel_spinner">
+            <Component class="javax.swing.JSpinner" name="heightLabel_spinner">
+              <Properties>
+                <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                  <SpinnerModel initial="1" minimum="1" numberType="java.lang.Integer" stepSize="2" type="number"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="heightLabel_spinnerStateChanged"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="cancelPropertyDialog_btn">
               <Properties>
@@ -794,13 +810,14 @@
             <Component class="javax.swing.JComboBox" name="retornoMetodo_jcb">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="6">
+                  <StringArray count="7">
                     <StringItem index="0" value="void"/>
                     <StringItem index="1" value="int"/>
-                    <StringItem index="2" value="float"/>
-                    <StringItem index="3" value="double"/>
-                    <StringItem index="4" value="char"/>
-                    <StringItem index="5" value="bool"/>
+                    <StringItem index="2" value="double"/>
+                    <StringItem index="3" value="float"/>
+                    <StringItem index="4" value="bool"/>
+                    <StringItem index="5" value="char"/>
+                    <StringItem index="6" value="string"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -1167,11 +1184,11 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="6">
                     <StringItem index="0" value="int"/>
-                    <StringItem index="1" value="float"/>
-                    <StringItem index="2" value="double"/>
-                    <StringItem index="3" value="char"/>
-                    <StringItem index="4" value="string"/>
-                    <StringItem index="5" value="bool"/>
+                    <StringItem index="1" value="double"/>
+                    <StringItem index="2" value="float"/>
+                    <StringItem index="3" value="bool"/>
+                    <StringItem index="4" value="char"/>
+                    <StringItem index="5" value="string"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -1356,6 +1373,118 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="eliminarArbol_jmiActionPerformed"/>
           </Events>
         </MenuItem>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JDialog" name="conector_dialog">
+      <Properties>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[248, 100]"/>
+        </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[248, 100]"/>
+        </Property>
+        <Property name="modal" type="boolean" value="true"/>
+        <Property name="resizable" type="boolean" value="false"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Component id="conector_jp" alignment="0" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Component id="conector_jp" alignment="1" min="-2" max="-2" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="conector_jp">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="cc" green="cc" red="cc" type="rgb"/>
+            </Property>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[248, 100]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[248, 100]"/>
+            </Property>
+          </Properties>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace pref="30" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="confirmConector_btn" min="-2" pref="89" max="-2" attributes="0"/>
+                          <Component id="addConectorLbl" alignment="1" min="-2" pref="193" max="-2" attributes="0"/>
+                          <Component id="posConector_jcb" min="-2" pref="193" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace pref="9" max="32767" attributes="0"/>
+                      <Component id="addConectorLbl" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="posConector_jcb" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="confirmConector_btn" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JButton" name="confirmConector_btn">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="66" green="66" red="66" type="rgb"/>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="12" style="1"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Agregar"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="confirmConector_btnMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="posConector_jcb">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="2">
+                    <StringItem index="0" value="Horizontal"/>
+                    <StringItem index="1" value="Vertical"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JLabel" name="addConectorLbl">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="12" style="1"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Agregar Conector:"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
       </SubComponents>
     </Container>
     <Menu class="javax.swing.JMenuBar" name="frameMenu_jmb">
@@ -1747,19 +1876,32 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="predefinedProcessFig_btn" max="32767" attributes="0"/>
-                          <Component id="processFig_btn" max="32767" attributes="0"/>
-                          <Component id="terminalFig_btn" max="32767" attributes="0"/>
-                          <Component id="decisionFig_btn" alignment="0" max="32767" attributes="0"/>
-                          <Component id="soutFig_btn" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="12" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
                       <Component id="optionsTitle" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="11" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="processFig_btn" max="32767" attributes="0"/>
+                                  <Component id="terminalFig_btn" max="32767" attributes="0"/>
+                                  <Component id="decisionFig_btn" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="soutFig_btn" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="bucleFor_btn" min="-2" pref="150" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                                      <Component id="bucleWhile_btn" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1770,15 +1912,17 @@
                       <Component id="optionsTitle" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="terminalFig_btn" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="processFig_btn" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="predefinedProcessFig_btn" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="decisionFig_btn" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="soutFig_btn" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="127" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bucleFor_btn" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bucleWhile_btn" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="68" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1800,6 +1944,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/recursos/figuras/siluetas/terminal.png"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Terminal&lt;/b&gt;&lt;p&gt;Inicio / Fin de un proceso&lt;/p&gt;&lt;/html&gt;"/>
                 <Property name="borderPainted" type="boolean" value="false"/>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
               </Properties>
@@ -1812,6 +1957,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/recursos/figuras/siluetas/proceso.png"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Proceso&lt;/b&gt;&lt;/html&gt;"/>
                 <Property name="borderPainted" type="boolean" value="false"/>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
               </Properties>
@@ -1819,16 +1965,17 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="processFig_btnMouseClicked"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="predefinedProcessFig_btn">
+            <Component class="javax.swing.JButton" name="bucleFor_btn">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/recursos/figuras/siluetas/defined_process.png"/>
+                  <Image iconType="3" name="/recursos/figuras/siluetas/bucle_for.png"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Bucle For&lt;/b&gt;&lt;/html&gt;"/>
                 <Property name="borderPainted" type="boolean" value="false"/>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="predefinedProcessFig_btnMouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bucleFor_btnMouseClicked"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="decisionFig_btn">
@@ -1836,6 +1983,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/recursos/figuras/siluetas/decision_rombo.png"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Decisi&#xf3;n&lt;/b&gt;&lt;/html&gt;"/>
                 <Property name="borderPainted" type="boolean" value="false"/>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
               </Properties>
@@ -1848,11 +1996,25 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/recursos/figuras/siluetas/paralelograma.png"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Salida de Datos&lt;/b&gt;&lt;p&gt;Impresion en consola / pantalla&lt;/p&gt;&lt;/html&gt;"/>
                 <Property name="borderPainted" type="boolean" value="false"/>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="soutFig_btnMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="bucleWhile_btn">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/recursos/figuras/siluetas/bucleWhile.png"/>
+                </Property>
+                <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Bucle While&lt;/b&gt;&lt;/html&gt;"/>
+                <Property name="borderPainted" type="boolean" value="false"/>
+                <Property name="contentAreaFilled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bucleWhile_btnMouseClicked"/>
               </Events>
             </Component>
           </SubComponents>
@@ -2068,11 +2230,13 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="185" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                      <Component id="addConector_btn" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                       <Component id="generarCodigo_btn" min="-2" pref="132" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="paste_btn" min="-2" pref="132" max="-2" attributes="0"/>
-                      <EmptySpace pref="453" max="32767" attributes="0"/>
+                      <EmptySpace pref="460" max="32767" attributes="0"/>
                       <Component id="diagram_toggleBtn" min="-2" pref="81" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="code_toggleBtn" min="-2" pref="81" max="-2" attributes="0"/>
@@ -2084,15 +2248,19 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="generarCodigo_btn" alignment="3" pref="31" max="32767" attributes="0"/>
-                              <Component id="paste_btn" alignment="3" pref="31" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="addConector_btn" min="-2" pref="34" max="-2" attributes="0"/>
+                                  <Component id="diagram_toggleBtn" max="32767" attributes="0"/>
+                                  <Component id="code_toggleBtn" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="diagram_toggleBtn" max="32767" attributes="0"/>
-                          <Component id="code_toggleBtn" max="32767" attributes="0"/>
+                          <Component id="generarCodigo_btn" max="32767" attributes="0"/>
+                          <Component id="paste_btn" alignment="1" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="25" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -2176,6 +2344,24 @@
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="paste_btnMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="addConector_btn">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="66" green="66" red="66" type="rgb"/>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="12" style="1"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Agregar Conector"/>
+                <Property name="borderPainted" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addConector_btnMouseClicked"/>
               </Events>
             </Component>
           </SubComponents>
@@ -2342,26 +2528,35 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="scrollClasses" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="clasesGeneradasLbl" min="-2" pref="321" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="createClase_btn" max="32767" attributes="0"/>
-                                  <Component id="herencia_btn" max="32767" attributes="0"/>
-                                  <Component id="addToWorkArea_btn" max="32767" attributes="0"/>
-                                  <Component id="deleteHerencia_btn" min="-2" pref="258" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="deleteHerencia_btn" max="32767" attributes="0"/>
+                                          <Component id="eliminarClase_btn" min="-2" pref="139" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Component id="scrollClasses" max="32767" attributes="0"/>
                               </Group>
+                              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="clasesGeneradasLbl" min="-2" pref="321" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                                      <Component id="addToWorkArea_btn" min="-2" pref="258" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="createClase_btn" max="32767" attributes="0"/>
+                                      <Component id="herencia_btn" min="-2" pref="139" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace pref="23" max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="23" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -2370,16 +2565,20 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="clasesGeneradasLbl" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="scrollClasses" min="-2" pref="424" max="-2" attributes="0"/>
+                      <Component id="scrollClasses" pref="400" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="createClase_btn" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="eliminarClase_btn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="createClase_btn" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="herencia_btn" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="deleteHerencia_btn" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="herencia_btn" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="deleteHerencia_btn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="addToWorkArea_btn" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -2480,6 +2679,24 @@
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="deleteHerencia_btnMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="eliminarClase_btn">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="99" green="99" red="99" type="rgb"/>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="12" style="1"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Eliminar Clase"/>
+                <Property name="borderPainted" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="eliminarClase_btnMouseClicked"/>
               </Events>
             </Component>
           </SubComponents>

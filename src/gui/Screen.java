@@ -4,6 +4,7 @@ import elementos.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -22,6 +23,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
@@ -33,7 +35,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTree;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -121,7 +125,7 @@ public class Screen extends JFrame {
         widthProperty = new javax.swing.JLabel();
         heigthPropertyLabel = new javax.swing.JLabel();
         widthLabel_spinner = new javax.swing.JSpinner();
-        heigthLabel_spinner = new javax.swing.JSpinner();
+        heightLabel_spinner = new javax.swing.JSpinner();
         cancelPropertyDialog_btn = new javax.swing.JButton();
         okProperties_btn = new javax.swing.JButton();
         variables_dialog = new javax.swing.JDialog();
@@ -196,6 +200,11 @@ public class Screen extends JFrame {
         descripcionMetodo_jmi = new javax.swing.JMenuItem();
         descripcion_jmi = new javax.swing.JMenuItem();
         eliminarArbol_jmi = new javax.swing.JMenuItem();
+        conector_dialog = new javax.swing.JDialog();
+        conector_jp = new javax.swing.JPanel();
+        confirmConector_btn = new javax.swing.JButton();
+        posConector_jcb = new javax.swing.JComboBox<>();
+        addConectorLbl = new javax.swing.JLabel();
         editorDiagrama_jp = new javax.swing.JPanel();
         tools_jp = new javax.swing.JPanel();
         fontLabel = new javax.swing.JLabel();
@@ -216,9 +225,10 @@ public class Screen extends JFrame {
         optionsTitle = new javax.swing.JLabel();
         terminalFig_btn = new javax.swing.JButton();
         processFig_btn = new javax.swing.JButton();
-        predefinedProcessFig_btn = new javax.swing.JButton();
+        bucleFor_btn = new javax.swing.JButton();
         decisionFig_btn = new javax.swing.JButton();
         soutFig_btn = new javax.swing.JButton();
+        bucleWhile_btn = new javax.swing.JButton();
         extras_tabs = new javax.swing.JTabbedPane();
         variables_jp = new javax.swing.JPanel();
         variables_scroll = new javax.swing.JScrollPane();
@@ -233,6 +243,7 @@ public class Screen extends JFrame {
         code_toggleBtn = new javax.swing.JToggleButton();
         diagram_toggleBtn = new javax.swing.JToggleButton();
         paste_btn = new javax.swing.JButton();
+        addConector_btn = new javax.swing.JButton();
         main_jp = new javax.swing.JPanel();
         workarea_jp = new javax.swing.JPanel();
         codeDiagrama_jp = new javax.swing.JPanel();
@@ -247,6 +258,7 @@ public class Screen extends JFrame {
         herencia_btn = new javax.swing.JButton();
         addToWorkArea_btn = new javax.swing.JButton();
         deleteHerencia_btn = new javax.swing.JButton();
+        eliminarClase_btn = new javax.swing.JButton();
         rightSide_jp = new javax.swing.JPanel();
         northSide_jp = new javax.swing.JPanel();
         controlClasses_jp = new javax.swing.JPanel();
@@ -315,6 +327,20 @@ public class Screen extends JFrame {
         heigthPropertyLabel.setForeground(new java.awt.Color(0, 0, 0));
         heigthPropertyLabel.setText("Alto (px):");
 
+        widthLabel_spinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 2));
+        widthLabel_spinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                widthLabel_spinnerStateChanged(evt);
+            }
+        });
+
+        heightLabel_spinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 2));
+        heightLabel_spinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                heightLabel_spinnerStateChanged(evt);
+            }
+        });
+
         cancelPropertyDialog_btn.setBackground(new java.awt.Color(153, 153, 153));
         cancelPropertyDialog_btn.setForeground(new java.awt.Color(0, 0, 0));
         cancelPropertyDialog_btn.setText("Cancelar");
@@ -369,7 +395,7 @@ public class Screen extends JFrame {
                         .addComponent(fontProperty_jcb, 0, 232, Short.MAX_VALUE)
                         .addComponent(fontSizeProperty_spinner)
                         .addComponent(widthLabel_spinner)
-                        .addComponent(heigthLabel_spinner)))
+                        .addComponent(heightLabel_spinner)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
         properties_jpLayout.setVerticalGroup(
@@ -404,7 +430,7 @@ public class Screen extends JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(properties_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(heigthPropertyLabel)
-                    .addComponent(heigthLabel_spinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(heightLabel_spinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addGroup(properties_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelPropertyDialog_btn)
@@ -634,7 +660,7 @@ public class Screen extends JFrame {
         nameMethodTitle.setForeground(new java.awt.Color(0, 0, 0));
         nameMethodTitle.setText("Nombre:");
 
-        retornoMetodo_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "void", "int", "float", "double", "char", "bool" }));
+        retornoMetodo_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "void", "int", "double", "float", "bool", "char", "string" }));
 
         retornoTitle.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         retornoTitle.setForeground(new java.awt.Color(0, 0, 0));
@@ -841,7 +867,7 @@ public class Screen extends JFrame {
         parameters_jp.setMaximumSize(new java.awt.Dimension(400, 242));
         parameters_jp.setMinimumSize(new java.awt.Dimension(400, 242));
 
-        parameterType_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "int", "float", "double", "char", "string", "bool" }));
+        parameterType_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "int", "double", "float", "bool", "char", "string" }));
 
         typeParametroLbl.setForeground(new java.awt.Color(0, 0, 0));
         typeParametroLbl.setText("Tipo de Parametro:");
@@ -1037,6 +1063,66 @@ public class Screen extends JFrame {
         });
         clases_jpm.add(eliminarArbol_jmi);
 
+        conector_dialog.setMaximumSize(new java.awt.Dimension(248, 100));
+        conector_dialog.setMinimumSize(new java.awt.Dimension(248, 100));
+        conector_dialog.setModal(true);
+        conector_dialog.setResizable(false);
+
+        conector_jp.setBackground(new java.awt.Color(204, 204, 204));
+        conector_jp.setMaximumSize(new java.awt.Dimension(248, 100));
+        conector_jp.setMinimumSize(new java.awt.Dimension(248, 100));
+
+        confirmConector_btn.setBackground(new java.awt.Color(102, 102, 102));
+        confirmConector_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        confirmConector_btn.setForeground(new java.awt.Color(0, 0, 0));
+        confirmConector_btn.setText("Agregar");
+        confirmConector_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                confirmConector_btnMouseClicked(evt);
+            }
+        });
+
+        posConector_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Horizontal", "Vertical" }));
+
+        addConectorLbl.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        addConectorLbl.setForeground(new java.awt.Color(0, 0, 0));
+        addConectorLbl.setText("Agregar Conector:");
+
+        javax.swing.GroupLayout conector_jpLayout = new javax.swing.GroupLayout(conector_jp);
+        conector_jp.setLayout(conector_jpLayout);
+        conector_jpLayout.setHorizontalGroup(
+            conector_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, conector_jpLayout.createSequentialGroup()
+                .addContainerGap(30, Short.MAX_VALUE)
+                .addGroup(conector_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(confirmConector_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addConectorLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(posConector_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25))
+        );
+        conector_jpLayout.setVerticalGroup(
+            conector_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, conector_jpLayout.createSequentialGroup()
+                .addContainerGap(9, Short.MAX_VALUE)
+                .addComponent(addConectorLbl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(posConector_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(confirmConector_btn)
+                .addGap(12, 12, 12))
+        );
+
+        javax.swing.GroupLayout conector_dialogLayout = new javax.swing.GroupLayout(conector_dialog.getContentPane());
+        conector_dialog.getContentPane().setLayout(conector_dialogLayout);
+        conector_dialogLayout.setHorizontalGroup(
+            conector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(conector_jp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        conector_dialogLayout.setVerticalGroup(
+            conector_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(conector_jp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UML Editor");
         setMaximumSize(new java.awt.Dimension(1280, 720));
@@ -1175,6 +1261,7 @@ public class Screen extends JFrame {
         optionsTitle.setText("  OPCIONES ---------------");
 
         terminalFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/terminal.png"))); // NOI18N
+        terminalFig_btn.setToolTipText("<html><b>Terminal</b><p>Inicio / Fin de un proceso</p></html>");
         terminalFig_btn.setBorderPainted(false);
         terminalFig_btn.setContentAreaFilled(false);
         terminalFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1184,6 +1271,7 @@ public class Screen extends JFrame {
         });
 
         processFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/proceso.png"))); // NOI18N
+        processFig_btn.setToolTipText("<html><b>Proceso</b></html>");
         processFig_btn.setBorderPainted(false);
         processFig_btn.setContentAreaFilled(false);
         processFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1192,16 +1280,18 @@ public class Screen extends JFrame {
             }
         });
 
-        predefinedProcessFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/defined_process.png"))); // NOI18N
-        predefinedProcessFig_btn.setBorderPainted(false);
-        predefinedProcessFig_btn.setContentAreaFilled(false);
-        predefinedProcessFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+        bucleFor_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/bucle_for.png"))); // NOI18N
+        bucleFor_btn.setToolTipText("<html><b>Bucle For</b></html>");
+        bucleFor_btn.setBorderPainted(false);
+        bucleFor_btn.setContentAreaFilled(false);
+        bucleFor_btn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                predefinedProcessFig_btnMouseClicked(evt);
+                bucleFor_btnMouseClicked(evt);
             }
         });
 
         decisionFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/decision_rombo.png"))); // NOI18N
+        decisionFig_btn.setToolTipText("<html><b>Decisión</b></html>");
         decisionFig_btn.setBorderPainted(false);
         decisionFig_btn.setContentAreaFilled(false);
         decisionFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1211,6 +1301,7 @@ public class Screen extends JFrame {
         });
 
         soutFig_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/paralelograma.png"))); // NOI18N
+        soutFig_btn.setToolTipText("<html><b>Salida de Datos</b><p>Impresion en consola / pantalla</p></html>");
         soutFig_btn.setBorderPainted(false);
         soutFig_btn.setContentAreaFilled(false);
         soutFig_btn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1219,22 +1310,40 @@ public class Screen extends JFrame {
             }
         });
 
+        bucleWhile_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/figuras/siluetas/bucleWhile.png"))); // NOI18N
+        bucleWhile_btn.setToolTipText("<html><b>Bucle While</b></html>");
+        bucleWhile_btn.setBorderPainted(false);
+        bucleWhile_btn.setContentAreaFilled(false);
+        bucleWhile_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bucleWhile_btnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout menuElements_jpLayout = new javax.swing.GroupLayout(menuElements_jp);
         menuElements_jp.setLayout(menuElements_jpLayout);
         menuElements_jpLayout.setHorizontalGroup(
             menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuElements_jpLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(predefinedProcessFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(processFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(terminalFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(decisionFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(soutFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(12, Short.MAX_VALUE))
-            .addGroup(menuElements_jpLayout.createSequentialGroup()
                 .addComponent(optionsTitle)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 11, Short.MAX_VALUE))
+            .addGroup(menuElements_jpLayout.createSequentialGroup()
+                .addGroup(menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(menuElements_jpLayout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(processFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(terminalFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(decisionFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(soutFig_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(menuElements_jpLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bucleFor_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(menuElements_jpLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(bucleWhile_btn)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         menuElements_jpLayout.setVerticalGroup(
             menuElements_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1243,15 +1352,17 @@ public class Screen extends JFrame {
                 .addComponent(optionsTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(terminalFig_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(processFig_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(predefinedProcessFig_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(decisionFig_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(soutFig_btn)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bucleFor_btn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bucleWhile_btn)
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         editorDiagrama_jp.add(menuElements_jp, java.awt.BorderLayout.LINE_START);
@@ -1401,16 +1512,29 @@ public class Screen extends JFrame {
             }
         });
 
+        addConector_btn.setBackground(new java.awt.Color(102, 102, 102));
+        addConector_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        addConector_btn.setForeground(new java.awt.Color(0, 0, 0));
+        addConector_btn.setText("Agregar Conector");
+        addConector_btn.setBorderPainted(false);
+        addConector_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addConector_btnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout controlButtons_jpLayout = new javax.swing.GroupLayout(controlButtons_jp);
         controlButtons_jp.setLayout(controlButtons_jpLayout);
         controlButtons_jpLayout.setHorizontalGroup(
             controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlButtons_jpLayout.createSequentialGroup()
-                .addGap(185, 185, 185)
+                .addGap(23, 23, 23)
+                .addComponent(addConector_btn)
+                .addGap(32, 32, 32)
                 .addComponent(generarCodigo_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(paste_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 453, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 460, Short.MAX_VALUE)
                 .addComponent(diagram_toggleBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(code_toggleBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1420,13 +1544,16 @@ public class Screen extends JFrame {
             controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(controlButtons_jpLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(generarCodigo_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                        .addComponent(paste_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
-                    .addComponent(diagram_toggleBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(code_toggleBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGroup(controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(controlButtons_jpLayout.createSequentialGroup()
+                        .addGroup(controlButtons_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(addConector_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(diagram_toggleBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(code_toggleBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(generarCodigo_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(paste_btn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(22, 22, 22))
         );
 
         editorDiagrama_jp.add(controlButtons_jp, java.awt.BorderLayout.PAGE_END);
@@ -1550,43 +1677,61 @@ public class Screen extends JFrame {
             }
         });
 
+        eliminarClase_btn.setBackground(new java.awt.Color(153, 153, 153));
+        eliminarClase_btn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        eliminarClase_btn.setForeground(new java.awt.Color(0, 0, 0));
+        eliminarClase_btn.setText("Eliminar Clase");
+        eliminarClase_btn.setBorderPainted(false);
+        eliminarClase_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                eliminarClase_btnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout menuClasses_jpLayout = new javax.swing.GroupLayout(menuClasses_jp);
         menuClasses_jp.setLayout(menuClasses_jpLayout);
         menuClasses_jpLayout.setHorizontalGroup(
             menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuClasses_jpLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scrollClasses)
-                .addGap(19, 19, 19))
-            .addGroup(menuClasses_jpLayout.createSequentialGroup()
                 .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuClasses_jpLayout.createSequentialGroup()
+                        .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(menuClasses_jpLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(deleteHerencia_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(eliminarClase_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(scrollClasses))
+                        .addGap(19, 19, 19))
                     .addGroup(menuClasses_jpLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(clasesGeneradasLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(menuClasses_jpLayout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(createClase_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(herencia_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(addToWorkArea_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(deleteHerencia_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(23, Short.MAX_VALUE))
+                        .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(clasesGeneradasLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(menuClasses_jpLayout.createSequentialGroup()
+                                .addGap(31, 31, 31)
+                                .addComponent(addToWorkArea_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(createClase_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(herencia_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(23, Short.MAX_VALUE))))
         );
         menuClasses_jpLayout.setVerticalGroup(
             menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuClasses_jpLayout.createSequentialGroup()
                 .addComponent(clasesGeneradasLbl)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollClasses, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollClasses, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(createClase_btn)
+                    .addComponent(eliminarClase_btn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(createClase_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(herencia_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deleteHerencia_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(menuClasses_jpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(herencia_btn)
+                    .addComponent(deleteHerencia_btn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(addToWorkArea_btn)
-                .addContainerGap())
+                .addGap(45, 45, 45))
         );
 
         classesGenerator_jp.add(menuClasses_jp, java.awt.BorderLayout.LINE_START);
@@ -1846,11 +1991,6 @@ public class Screen extends JFrame {
         addToWorkArea(proceso);
     }//GEN-LAST:event_processFig_btnMouseClicked
 
-    private void predefinedProcessFig_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_predefinedProcessFig_btnMouseClicked
-        ProcesoPredefinido procesoPredefinido = new ProcesoPredefinido(new ImageIcon(getClass().getResource("/recursos/figuras/templates/predefined_process.png")), 50, 50);
-        addToWorkArea(procesoPredefinido);
-    }//GEN-LAST:event_predefinedProcessFig_btnMouseClicked
-
     private void decisionFig_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_decisionFig_btnMouseClicked
         Decision decision = new Decision(new ImageIcon(getClass().getResource("/recursos/figuras/templates/decision.png")), 50, 50);
         addToWorkArea(decision);
@@ -1860,6 +2000,20 @@ public class Screen extends JFrame {
         SalidaDatos sout = new SalidaDatos(new ImageIcon(getClass().getResource("/recursos/figuras/templates/in_out.png")), 50, 50);
         addToWorkArea(sout);
     }//GEN-LAST:event_soutFig_btnMouseClicked
+    
+    private void bucleFor_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bucleFor_btnMouseClicked
+        BucleFor bucleFor = new BucleFor(new ImageIcon(getClass().getResource("/recursos/figuras/templates/bucle_for.png")), "",50, 50);
+        addToWorkArea(bucleFor);
+    }//GEN-LAST:event_bucleFor_btnMouseClicked
+
+    private void bucleWhile_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bucleWhile_btnMouseClicked
+        BucleWhile bucleWhile = new BucleWhile(new ImageIcon(getClass().getResource("/recursos/figuras/templates/bucle_while.png")), "true",50, 50);
+        addToWorkArea(bucleWhile);
+    }//GEN-LAST:event_bucleWhile_btnMouseClicked
+
+    private void addConector_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addConector_btnMouseClicked
+        showDialog("Agregar Conector", conector_dialog);
+    }//GEN-LAST:event_addConector_btnMouseClicked
 
     /*
     * TOOLS FUNCTIONS
@@ -1976,14 +2130,31 @@ public class Screen extends JFrame {
 
     private void elementProperties_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elementProperties_jmiActionPerformed
         elementoSeleccionado = encontrarElemento(labelSeleccionado);
-        tf_nameProperty.setText(labelSeleccionado.getName());
-        tf_textProperty.setText(labelSeleccionado.getText());
-        bgProperty.setBackground(labelSeleccionado.getBackground());
-        foregroundProperty.setBackground(labelSeleccionado.getForeground());
-        bgProperty.setOpaque(true);
-        foregroundProperty.setOpaque(true);
-        fontProperty_jcb.setSelectedItem(labelSeleccionado.getFont().getName());
-        fontSize_spinner.setValue(labelSeleccionado.getFont().getSize());
+        if (elementoSeleccionado instanceof Conector) {
+            tf_nameProperty.setEnabled(false);
+            tf_textProperty.setEnabled(false);
+            fontProperty_jcb.setEnabled(false);
+            fontSize_spinner.setEnabled(false);
+            fontSize_spinner.setVisible(false);
+            widthLabel_spinner.setValue(labelSeleccionado.getWidth());
+            heightLabel_spinner.setValue(labelSeleccionado.getHeight());
+        } else {
+            tf_nameProperty.setEnabled(true);
+            tf_textProperty.setEnabled(true);
+            fontProperty_jcb.setEnabled(true);
+            fontSize_spinner.setEnabled(true);
+            fontSize_spinner.setVisible(true);
+            tf_nameProperty.setText(labelSeleccionado.getName());
+            tf_textProperty.setText(labelSeleccionado.getText());
+            bgProperty.setBackground(labelSeleccionado.getBackground());
+            foregroundProperty.setBackground(labelSeleccionado.getForeground());
+            bgProperty.setOpaque(true);
+            foregroundProperty.setOpaque(true);
+            fontProperty_jcb.setSelectedItem(labelSeleccionado.getFont().getName());
+            fontSize_spinner.setValue(labelSeleccionado.getFont().getSize());
+            widthLabel_spinner.setValue(labelSeleccionado.getWidth());
+            heightLabel_spinner.setValue(labelSeleccionado.getHeight());
+        }
         showDialog("Elemento " + labelSeleccionado.getName() + " - Propiedades", properties_dialog);
     }//GEN-LAST:event_elementProperties_jmiActionPerformed
 
@@ -2017,6 +2188,8 @@ public class Screen extends JFrame {
             labelSeleccionado.setText(nuevoTexto);
             elementoSeleccionado.setTexto(nuevoTexto);
         }
+        
+        properties_dialog.dispose();
     }//GEN-LAST:event_okProperties_btnMouseClicked
 
     /*
@@ -2426,7 +2599,7 @@ public class Screen extends JFrame {
             DefaultTreeModel modelo = (DefaultTreeModel) jt_classes.getModel();
             DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
 
-            Clase clase = new Clase(nombreClase);
+            Clase clase = new Clase(nombreClase.replace(" ", ""));
             clases.add(clase);
 
             DefaultMutableTreeNode nuevaClase = new DefaultMutableTreeNode(clase);
@@ -2489,104 +2662,11 @@ public class Screen extends JFrame {
             JTree arbolClase = new JTree(modelo);
             JScrollPane scroll = new JScrollPane(arbolClase);
             scroll.setBounds(15, 15, 180, 225);
-            actionListeners(scroll, arbolClase);
+            initDragAndDrop(scroll, arbolClase);
             workareaClasses_jp.add(scroll);
             actualizarVista(workareaClasses_jp);
         }
     }//GEN-LAST:event_addToWorkArea_btnMouseClicked
-
-    private void actionListeners(JScrollPane scroll, JTree tree) {
-
-        tree.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                arbolSeleccionado = tree;
-                workareaClasses_jp.setComponentZOrder(scroll, 0);
-                workareaClasses_jp.repaint();
-                DefaultMutableTreeNode nodoClase = (DefaultMutableTreeNode) arbolSeleccionado.getModel().getRoot();
-                claseSeleccionada = encontrarClase(nodoClase);
-                if (tree.getSelectionPath() == null) {
-                    return;
-                }
-                if (evt.isMetaDown()) {
-
-                    DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent();
-
-                    if (nodo.getParent() == null) {
-                        addPropiedad_jmi.setVisible(false);
-                        eliminarPropiedad_jmi.setVisible(false);
-                        addMetodo_jmi.setVisible(false);
-                        eliminarMetodo_jmi.setVisible(false);
-                        descripcionMetodo_jmi.setVisible(false);
-                        descripcion_jmi.setVisible(true);
-                        eliminarArbol_jmi.setVisible(true);
-                    } else if (nodo.toString().equalsIgnoreCase("Propiedades")) {
-                        addPropiedad_jmi.setVisible(true);
-                        eliminarPropiedad_jmi.setVisible(false);
-                        addMetodo_jmi.setVisible(false);
-                        eliminarMetodo_jmi.setVisible(false);
-                        descripcionMetodo_jmi.setVisible(false);
-                        descripcion_jmi.setVisible(false);
-                        eliminarArbol_jmi.setVisible(false);
-                    } else if (nodo.getUserObject() instanceof Variable) {
-                        addPropiedad_jmi.setVisible(false);
-                        eliminarPropiedad_jmi.setVisible(true);
-                        addMetodo_jmi.setVisible(false);
-                        eliminarMetodo_jmi.setVisible(false);
-                        descripcionMetodo_jmi.setVisible(false);
-                        descripcion_jmi.setVisible(false);
-                        eliminarArbol_jmi.setVisible(false);
-                    } else if (nodo.toString().equalsIgnoreCase("Metodos")) {
-                        addPropiedad_jmi.setVisible(false);
-                        eliminarPropiedad_jmi.setVisible(false);
-                        addMetodo_jmi.setVisible(true);
-                        eliminarMetodo_jmi.setVisible(false);
-                        descripcionMetodo_jmi.setVisible(false);
-                        descripcion_jmi.setVisible(false);
-                        eliminarArbol_jmi.setVisible(false);
-                    } else if (nodo.getUserObject() instanceof Metodo) {
-                        addPropiedad_jmi.setVisible(false);
-                        eliminarPropiedad_jmi.setVisible(false);
-                        addMetodo_jmi.setVisible(false);
-                        eliminarMetodo_jmi.setVisible(true);
-                        descripcionMetodo_jmi.setVisible(true);
-                        descripcion_jmi.setVisible(false);
-                        eliminarArbol_jmi.setVisible(false);
-                    } else if (nodo.getUserObject() == null) {
-                        addPropiedad_jmi.setVisible(false);
-                        eliminarPropiedad_jmi.setVisible(false);
-                        addMetodo_jmi.setVisible(false);
-                        eliminarMetodo_jmi.setVisible(false);
-                        descripcionMetodo_jmi.setVisible(false);
-                        descripcion_jmi.setVisible(false);
-                        eliminarArbol_jmi.setVisible(false);
-                    }
-                    clases_jpm.show(tree, evt.getX(), evt.getY());
-                } else {
-                    return;
-                }
-            }
-            
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                click = evt.getPoint();
-                workareaClasses_jp.setComponentZOrder(scroll, 0);
-            }
-        });
-        tree.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent evt) {
-                Point movedClick = SwingUtilities.convertPoint(tree.getParent().getParent(), evt.getPoint(), workareaClasses_jp);
-                int posX = movedClick.x - click.x;
-                int posY = movedClick.y - click.y;
-                posX = setLimits(posX, scroll.getWidth(), 0, workareaClasses_jp.getWidth());
-                posY = setLimits(posY, scroll.getHeight(), 0, workareaClasses_jp.getHeight());
-                scroll.setLocation(posX, posY);
-                scroll.getParent().setLocation(posX, posY);
-                actualizarVista(workareaClasses_jp);
-            }
-        });
-    }
 
     private void applyInheritance_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_applyInheritance_btnMouseClicked
         DefaultListModel modelClasePadre = (DefaultListModel) parentClass_list.getModel();
@@ -2754,6 +2834,7 @@ public class Screen extends JFrame {
             }
             if (nodoEliminar != null) {
                 nodoPadre.remove(nodoEliminar);
+                modeloGeneral.reload();
             }
         }
     }//GEN-LAST:event_eliminarMetodo_jmiActionPerformed
@@ -2772,7 +2853,7 @@ public class Screen extends JFrame {
                         for (Metodo metodoEnClase : claseSeleccionada.getMetodos()) {
                             if (metodoEnClase.equals(metodo)) {
                                 metodoEnClase.setDescripcion(descripcion);
-                                showMessage("La descripcion del metodo " + metodoEnClase.getNombre()+ " fue cambiada!", "Exito", JOptionPane.INFORMATION_MESSAGE);
+                                showMessage("La descripcion del metodo " + metodoEnClase.getNombre() + " fue cambiada!", "Exito", JOptionPane.INFORMATION_MESSAGE);
                                 break;
                             }
                         }
@@ -2785,12 +2866,12 @@ public class Screen extends JFrame {
 
     private void descripcion_jmiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descripcion_jmiActionPerformed
         if (arbolSeleccionado != null && arbolSeleccionado.getSelectionPath() != null) {
-           String descripcion = JOptionPane.showInputDialog(this, "Escribe una descripcion de la clase");
-           if (descripcion.trim().length() != 0 && descripcion != null) {
-               claseSeleccionada.setDescripcion(descripcion);
-               showMessage("Descripcion de la Clase " + claseSeleccionada.getNombre() + " fue cambiada!", "Exito", JOptionPane.INFORMATION_MESSAGE);
-           }
-           
+            String descripcion = JOptionPane.showInputDialog(this, "Escribe una descripcion de la clase");
+            if (descripcion.trim().length() != 0 && descripcion != null) {
+                claseSeleccionada.setDescripcion(descripcion);
+                showMessage("Descripcion de la Clase " + claseSeleccionada.getNombre() + " fue cambiada!", "Exito", JOptionPane.INFORMATION_MESSAGE);
+            }
+
         }
     }//GEN-LAST:event_descripcion_jmiActionPerformed
 
@@ -2959,7 +3040,15 @@ public class Screen extends JFrame {
     }//GEN-LAST:event_generarCodigo_btnMouseClicked
 
     private void generarCodigoClases_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_generarCodigoClases_btnMouseClicked
-        // en proceso...
+        ta_codeClass.setText("");
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) jt_classes.getModel().getRoot();
+        if (raiz.getChildCount() < 1) {
+            return;
+        }
+        for (Clase clase : clases) {
+            ta_codeClass.append(clase.generarCodigo());
+        }
+        showMessage("Codigo Generado Exitosamente", "Generado", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_generarCodigoClases_btnMouseClicked
 
     private void cancelInheritance_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelInheritance_btnMouseClicked
@@ -2969,6 +3058,57 @@ public class Screen extends JFrame {
     private void cancelParameter_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelParameter_btnMouseClicked
         parameters_dialog.dispose();
     }//GEN-LAST:event_cancelParameter_btnMouseClicked
+
+    private void eliminarClase_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eliminarClase_btnMouseClicked
+        if (jt_classes.getSelectionPath() == null) {
+            return;
+        }
+        DefaultTreeModel modelo = (DefaultTreeModel) jt_classes.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
+        DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) jt_classes.getSelectionPath().getLastPathComponent();
+
+        if (nodo.getUserObject() instanceof Clase) {
+            Clase clase = (Clase) nodo.getUserObject();
+            claseSeleccionada = encontrarClase(nodo);
+            
+            if (claseSeleccionada == clase) {
+                clases.remove(claseSeleccionada);
+                claseSeleccionada = null;
+                nodo.removeAllChildren();
+                raiz.remove(nodo);
+                modelo.reload();
+                showMessage("Clase eliminada!", "Eliminado", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_eliminarClase_btnMouseClicked
+
+    private void widthLabel_spinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_widthLabel_spinnerStateChanged
+        ImageIcon img = (ImageIcon) labelSeleccionado.getIcon();
+        labelSeleccionado.setBounds(labelSeleccionado.getX(), labelSeleccionado.getY(), (int) widthLabel_spinner.getValue(), labelSeleccionado.getHeight());
+        Icon icon = new ImageIcon(img.getImage().getScaledInstance(labelSeleccionado.getWidth(), labelSeleccionado.getHeight(), Image.SCALE_DEFAULT));
+        labelSeleccionado.setIcon(icon);
+    }//GEN-LAST:event_widthLabel_spinnerStateChanged
+
+    private void heightLabel_spinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_heightLabel_spinnerStateChanged
+        ImageIcon img = (ImageIcon) labelSeleccionado.getIcon();
+        labelSeleccionado.setBounds(labelSeleccionado.getX(), labelSeleccionado.getY(), labelSeleccionado.getWidth(), (int) heightLabel_spinner.getValue());
+        Icon icon = new ImageIcon(img.getImage().getScaledInstance(labelSeleccionado.getWidth(), labelSeleccionado.getHeight(), Image.SCALE_DEFAULT));
+        labelSeleccionado.setIcon(icon);
+    }//GEN-LAST:event_heightLabel_spinnerStateChanged
+
+    private void confirmConector_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmConector_btnMouseClicked
+        String pos = (String) posConector_jcb.getSelectedItem();
+        if (pos.equalsIgnoreCase("Horizontal")) {
+            Conector conectorHorizontal = new Conector(new ImageIcon(getClass().getResource("/recursos/figuras/conectores/conector_h.png")));
+            addToWorkArea(conectorHorizontal);
+        } else if (pos.equalsIgnoreCase("Vertical")) {
+            Conector conectorVertical = new Conector(new ImageIcon(getClass().getResource("/recursos/figuras/conectores/conector_v.png")));
+            addToWorkArea(conectorVertical);
+        }
+        conector_dialog.dispose();
+    }//GEN-LAST:event_confirmConector_btnMouseClicked
+
+    
 
     public static void main(String args[]) {
         try {
@@ -3026,6 +3166,29 @@ public class Screen extends JFrame {
             public void mouseClicked(MouseEvent evt) {
                 seleccionarLabel(figura);
                 elementoSeleccionado = encontrarElemento(figura);
+                if (elementoSeleccionado instanceof Conector) {
+                    fontChooser_jcb.setEnabled(false);
+                    fontSize_spinner.setEnabled(false);
+                    bold_toggleBtn.setEnabled(false);
+                    italic_toggleBtn.setEnabled(false);
+                    foregroundColor_btn.setEnabled(false);
+                    changeElementBackground_jmi.setVisible(true);
+                    changeElementForeground_jmi.setVisible(false);
+                    changeElementText_jmi.setVisible(false);
+                    changeElementFont_jmi.setVisible(false);
+                    js_elementEdition.setVisible(false);
+                } else {
+                    fontChooser_jcb.setEnabled(true);
+                    fontSize_spinner.setEnabled(true);
+                    bold_toggleBtn.setEnabled(true);
+                    italic_toggleBtn.setEnabled(true);
+                    foregroundColor_btn.setEnabled(true);
+                    changeElementBackground_jmi.setVisible(true);
+                    changeElementForeground_jmi.setVisible(true);
+                    changeElementText_jmi.setVisible(true);
+                    changeElementFont_jmi.setVisible(true);
+                    js_elementEdition.setVisible(true);
+                }
             }
         });
 
@@ -3045,6 +3208,96 @@ public class Screen extends JFrame {
         });
     }
 
+    private void initDragAndDrop(JScrollPane scroll, JTree tree) {
+
+        tree.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                arbolSeleccionado = tree;
+                workareaClasses_jp.repaint();
+                DefaultMutableTreeNode nodoClase = (DefaultMutableTreeNode) arbolSeleccionado.getModel().getRoot();
+                claseSeleccionada = encontrarClase(nodoClase);
+                if (tree.getSelectionPath() == null) {
+                    return;
+                }
+                if (evt.isMetaDown()) {
+
+                    DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent();
+
+                    if (nodo.getParent() == null) {
+                        addPropiedad_jmi.setVisible(false);
+                        eliminarPropiedad_jmi.setVisible(false);
+                        addMetodo_jmi.setVisible(false);
+                        eliminarMetodo_jmi.setVisible(false);
+                        descripcionMetodo_jmi.setVisible(false);
+                        descripcion_jmi.setVisible(true);
+                        eliminarArbol_jmi.setVisible(true);
+                    } else if (nodo.toString().equalsIgnoreCase("Propiedades")) {
+                        addPropiedad_jmi.setVisible(true);
+                        eliminarPropiedad_jmi.setVisible(false);
+                        addMetodo_jmi.setVisible(false);
+                        eliminarMetodo_jmi.setVisible(false);
+                        descripcionMetodo_jmi.setVisible(false);
+                        descripcion_jmi.setVisible(false);
+                        eliminarArbol_jmi.setVisible(false);
+                    } else if (nodo.getUserObject() instanceof Variable) {
+                        addPropiedad_jmi.setVisible(false);
+                        eliminarPropiedad_jmi.setVisible(true);
+                        addMetodo_jmi.setVisible(false);
+                        eliminarMetodo_jmi.setVisible(false);
+                        descripcionMetodo_jmi.setVisible(false);
+                        descripcion_jmi.setVisible(false);
+                        eliminarArbol_jmi.setVisible(false);
+                    } else if (nodo.toString().equalsIgnoreCase("Metodos")) {
+                        addPropiedad_jmi.setVisible(false);
+                        eliminarPropiedad_jmi.setVisible(false);
+                        addMetodo_jmi.setVisible(true);
+                        eliminarMetodo_jmi.setVisible(false);
+                        descripcionMetodo_jmi.setVisible(false);
+                        descripcion_jmi.setVisible(false);
+                        eliminarArbol_jmi.setVisible(false);
+                    } else if (nodo.getUserObject() instanceof Metodo) {
+                        addPropiedad_jmi.setVisible(false);
+                        eliminarPropiedad_jmi.setVisible(false);
+                        addMetodo_jmi.setVisible(false);
+                        eliminarMetodo_jmi.setVisible(true);
+                        descripcionMetodo_jmi.setVisible(true);
+                        descripcion_jmi.setVisible(false);
+                        eliminarArbol_jmi.setVisible(false);
+                    } else if (nodo.getUserObject() == null) {
+                        addPropiedad_jmi.setVisible(false);
+                        eliminarPropiedad_jmi.setVisible(false);
+                        addMetodo_jmi.setVisible(false);
+                        eliminarMetodo_jmi.setVisible(false);
+                        descripcionMetodo_jmi.setVisible(false);
+                        descripcion_jmi.setVisible(false);
+                        eliminarArbol_jmi.setVisible(false);
+                    }
+                    clases_jpm.show(tree, evt.getX(), evt.getY());
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                click = evt.getPoint();
+            }
+        });
+        tree.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent evt) {
+                Point movedClick = SwingUtilities.convertPoint(tree.getParent(), evt.getPoint(), workareaClasses_jp);
+                int posX = movedClick.x - click.x;
+                int posY = movedClick.y - click.y;
+                posX = setLimits(posX, scroll.getWidth(), 0, workareaClasses_jp.getWidth());
+                posY = setLimits(posY, scroll.getHeight(), 0, workareaClasses_jp.getHeight());
+                scroll.setLocation(posX, posY);
+                scroll.getParent().setLocation(posX, posY);
+                actualizarVista(workareaClasses_jp);
+
+            }
+        });
+    }
+
     private int setLimits(int valor, int medidaIcono, int min, int max) {
         if (valor < min) {
             return min;
@@ -3057,7 +3310,6 @@ public class Screen extends JFrame {
 
     private void seleccionarLabel(JLabel label) {
         labelSeleccionado = label;
-        workarea_jp.setComponentZOrder(labelSeleccionado, 0);
         actualizarVista(workarea_jp);
     }
 
@@ -3136,8 +3388,8 @@ public class Screen extends JFrame {
         for (FiguraDiagrama elemento : elementos) {
             JLabel label = elemento.getLabel();
             label.setComponentPopupMenu(elements_jpm);
-            initDragAndDrop(label, encontrarElemento(label));
             workarea_jp.add(label);
+            initDragAndDrop(label, encontrarElemento(label));
             actualizarVista(workarea_jp);
         }
     }
@@ -3286,6 +3538,8 @@ public class Screen extends JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Variables declaration">
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel addConectorLbl;
+    private javax.swing.JButton addConector_btn;
     private javax.swing.JMenuItem addMetodo_jmi;
     private javax.swing.JButton addParametro_btn;
     private javax.swing.JMenuItem addPropiedad_jmi;
@@ -3302,6 +3556,8 @@ public class Screen extends JFrame {
     private javax.swing.JLabel backgroundLabel;
     private javax.swing.JLabel bgProperty;
     private javax.swing.JToggleButton bold_toggleBtn;
+    private javax.swing.JButton bucleFor_btn;
+    private javax.swing.JButton bucleWhile_btn;
     private javax.swing.JButton cancelCreationVariable_btn;
     private javax.swing.JButton cancelInheritance_btn;
     private javax.swing.JButton cancelMethod_btn;
@@ -3321,6 +3577,9 @@ public class Screen extends JFrame {
     private javax.swing.JPanel codeClasses_jp;
     private javax.swing.JPanel codeDiagrama_jp;
     private javax.swing.JToggleButton code_toggleBtn;
+    private javax.swing.JDialog conector_dialog;
+    private javax.swing.JPanel conector_jp;
+    private javax.swing.JButton confirmConector_btn;
     private javax.swing.JButton confirmParametro_btn;
     private javax.swing.JPanel controlButtons_jp;
     private javax.swing.JPanel controlClasses_jp;
@@ -3340,6 +3599,7 @@ public class Screen extends JFrame {
     private javax.swing.JMenuItem elementProperties_jmi;
     private javax.swing.JPopupMenu elements_jpm;
     private javax.swing.JMenuItem eliminarArbol_jmi;
+    private javax.swing.JButton eliminarClase_btn;
     private javax.swing.JMenuItem eliminarMetodo_jmi;
     private javax.swing.JMenuItem eliminarPropiedad_jmi;
     private javax.swing.JMenu exportOptions_jm;
@@ -3361,7 +3621,7 @@ public class Screen extends JFrame {
     private javax.swing.JButton generarCodigoClases_btn;
     private javax.swing.JButton generarCodigo_btn;
     private javax.swing.JButton guardarOperancion_btn;
-    private javax.swing.JSpinner heigthLabel_spinner;
+    private javax.swing.JSpinner heightLabel_spinner;
     private javax.swing.JLabel heigthPropertyLabel;
     private javax.swing.JButton herencia_btn;
     private javax.swing.JDialog herencia_dialog;
@@ -3398,7 +3658,7 @@ public class Screen extends JFrame {
     private javax.swing.JScrollPane parent_scroll;
     private javax.swing.JMenuItem pasteElement_jmi;
     private javax.swing.JButton paste_btn;
-    private javax.swing.JButton predefinedProcessFig_btn;
+    private javax.swing.JComboBox<String> posConector_jcb;
     private javax.swing.JPanel procesos_jp;
     private javax.swing.JButton processFig_btn;
     private javax.swing.JList<String> process_list;
